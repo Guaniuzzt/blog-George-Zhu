@@ -6,7 +6,7 @@ export default function Header() {
     <header className="flex justify-between md:items-center mt-4">
       <div className="flex items-center md:space-x-12">
         <div className="hidden md:block">
-          <Link href="/" className="text-xl">Piotr Jura</Link>
+          <Link href="/" className="text-xl">George Zhu</Link>
         </div>
         <Navigation />
       </div>

@@ -10,10 +10,10 @@ const roboto = Roboto({
 
 export const metadata = {
   title: {
-    template: '%s | Piotr Jura',
-    default: 'Piotr Jura'
+    template: '%s | George Zhu',
+    default: 'George Zhu'
   },
-  // description: 'Piotr Jura Portfolio',
+  // description: 'George Zhu Portfolio',
 }
 
 export default function RootLayout({ children }) {
