@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation'
+import { MDXRemote } from 'next-mdx-remote/rsc'
 
 const titles = {
   'first': 'Hello First!',
@@ -19,5 +20,7 @@ export default function BlogPage({ params }) {
     notFound()
   }
 
-  return (<>Hello! {params.slug}</>)
+  return (<MDXRemote source={`# Hello World
+      This is from Server Components!
+      `}/>)
 }
