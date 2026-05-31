@@ -1,5 +1,7 @@
 import { notFound } from 'next/navigation'
 import { MDXRemote } from 'next-mdx-remote/rsc'
+import fs from 'fs'
+import path from 'path'
 
 const titles = {
   'first': 'Hello First!',
@@ -20,7 +22,11 @@ export default function BlogPage({ params }) {
     notFound()
   }
 
-  return (<MDXRemote source={`# Hello World
-      This is from Server Components!
-      `}/>)
+  const markdown = fs.readFileSync(path.join(process.cwd(), 'content', `${params.slug}.mdx`), 'utf-8')
+
+  return (
+  <article className='prose dark:prose-invert'>
+    <MDXRemote source={markdown}/>
+  </article>
+  )
 }
