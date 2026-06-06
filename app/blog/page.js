@@ -1,13 +1,19 @@
 import Link from 'next/link'
+import { getPosts } from '@/lib/posts'
+import Pagination from '@/components/pagination'
 
 export default async function BlogPostsPage(
   { searchParams }
 ) {
-  console.log(searchParams.tags)
   const tags = searchParams.tags?.split(',')
-  console.log(tags)
-  const posts = await getPosts({
-    tags
+  const page = searchParams.page ?? 1
+  const limit = searchParams.limit ?? 3
+  const order = searchParams.order ?? 'newest'
+  const { posts, pageCount } = await getPosts({
+    tags,
+    newest: order === 'newest',
+    page,
+    limit
   })
   return (
     <>
@@ -17,6 +23,12 @@ export default async function BlogPostsPage(
 
       <hr />
 
+      <div className="mb-8">
+        Display&nbsp;
+        {order === 'newest' && <Link href="/blog?order=oldest" className="underline">oldest</Link>}
+        {order === 'oldest' && <Link href="/blog?order=newest" className="underline">newest</Link>}
+      </div>
+
       <ul className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {posts.map(post => (
           <li key={post.slug}>
@@ -25,6 +37,10 @@ export default async function BlogPostsPage(
           </li>
         ))}
       </ul>
+
+      <div className="mt-8">
+        <Pagination pageCount={pageCount} />
+      </div>
     </>
   )
 }
