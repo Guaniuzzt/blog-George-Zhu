@@ -3,11 +3,15 @@ import { getPosts } from "@/lib/posts"
 import Link from 'next/link'
 import Card from "@/components/card"
 import { MotionItem } from "@/components/page-transition"
+import { getTranslation } from "@/lib/i18n"
+import useServerLanguage from "@/hooks/use-server-language"
 
 export default async function Home() {
   const { posts } = await getPosts({
     newest: true, limit: 3
   })
+  const lang = useServerLanguage()
+  const t = (key) => getTranslation(lang)[key] || key
 
   return (
     <>
@@ -18,21 +22,17 @@ export default async function Home() {
         <div className="absolute top-20 -left-20 w-48 h-48 bg-[var(--accent2)]/5 rounded-full blur-3xl animate-float pointer-events-none" style={{ animationDelay: '-3s' }} />
 
         <div className="max-w-2xl">
-          <H1 className="mb-4">Hey, I&apos;m George Zhu</H1>
+          <H1 className="mb-4">{t('home.greeting')}</H1>
 
           <MotionItem delay={0.15}>
             <p className="text-lg md:text-xl text-[var(--text-secondary)] mb-4 leading-relaxed">
-              A <span className="text-[var(--accent)] font-semibold">full-stack developer</span> who crafts
-              <span className="text-[var(--accent2)] font-semibold"> digital experiences </span>
-              at the intersection of code and creativity.
+              {t('home.tagline')}
             </p>
           </MotionItem>
 
           <MotionItem delay={0.25}>
             <p className="text-[var(--text-muted)] mb-8 leading-relaxed">
-              I build performant web applications with modern technologies.
-              When I&apos;m not coding, you&apos;ll find me exploring new tools,
-              writing about tech, or capturing moments through my lens.
+              {t('home.subtitle')}
             </p>
           </MotionItem>
 
@@ -42,14 +42,14 @@ export default async function Home() {
                 href="/about/projects"
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[var(--accent)] text-white font-semibold text-sm hover:shadow-lg hover:shadow-[var(--accent)]/25 transition-all duration-300 hover:-translate-y-0.5"
               >
-                View Projects
+                {t('home.viewProjects')}
                 <span className="text-lg">→</span>
               </Link>
               <Link
                 href="/blog"
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-[var(--border-color)] text-[var(--text-primary)] font-semibold text-sm hover:border-[var(--accent)] hover:text-[var(--accent)] transition-all duration-300 hover:-translate-y-0.5"
               >
-                Read Blog
+                {t('home.readBlog')}
               </Link>
             </div>
           </MotionItem>
@@ -60,7 +60,7 @@ export default async function Home() {
       <MotionItem delay={0.4}>
         <div className="flex items-center gap-4 mb-12">
           <div className="h-px flex-1 bg-gradient-to-r from-transparent via-[var(--border-color)] to-transparent" />
-          <span className="text-xs font-mono text-[var(--text-muted)] tracking-widest uppercase">Latest Posts</span>
+          <span className="text-xs font-mono text-[var(--text-muted)] tracking-widest uppercase">{t('home.latestPosts')}</span>
           <div className="h-px flex-1 bg-gradient-to-r from-transparent via-[var(--border-color)] to-transparent" />
         </div>
       </MotionItem>
@@ -118,7 +118,7 @@ export default async function Home() {
               href="/blog"
               className="inline-flex items-center gap-2 text-sm font-medium text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors duration-300"
             >
-              <span>View all posts</span>
+              <span>{t('home.viewAll')}</span>
               <span className="text-lg">→</span>
             </Link>
           </div>

@@ -3,22 +3,24 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { motion } from 'framer-motion'
+import useLanguage from '@/hooks/use-language'
 
-const links = [
-  { href: '/', label: 'Home' },
-  { href: '/about', label: 'About' },
-  { href: '/about/projects', label: 'Projects' },
-  { href: '/photos', label: 'Photos' },
-  { href: '/blog', label: 'Blog' },
+const linkKeys = [
+  { href: '/', i18nKey: 'nav.home' },
+  { href: '/about', i18nKey: 'nav.about' },
+  { href: '/about/projects', i18nKey: 'nav.projects' },
+  { href: '/photos', i18nKey: 'nav.photos' },
+  { href: '/blog', i18nKey: 'nav.blog' },
 ]
 
 export default function Navigation() {
   const pathname = usePathname()
+  const { t } = useLanguage()
 
   return (
     <nav className="hidden md:block">
       <ul className="flex gap-1">
-        {links.map((link, i) => {
+        {linkKeys.map((link, i) => {
           const isActive =
             link.href === '/'
               ? pathname === '/'
@@ -37,7 +39,7 @@ export default function Navigation() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.06, duration: 0.4 }}
                 >
-                  {link.label}
+                  {t(link.i18nKey)}
                   {isActive && (
                     <motion.span
                       className="absolute inset-0 bg-[var(--accent-glow)] rounded-lg -z-10"

@@ -2,8 +2,11 @@
 
 import Link from 'next/link'
 import { motion } from 'framer-motion'
+import useLanguage from '@/hooks/use-language'
 
 export default function NotFound() {
+  const { t } = useLanguage()
+
   return (
     <div className="min-h-[70vh] flex flex-col items-center justify-center text-center relative">
       {/* Background glitch effect */}
@@ -40,7 +43,7 @@ export default function NotFound() {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2 }}
         >
-          Page not found
+          {t('404.title')}
         </motion.p>
 
         <motion.p
@@ -49,7 +52,7 @@ export default function NotFound() {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3 }}
         >
-          The page you&apos;re looking for doesn&apos;t exist or has been moved.
+          {t('404.desc')}
         </motion.p>
 
         <motion.div
@@ -62,7 +65,7 @@ export default function NotFound() {
             className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[var(--accent)] text-white font-semibold text-sm hover:shadow-lg hover:shadow-[var(--accent)]/25 transition-all duration-300 hover:-translate-y-0.5"
           >
             <span>←</span>
-            <span>Back home</span>
+            <span>{t('404.backHome')}</span>
           </Link>
         </motion.div>
       </motion.div>

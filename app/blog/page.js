@@ -4,6 +4,8 @@ import Pagination from '@/components/pagination'
 import H1 from '@/components/h1'
 import Card from '@/components/card'
 import { MotionItem } from '@/components/page-transition'
+import { getTranslation } from '@/lib/i18n'
+import useServerLanguage from '@/hooks/use-server-language'
 
 export default async function BlogPostsPage(
   { searchParams }
@@ -18,14 +20,16 @@ export default async function BlogPostsPage(
     page,
     limit
   })
+  const lang = useServerLanguage()
+  const t = (key) => getTranslation(lang)[key] || key
 
   return (
     <>
-      <H1>Blog</H1>
+      <H1>{t('blog.title')}</H1>
 
       <MotionItem delay={0.1}>
         <p className="text-lg text-[var(--text-secondary)] mb-8 leading-relaxed">
-          Thoughts on web development, design, and technology.
+          {t('blog.desc')}
         </p>
       </MotionItem>
 
@@ -36,13 +40,13 @@ export default async function BlogPostsPage(
       {/* Order Toggle */}
       <MotionItem delay={0.2}>
         <div className="flex items-center gap-2 mb-8 text-sm">
-          <span className="text-[var(--text-muted)]">Sort:</span>
+          <span className="text-[var(--text-muted)]">{t('blog.sort')}</span>
           {order === 'newest' && (
             <Link
               href="/blog?order=oldest"
               className="px-3 py-1 rounded-lg border border-[var(--border-color)] hover:border-[var(--accent)] hover:text-[var(--accent)] transition-all duration-300"
             >
-              Newest ↓
+              {t('blog.newest')}
             </Link>
           )}
           {order === 'oldest' && (
@@ -50,7 +54,7 @@ export default async function BlogPostsPage(
               href="/blog?order=newest"
               className="px-3 py-1 rounded-lg border border-[var(--border-color)] hover:border-[var(--accent)] hover:text-[var(--accent)] transition-all duration-300"
             >
-              Oldest ↑
+              {t('blog.oldest')}
             </Link>
           )}
         </div>
@@ -61,9 +65,9 @@ export default async function BlogPostsPage(
         <MotionItem delay={0.25}>
           <div className="text-center py-20">
             <div className="text-6xl mb-4">📝</div>
-            <p className="text-xl text-[var(--text-muted)]">No posts found</p>
+            <p className="text-xl text-[var(--text-muted)]">{t('blog.noPosts')}</p>
             <Link href="/blog" className="mt-4 inline-block text-[var(--accent)] hover:underline">
-              Clear filters
+              {t('blog.clearFilters')}
             </Link>
           </div>
         </MotionItem>
@@ -94,7 +98,7 @@ export default async function BlogPostsPage(
 
                 {/* Read more link */}
                 <span className="inline-flex items-center gap-1 text-sm text-[var(--accent)] font-medium group-hover:gap-2 transition-all duration-300">
-                  Read article
+                  {t('blog.readArticle')}
                   <span className="text-base">→</span>
                 </span>
               </Card>

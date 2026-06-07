@@ -2,6 +2,8 @@ import H1 from "@/components/h1"
 import { MotionItem } from "@/components/page-transition"
 import Link from "next/link"
 import Card from "@/components/card"
+import { getTranslation } from "@/lib/i18n"
+import useServerLanguage from "@/hooks/use-server-language"
 
 export const metadata = {
   title: 'About'
@@ -17,29 +19,29 @@ const skills = [
 ]
 
 export default function AboutPage() {
+  const lang = useServerLanguage()
+  const t = (key) => getTranslation(lang)[key] || key
+
   return (
     <div>
-      <H1>About Me</H1>
+      <H1>{t('about.title')}</H1>
 
       <MotionItem delay={0.1}>
         <p className="text-lg text-[var(--text-secondary)] mb-4 leading-relaxed">
-          Hi, I&apos;m <span className="text-[var(--accent)] font-semibold">George Zhu</span> — a full-stack developer passionate about building beautiful, performant web applications.
+          {t('about.p1')}
         </p>
       </MotionItem>
 
       <MotionItem delay={0.15}>
         <p className="text-[var(--text-muted)] mb-12 leading-relaxed max-w-2xl">
-          With a focus on modern JavaScript ecosystems, I create end-to-end solutions
-          from database design to pixel-perfect UI. I believe code should be both
-          elegant and accessible, and I&apos;m always exploring the intersection of
-          technology and creative expression.
+          {t('about.p2')}
         </p>
       </MotionItem>
 
       {/* Skills Section */}
       <MotionItem delay={0.2}>
         <h2 className="font-['Clash_Display'] text-2xl font-semibold mb-6">
-          Skills & Tools
+          {t('about.skills')}
         </h2>
       </MotionItem>
 
@@ -72,17 +74,17 @@ export default function AboutPage() {
       <MotionItem delay={0.5}>
         <Card className="text-center">
           <h3 className="font-['Clash_Display'] text-xl font-semibold mb-3">
-            Let&apos;s Connect
+            {t('about.connect')}
           </h3>
           <p className="text-[var(--text-secondary)] mb-4 text-sm max-w-md mx-auto">
-            I&apos;m always open to discussing new projects, creative ideas, or opportunities.
+            {t('about.connectDesc')}
           </p>
           <div className="flex justify-center gap-4">
             <Link
               href="/about/projects"
               className="px-5 py-2 rounded-xl bg-[var(--accent)] text-white text-sm font-medium hover:shadow-lg hover:shadow-[var(--accent)]/25 transition-all duration-300 hover:-translate-y-0.5"
             >
-              View Projects
+              {t('about.viewProjects')}
             </Link>
             <a
               href="https://github.com/Guaniuzzt"
@@ -90,7 +92,7 @@ export default function AboutPage() {
               rel="noopener noreferrer"
               className="px-5 py-2 rounded-xl border border-[var(--border-color)] text-sm font-medium text-[var(--text-secondary)] hover:border-[var(--accent)] hover:text-[var(--accent)] transition-all duration-300 hover:-translate-y-0.5"
             >
-              GitHub Profile
+              {t('about.github')}
             </a>
           </div>
         </Card>

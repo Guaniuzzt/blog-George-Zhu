@@ -3,6 +3,7 @@ import Header from '@/components/header'
 import Chatbot from '@/components/chatbot'
 import PageTransition from '@/components/page-transition'
 import useServerDarkMode from '@/hooks/use-server-dark-mode'
+import useServerLanguage from '@/hooks/use-server-language'
 import { SpeedInsights } from "@vercel/speed-insights/next"
 
 export const metadata = {
@@ -15,8 +16,9 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   const theme = useServerDarkMode()
+  const lang = useServerLanguage()
   return (
-    <html lang="en" className={theme}>
+    <html lang={lang} className={theme}>
       <body className="min-h-screen">
         {/* Animated background grid */}
         <div className="fixed inset-0 grid-bg pointer-events-none opacity-[0.03] dark:opacity-[0.02]" />

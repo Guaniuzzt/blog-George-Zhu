@@ -3,6 +3,7 @@
 import Navigation from "./navigation"
 import Link from "next/link"
 import DarkMode from "./dark-mode"
+import LanguageToggle from "./language-toggle"
 import { useState } from 'react'
 import { motion, useScroll, useMotionValueEvent } from 'framer-motion'
 
@@ -41,7 +42,10 @@ export default function Header() {
           </Link>
           <Navigation />
         </div>
-        <DarkMode />
+        <div className="flex items-center gap-3">
+          <LanguageToggle />
+          <DarkMode />
+        </div>
       </div>
     </motion.header>
   )

@@ -5,6 +5,8 @@ import dog3 from './../../public/images/dog3.png'
 import dog4 from './../../public/images/dog4.png'
 import H1 from '@/components/h1'
 import { MotionItem } from '@/components/page-transition'
+import { getTranslation } from '@/lib/i18n'
+import useServerLanguage from '@/hooks/use-server-language'
 
 export const metadata = {
   title: 'Photos'
@@ -18,13 +20,16 @@ const photos = [
 ]
 
 export default function PhotosPage() {
+  const lang = useServerLanguage()
+  const t = (key) => getTranslation(lang)[key] || key
+
   return (
     <div>
-      <H1>Photos</H1>
+      <H1>{t('photos.title')}</H1>
 
       <MotionItem delay={0.1}>
         <p className="text-lg text-[var(--text-secondary)] mb-8 leading-relaxed">
-          A glimpse into my world — my four-legged companion.
+          {t('photos.desc')}
         </p>
       </MotionItem>
 
