@@ -3,6 +3,7 @@ import Header from '@/components/header'
 import Chatbot from '@/components/chatbot'
 import PageTransition from '@/components/page-transition'
 import useServerDarkMode from '@/hooks/use-server-dark-mode'
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 export const metadata = {
   title: {
