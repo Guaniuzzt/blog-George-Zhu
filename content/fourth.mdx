@@ -7,13 +7,68 @@ tags:
   - backend
   - flexbox
 ---
+
 # Intro to Node.js
 
-Getting started with Node.js. This is some **bold** and _italic_ text. 
+Node.js changed everything: JavaScript, once confined to the browser, could now run on the server. Here's how to get started.
 
-Here's a list:
-- 1
-- 2
-- 3
+## What is Node.js?
 
-Begin your Node.js journey!
+Node.js is a JavaScript runtime built on Chrome's V8 engine. It allows you to:
+
+- Build **web servers** and APIs
+- Create **command-line tools**
+- Run **build scripts** and automation
+- Power **real-time applications** (chat, gaming, etc.)
+
+## Your first server
+
+```js
+const http = require('http')
+
+const server = http.createServer((req, res) => {
+  res.writeHead(200, { 'Content-Type': 'text/plain' })
+  res.end('Hello, Node.js!')
+})
+
+server.listen(3000, () => {
+  console.log('Server running at http://localhost:3000')
+})
+```
+
+Save this as `server.js`, run `node server.js`, and visit `http://localhost:3000`.
+
+## npm — the package ecosystem
+
+Node.js comes with **npm**, the world's largest package registry:
+
+```bash
+npm init -y          # create a package.json
+npm install express  # add a dependency
+npm install -g nodemon  # install globally
+```
+
+## Key built-in modules
+
+| Module | Purpose |
+|---|---|
+| `fs` | File system operations |
+| `path` | Path handling across OS |
+| `http` | HTTP server and client |
+| `events` | Event-driven programming |
+| `stream` | Handling streaming data |
+
+## The event loop
+
+Node.js is **single-threaded** but **non-blocking**. The event loop handles asynchronous operations — I/O, timers, network requests — without blocking the main thread. This is what makes it fast and scalable.
+
+```js
+// Non-blocking — the callback runs after the file is read
+fs.readFile('data.txt', 'utf-8', (err, data) => {
+  if (err) throw err
+  console.log(data)
+})
+console.log('This runs first!')
+```
+
+Node.js is the foundation of modern JavaScript development. Mastering it opens doors to full-stack engineering, CLI tooling, and beyond.

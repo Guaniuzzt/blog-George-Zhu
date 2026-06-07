@@ -7,13 +7,90 @@ tags:
   - web design
   - backend
 ---
+
 # Advanced HTML Techniques
 
-Tips and tricks for advanced HTML. This is some **bold** and _italic_ text. 
+HTML is often dismissed as "easy," but modern HTML has powerful features that many developers overlook. Here are some advanced techniques worth knowing.
 
-Here's a list:
-- Red
-- Blue
-- Green
+## Semantic HTML
 
-Enhance your HTML skills!
+Use the right element for the right job. It improves accessibility, SEO, and code readability.
+
+```html
+<!-- Instead of this -->
+<div class="header">...</div>
+<div class="nav">...</div>
+<div class="article">...</div>
+<div class="footer">...</div>
+
+<!-- Do this -->
+<header>...</header>
+<nav>...</nav>
+<article>...</article>
+<footer>...</footer>
+```
+
+Key semantic elements: `<main>`, `<section>`, `<aside>`, `<figure>`, `<time>`, `<details>`, `<dialog>`.
+
+## The `<dialog>` element
+
+Native modals without JavaScript libraries:
+
+```html
+<dialog id="my-dialog">
+  <p>This is a native dialog!</p>
+  <button onclick="this.closest('dialog').close()">Close</button>
+</dialog>
+
+<script>
+  document.querySelector('#my-dialog').showModal()
+</script>
+```
+
+## The `<picture>` element
+
+Serve different images based on screen size or format support:
+
+```html
+<picture>
+  <source srcset="hero.avif" type="image/avif" />
+  <source srcset="hero.webp" type="image/webp" />
+  <img src="hero.jpg" alt="Hero image" loading="lazy" />
+</picture>
+```
+
+## Custom data attributes
+
+Store data directly in HTML:
+
+```html
+<button data-user-id="42" data-action="delete">Delete</button>
+
+<script>
+  document.querySelector('button').addEventListener('click', (e) => {
+    const { userId, action } = e.target.dataset
+    console.log(`${action} user ${userId}`)
+  })
+</script>
+```
+
+## The `inputmode` attribute
+
+Help mobile users by showing the right keyboard:
+
+```html
+<input type="text" inputmode="numeric" placeholder="Enter a number" />
+<input type="text" inputmode="email" placeholder="Enter email" />
+<input type="text" inputmode="url" placeholder="Enter URL" />
+```
+
+## Accessibility quick wins
+
+- Always use `<label>` with form inputs
+- Add `alt` text to all images
+- Use ARIA roles sparingly — prefer native HTML
+- Ensure keyboard navigation works for all interactive elements
+
+---
+
+HTML may be the foundation, but these techniques take it to the next level. Write markup that's meaningful, accessible, and future-proof.

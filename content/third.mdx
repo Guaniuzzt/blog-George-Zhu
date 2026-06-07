@@ -7,13 +7,65 @@ tags:
   - hooks
   - css
 ---
+
 # Understanding React Hooks
 
-Everything you need to know about React Hooks. This is some **bold** and _italic_ text. 
+React Hooks revolutionized how we write components. They let you use state and other React features without writing a class — making code cleaner, more reusable, and easier to test.
 
-Here's a list:
-- A
-- B
-- C
+## The two most-used hooks
 
-Dive into React!
+### `useState`
+
+Manage local state in a function component:
+
+```jsx
+import { useState } from 'react'
+
+function Counter() {
+  const [count, setCount] = useState(0)
+
+  return (
+    <div>
+      <p>You clicked {count} times</p>
+      <button onClick={() => setCount(count + 1)}>Click me</button>
+    </div>
+  )
+}
+```
+
+### `useEffect`
+
+Handle side effects like data fetching, subscriptions, or DOM manipulation:
+
+```jsx
+import { useState, useEffect } from 'react'
+
+function UserProfile({ userId }) {
+  const [user, setUser] = useState(null)
+
+  useEffect(() => {
+    fetch(`/api/users/${userId}`)
+      .then(res => res.json())
+      .then(setUser)
+  }, [userId]) // re-run when userId changes
+
+  if (!user) return <p>Loading...</p>
+  return <h1>{user.name}</h1>
+}
+```
+
+## Beyond the basics
+
+- **`useContext`** — avoid prop drilling with shared state
+- **`useRef`** — persist values across renders without re-rendering
+- **`useMemo` / `useCallback`** — optimize expensive computations and callbacks
+- **Custom Hooks** — extract and reuse stateful logic across components
+
+## Rules of Hooks
+
+1. Only call hooks **at the top level** (not inside loops, conditions, or nested functions)
+2. Only call hooks **from React function components** or custom hooks
+
+---
+
+Hooks changed the game. If you haven't embraced them yet, now's the time.

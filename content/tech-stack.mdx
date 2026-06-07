@@ -1,0 +1,60 @@
+---
+title: Complete Tech Stack Breakdown
+description: "A deep dive into the core technologies powering this blog: Next.js 14, Tailwind CSS, MDX, Framer Motion, and more"
+date: "2026-06-06"
+tags:
+  - nextjs
+  - tailwindcss
+  - mdx
+  - react
+---
+
+# Complete Tech Stack Breakdown
+
+This blog project is built with a modern frontend stack. Here's a breakdown of each technology and why it was chosen.
+
+## 🚀 Next.js 14 — Full-Stack Framework
+
+The project is based on **Next.js 14**, using the App Router architecture. Next.js provides:
+
+- **Server-Side Rendering (SSR)** — Blog content is pre-rendered on the server, SEO-friendly
+- **File-System Routing** — `app/blog/[slug]/page.js` maps directly to a route
+- **React Server Components** — MDX compilation happens on the server, reducing client-side JS
+
+```js
+// app/page.js — fetch post data directly on the server
+export default async function Home() {
+  const { posts } = await getPosts({ newest: true, limit: 3 })
+  return (/* ... */)
+}
+```
+
+## 🎨 Tailwind CSS — Styling
+
+**Tailwind CSS** powers the utility-first styling approach:
+
+- Dark mode toggled via the `class` strategy
+- `@tailwindcss/typography` plugin for beautiful MDX-rendered prose
+- Custom CSS variables for the theme color system (`--accent`, `--text-primary`, etc.)
+
+## ✍️ MDX — Content Management
+
+Blog content is authored in **MDX**, blending Markdown with React components:
+
+- `next-mdx-remote/rsc` compiles MDX on the server
+- Custom component mapping (e.g., `h1` mapped to a custom `H1` component)
+- Frontmatter manages metadata (title, date, tags)
+
+## 🎬 Framer Motion — Animations
+
+Page transitions and entrance animations are driven by **Framer Motion**:
+
+- `PageTransition` wraps pages for route-change animations
+- `MotionItem` enables staggered entrance effects for list items
+
+## 🌐 Deployment & Monitoring
+
+- Deployed on **Vercel** with automatic CI/CD
+- `@vercel/speed-insights` integrated for real-time performance monitoring
+
+This stack delivers the perfect balance of **performance, maintainability, and developer experience**.

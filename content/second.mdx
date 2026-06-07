@@ -6,13 +6,67 @@ tags:
   - css
   - flexbox
 ---
+
 # Exploring CSS Flexbox
 
-A deep dive into CSS Flexbox layout. This is some **bold** and _italic_ text. 
+Flexbox is one of the most powerful layout tools in CSS. Once you truly understand it, building complex layouts becomes almost effortless.
 
-Here's a list:
-- Item 1
-- Item 2
-- Item 3
+## The two axes
 
-Enjoy learning!
+Flexbox operates on two axes:
+
+- **Main axis** — defined by `flex-direction` (row or column)
+- **Cross axis** — perpendicular to the main axis
+
+```css
+.container {
+  display: flex;
+  flex-direction: row;        /* main = horizontal, cross = vertical */
+  justify-content: center;    /* align along main axis */
+  align-items: center;        /* align along cross axis */
+}
+```
+
+## Key properties on the container
+
+| Property | What it does |
+|---|---|
+| `flex-direction` | Sets the main axis direction |
+| `justify-content` | Distributes items along the main axis |
+| `align-items` | Aligns items along the cross axis |
+| `flex-wrap` | Allows items to wrap to the next line |
+| `gap` | Controls spacing between items |
+
+## Key properties on items
+
+- `flex-grow` — how much the item can grow relative to others
+- `flex-shrink` — how much it can shrink
+- `flex-basis` — the initial size before growing/shrinking
+- `align-self` — override `align-items` for a single item
+
+## A practical example
+
+```css
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+}
+
+.nav-links {
+  display: flex;
+  gap: 2rem;
+}
+```
+
+This simple setup creates a responsive navbar with evenly-spaced links — no floats, no clearfix hacks needed.
+
+## When to use Flexbox vs Grid
+
+- **Flexbox** — one-dimensional layouts (rows OR columns)
+- **Grid** — two-dimensional layouts (rows AND columns)
+
+Often, the best approach is to use both together: Grid for the overall page layout, Flexbox for component-level alignment.
+
+Happy flexing!

@@ -7,13 +7,84 @@ tags:
   - frontend
   - react
 ---
+
 # Vue.js for Beginners
 
-A beginner's guide to Vue.js. This is some **bold** and _italic_ text. 
+Vue.js is a progressive JavaScript framework for building user interfaces. It's approachable, performant, and versatile — a great choice for beginners and pros alike.
 
-Here's a list:
-- X
-- Y
-- Z
+## Why Vue?
 
-Start with Vue.js!
+- **Gentle learning curve** — you can start with a single `<script>` tag and scale up
+- **Reactive data binding** — the UI updates automatically when data changes
+- **Single-File Components** — HTML, CSS, and JS in one `.vue` file
+- **Excellent documentation** — widely praised as one of the best in the ecosystem
+
+## Your first Vue app
+
+```html
+<div id="app">
+  <p>{{ message }}</p>
+  <button @click="reverseMessage">Reverse</button>
+</div>
+
+<script>
+const { createApp } = Vue
+
+createApp({
+  data() {
+    return { message: 'Hello Vue!' }
+  },
+  methods: {
+    reverseMessage() {
+      this.message = this.message.split('').reverse().join('')
+    }
+  }
+}).mount('#app')
+</script>
+```
+
+## Single-File Components (SFCs)
+
+At scale, you'll use `.vue` files:
+
+```vue
+<template>
+  <div>
+    <h1>{{ title }}</h1>
+    <button @click="increment">Count: {{ count }}</button>
+  </div>
+</template>
+
+<script setup>
+import { ref } from 'vue'
+
+const title = ref('Counter')
+const count = ref(0)
+
+function increment() {
+  count.value++
+}
+</script>
+
+<style scoped>
+h1 { color: #42b883; }
+</style>
+```
+
+## Composition API vs Options API
+
+Vue 3 introduced the **Composition API**, which uses `setup()` or `<script setup>`:
+
+- **Options API** — organize by options (`data`, `methods`, `computed`)
+- **Composition API** — organize by logical concerns, better for large components
+
+Both are fully supported — pick what fits your project.
+
+## Key concepts
+
+- **Reactivity** — `ref()` and `reactive()` for reactive state
+- **Computed properties** — derived state that auto-updates
+- **Watchers** — react to state changes
+- **Directives** — `v-if`, `v-for`, `v-bind`, `v-model` and more
+
+Vue combines the best ideas from React, Angular, and plain HTML. It's well worth adding to your toolkit.
