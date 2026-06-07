@@ -1,28 +1,49 @@
 'use client'
 
 import Link from 'next/link'
-import { useSearchParams } from 'next/navigation'
-import { usePathname } from 'next/navigation'
+import { useSearchParams, usePathname } from 'next/navigation'
+import { motion } from 'framer-motion'
 
 export default function Pagination({ pageCount }) {
   const searchParams = useSearchParams()
   const pathname = usePathname()
 
+  if (pageCount <= 1) return null
+
   const pages = []
-  const page = Number(searchParams.get('page') ?? 1)
+  const currentPage = Number(searchParams.get('page') ?? 1)
+
   for (let i = 1; i <= pageCount; i++) {
     pages.push(i)
   }
 
   return (
-    <ul className="flex justify-center space-x-4 font-mono text-lg">
+    <nav className="flex justify-center items-center gap-2">
       {pages.map(pageNumber => {
         const params = new URLSearchParams(searchParams)
         params.set('page', pageNumber.toString())
-        return (<li key={pageNumber}>
-          <Link href={`${pathname}?${params.toString()}`} className={`${pageNumber === page ? 'decoration-gray-400 underline-offset-4 underline decoration-4' : ''} text-gray-500 dark:text-gray-400`}>{pageNumber}</Link>
-        </li>)
+        const isActive = pageNumber === currentPage
+
+        return (
+          <Link
+            key={pageNumber}
+            href={`${pathname}?${params.toString()}`}
+            className="relative"
+          >
+            <motion.span
+              className={`inline-flex items-center justify-center w-10 h-10 rounded-xl text-sm font-mono font-medium transition-colors duration-300 ${
+                isActive
+                  ? 'text-white bg-[var(--accent)]'
+                  : 'text-[var(--text-secondary)] hover:text-[var(--accent)] hover:bg-[var(--bg-secondary)]'
+              }`}
+              whileHover={!isActive ? { scale: 1.1 } : {}}
+              whileTap={!isActive ? { scale: 0.95 } : {}}
+            >
+              {pageNumber}
+            </motion.span>
+          </Link>
+        )
       })}
-    </ul>
+    </nav>
   )
 }

@@ -1,11 +1,13 @@
 export default function ProjectListLoading() {
   return (
-    <ul className="space-y-8">
-      {Array(3).fill(0).map((_el, index) => (
-        <li key={index}>
-          <div className="w-full h-24 animate-pulse bg-neutral-100 dark:bg-neutral-700"></div>
-        </li>
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+      {Array(4).fill(0).map((_, i) => (
+        <div
+          key={i}
+          className="h-32 rounded-2xl bg-[var(--bg-tertiary)] animate-pulse border border-[var(--border-color)]"
+          style={{ animationDelay: `${i * 0.1}s` }}
+        />
       ))}
-    </ul>
+    </div>
   )
 }
