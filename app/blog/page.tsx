@@ -7,21 +7,31 @@ import { MotionItem } from '@/components/page-transition'
 import { getTranslation } from '@/lib/i18n'
 import useServerLanguage from '@/hooks/use-server-language'
 
-export default async function BlogPostsPage(
-  { searchParams }
-) {
+interface BlogPageProps {
+  searchParams: {
+    tags?: string
+    page?: string
+    limit?: string
+    order?: string
+  }
+}
+
+export default async function BlogPostsPage({ searchParams }: BlogPageProps) {
   const tags = searchParams.tags?.split(',')
   const page = Number(searchParams.page) || 1
   const limit = Number(searchParams.limit) || 6
   const order = searchParams.order ?? 'newest'
-  const { posts, pageCount } = await getPosts({
+
+  const { posts, totalPages } = await getPosts({
     tags,
     newest: order === 'newest',
     page,
-    limit
+    limit,
   })
+
   const lang = useServerLanguage()
-  const t = (key) => getTranslation(lang)[key] || key
+  const dict = getTranslation(lang) as Record<string, string>
+  const t = (key: string): string => dict[key] || key
 
   return (
     <>
@@ -37,7 +47,6 @@ export default async function BlogPostsPage(
         <hr />
       </MotionItem>
 
-      {/* Order Toggle */}
       <MotionItem delay={0.2}>
         <div className="flex items-center gap-2 mb-8 text-sm">
           <span className="text-[var(--text-muted)]">{t('blog.sort')}</span>
@@ -60,13 +69,15 @@ export default async function BlogPostsPage(
         </div>
       </MotionItem>
 
-      {/* Posts Grid */}
       {posts.length === 0 ? (
         <MotionItem delay={0.25}>
           <div className="text-center py-20">
             <div className="text-6xl mb-4">📝</div>
             <p className="text-xl text-[var(--text-muted)]">{t('blog.noPosts')}</p>
-            <Link href="/blog" className="mt-4 inline-block text-[var(--accent)] hover:underline">
+            <Link
+              href="/blog"
+              className="mt-4 inline-block text-[var(--accent)] hover:underline"
+            >
               {t('blog.clearFilters')}
             </Link>
           </div>
@@ -76,27 +87,25 @@ export default async function BlogPostsPage(
           {posts.map((post, i) => (
             <MotionItem key={post.slug} delay={0.05 * i}>
               <Card href={`/blog/${post.slug}`}>
-                {/* Date */}
                 <div className="flex items-center gap-2 text-xs text-[var(--text-muted)] font-mono mb-3">
                   <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)]" />
                   {post.frontmatter.date}
                 </div>
 
-                {/* Title */}
                 <h3 className="text-xl font-['Clash_Display'] font-semibold text-[var(--text-primary)] group-hover:text-[var(--accent)] transition-colors duration-300 mb-3 line-clamp-2">
                   {post.frontmatter.title}
                 </h3>
 
-                {/* Tags */}
                 {post.frontmatter.tags && (
                   <div className="flex flex-wrap gap-1 mb-4">
-                    {post.frontmatter.tags.map(tag => (
-                      <span key={tag} className="tag text-[0.65rem]">#{tag}</span>
+                    {post.frontmatter.tags.map((tag) => (
+                      <span key={tag} className="tag text-[0.65rem]">
+                        #{tag}
+                      </span>
                     ))}
                   </div>
                 )}
 
-                {/* Read more link */}
                 <span className="inline-flex items-center gap-1 text-sm text-[var(--accent)] font-medium group-hover:gap-2 transition-all duration-300">
                   {t('blog.readArticle')}
                   <span className="text-base">→</span>
@@ -107,10 +116,9 @@ export default async function BlogPostsPage(
         </div>
       )}
 
-      {/* Pagination */}
       <MotionItem delay={0.3}>
         <div className="mt-12">
-          <Pagination pageCount={pageCount} />
+          <Pagination pageCount={totalPages} />
         </div>
       </MotionItem>
     </>

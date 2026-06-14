@@ -1,28 +1,50 @@
-import Card from "@/components/card"
-import { MotionItem } from "@/components/page-transition"
+import Card from '@/components/card'
+import { MotionItem } from '@/components/page-transition'
+import type { Repo } from '@/types'
 
-async function getRepos() {
+async function getRepos(): Promise<Repo[]> {
   try {
     const response = await fetch(
       'https://api.github.com/users/Guaniuzzt/repos',
       { next: { revalidate: 3600 } }
     )
     if (!response.ok) throw new Error('Failed to fetch')
-    return await response.json()
-  } catch (e) {
-    // Fallback to db.json if API fails
-    const response = await fetch('http://localhost:3001/repos', { cache: 'no-store' })
-    return await response.json()
+    return (await response.json()) as Repo[]
+  } catch {
+    // GitHub API 失败时回退到本地 json-server
+    const response = await fetch('http://localhost:3001/repos', {
+      cache: 'no-store',
+    })
+    return (await response.json()) as Repo[]
   }
 }
 
+const LANGUAGE_COLORS: Record<string, string> = {
+  JavaScript: '#f7df1e',
+  TypeScript: '#3178c6',
+  Python: '#3776ab',
+  HTML: '#e34f26',
+  CSS: '#563d7c',
+  Ruby: '#cc342d',
+  Go: '#00add8',
+  Rust: '#dea584',
+  Vue: '#4fc08d',
+  Shell: '#89e051',
+  Java: '#b07219',
+  default: '#8b8b8b',
+}
+
+function getLanguageColor(lang: string): string {
+  return LANGUAGE_COLORS[lang] || LANGUAGE_COLORS.default
+}
+
 export default async function ProjectList() {
-  let repos = []
-  let error = null
+  let repos: Repo[] = []
+  let error: string | null = null
 
   try {
     repos = await getRepos()
-  } catch (e) {
+  } catch {
     error = 'Unable to load projects. Please try again later.'
   }
 
@@ -36,20 +58,20 @@ export default async function ProjectList() {
     )
   }
 
-  // Sort by stars
-  const sortedRepos = repos.sort((a, b) => (b.stargazers_count || 0) - (a.stargazers_count || 0))
+  const sortedRepos = [...repos].sort(
+    (a, b) => (b.stargazers_count || 0) - (a.stargazers_count || 0)
+  )
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
       {sortedRepos.map((repo, i) => (
         <MotionItem key={repo.id} delay={0.05 * i}>
           <Card href={repo.html_url} className="h-full flex flex-col">
-            {/* Header */}
             <div className="flex justify-between items-start mb-3 gap-2">
               <div className="flex items-center gap-2 min-w-0">
                 <span className="flex-shrink-0 w-2.5 h-2.5 rounded-full bg-[var(--accent)]" />
                 <h3 className="font-['Clash_Display'] font-semibold text-[var(--text-primary)] truncate">
-                  {repo.name}
+                  {repo.name ?? repo.title}
                 </h3>
               </div>
               {repo.stargazers_count > 0 && (
@@ -62,19 +84,15 @@ export default async function ProjectList() {
               )}
             </div>
 
-            {/* Description */}
             <p className="text-sm text-[var(--text-secondary)] leading-relaxed flex-1 line-clamp-3">
               {repo.description || 'No description'}
             </p>
 
-            {/* Language indicator */}
             {repo.language && (
               <div className="mt-4 flex items-center gap-2">
                 <span
                   className="w-2 h-2 rounded-full"
-                  style={{
-                    background: getLanguageColor(repo.language)
-                  }}
+                  style={{ background: getLanguageColor(repo.language) }}
                 />
                 <span className="text-xs text-[var(--text-muted)] font-mono">
                   {repo.language}
@@ -86,22 +104,4 @@ export default async function ProjectList() {
       ))}
     </div>
   )
-}
-
-function getLanguageColor(lang) {
-  const colors = {
-    JavaScript: '#f7df1e',
-    TypeScript: '#3178c6',
-    Python: '#3776ab',
-    HTML: '#e34f26',
-    CSS: '#563d7c',
-    Ruby: '#cc342d',
-    Go: '#00add8',
-    Rust: '#dea584',
-    Vue: '#4fc08d',
-    Shell: '#89e051',
-    Java: '#b07219',
-    default: '#8b8b8b',
-  }
-  return colors[lang] || colors.default
 }

@@ -9,19 +9,11 @@ export default function NotFound() {
 
   return (
     <div className="min-h-[70vh] flex flex-col items-center justify-center text-center relative">
-      {/* Background glitch effect */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <motion.div
           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[20rem] font-['Clash_Display'] font-bold text-[var(--bg-tertiary)] select-none"
-          animate={{
-            opacity: [0.1, 0.2, 0.1],
-            scale: [1, 1.02, 1],
-          }}
-          transition={{
-            duration: 4,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
+          animate={{ opacity: [0.1, 0.2, 0.1], scale: [1, 1.02, 1] }}
+          transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
         >
           404
         </motion.div>

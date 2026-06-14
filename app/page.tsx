@@ -1,25 +1,25 @@
-import H1 from "@/components/h1"
-import { getPosts } from "@/lib/posts"
+import H1 from '@/components/h1'
+import { getPosts } from '@/lib/posts'
 import Link from 'next/link'
-import Card from "@/components/card"
-import { MotionItem } from "@/components/page-transition"
-import { getTranslation } from "@/lib/i18n"
-import useServerLanguage from "@/hooks/use-server-language"
+import Card from '@/components/card'
+import { MotionItem } from '@/components/page-transition'
+import { getTranslation } from '@/lib/i18n'
+import useServerLanguage from '@/hooks/use-server-language'
 
 export default async function Home() {
-  const { posts } = await getPosts({
-    newest: true, limit: 3
-  })
+  const { posts } = await getPosts({ newest: true, limit: 3 })
   const lang = useServerLanguage()
-  const t = (key) => getTranslation(lang)[key] || key
+  const dict = getTranslation(lang) as Record<string, string>
+  const t = (key: string): string => dict[key] || key
 
   return (
     <>
-      {/* Hero Section */}
       <section className="mb-20 relative">
-        {/* Floating accent shapes */}
         <div className="absolute -top-10 -right-10 w-64 h-64 bg-[var(--accent)]/5 rounded-full blur-3xl animate-float pointer-events-none" />
-        <div className="absolute top-20 -left-20 w-48 h-48 bg-[var(--accent2)]/5 rounded-full blur-3xl animate-float pointer-events-none" style={{ animationDelay: '-3s' }} />
+        <div
+          className="absolute top-20 -left-20 w-48 h-48 bg-[var(--accent2)]/5 rounded-full blur-3xl animate-float pointer-events-none"
+          style={{ animationDelay: '-3s' }}
+        />
 
         <div className="max-w-2xl">
           <H1 className="mb-4">{t('home.greeting')}</H1>
@@ -56,16 +56,16 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* Divider */}
       <MotionItem delay={0.4}>
         <div className="flex items-center gap-4 mb-12">
           <div className="h-px flex-1 bg-gradient-to-r from-transparent via-[var(--border-color)] to-transparent" />
-          <span className="text-xs font-mono text-[var(--text-muted)] tracking-widest uppercase">{t('home.latestPosts')}</span>
+          <span className="text-xs font-mono text-[var(--text-muted)] tracking-widest uppercase">
+            {t('home.latestPosts')}
+          </span>
           <div className="h-px flex-1 bg-gradient-to-r from-transparent via-[var(--border-color)] to-transparent" />
         </div>
       </MotionItem>
 
-      {/* Blog Posts */}
       <section>
         <div className="grid grid-cols-1 gap-6">
           {posts.map((post, i) => (
@@ -73,11 +73,12 @@ export default async function Home() {
               <Card href={`/blog/${post.slug}`} className="!p-0 overflow-hidden">
                 <div className="p-6">
                   <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6">
-                    {/* Date badge */}
                     <div className="flex-shrink-0">
                       <div className="inline-flex flex-col items-center px-3 py-2 rounded-lg bg-[var(--bg-tertiary)] min-w-[3.5rem]">
                         <span className="text-xs font-mono text-[var(--text-muted)] uppercase tracking-wider">
-                          {new Date(post.frontmatter.date).toLocaleString('default', { month: 'short' })}
+                          {new Date(post.frontmatter.date).toLocaleString('default', {
+                            month: 'short',
+                          })}
                         </span>
                         <span className="text-xl font-['Clash_Display'] font-semibold text-[var(--accent)] leading-none">
                           {new Date(post.frontmatter.date).getDate()}
@@ -91,14 +92,15 @@ export default async function Home() {
                       </h3>
                       {post.frontmatter.tags && (
                         <div className="flex flex-wrap gap-1.5 mt-2">
-                          {post.frontmatter.tags.map(tag => (
-                            <span key={tag} className="tag text-[0.65rem]">#{tag}</span>
+                          {post.frontmatter.tags.map((tag) => (
+                            <span key={tag} className="tag text-[0.65rem]">
+                              #{tag}
+                            </span>
                           ))}
                         </div>
                       )}
                     </div>
 
-                    {/* Arrow */}
                     <div className="flex-shrink-0 self-end sm:self-center">
                       <span className="inline-flex items-center justify-center w-8 h-8 rounded-full border border-[var(--border-color)] text-[var(--text-muted)] group-hover:border-[var(--accent)] group-hover:text-[var(--accent)] group-hover:translate-x-1 transition-all duration-300">
                         →
@@ -111,7 +113,6 @@ export default async function Home() {
           ))}
         </div>
 
-        {/* View All */}
         <MotionItem delay={0.5}>
           <div className="mt-8 text-center">
             <Link

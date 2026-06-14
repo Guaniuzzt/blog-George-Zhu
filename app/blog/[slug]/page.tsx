@@ -1,15 +1,22 @@
-import H1 from "@/components/h1"
-import { MotionItem } from "@/components/page-transition"
-import Link from "next/link"
-import Card from "@/components/card"
-import { getTranslation } from "@/lib/i18n"
-import useServerLanguage from "@/hooks/use-server-language"
+import H1 from '@/components/h1'
+import { MotionItem } from '@/components/page-transition'
+import Link from 'next/link'
+import Card from '@/components/card'
+import { getTranslation } from '@/lib/i18n'
+import useServerLanguage from '@/hooks/use-server-language'
+import type { Metadata } from 'next'
 
-export const metadata = {
-  title: 'About'
+export const metadata: Metadata = {
+  title: 'About',
 }
 
-const skills = [
+interface Skill {
+  name: string
+  level: number
+  color: string
+}
+
+const skills: Skill[] = [
   { name: 'React / Next.js', level: 90, color: '#61dafb' },
   { name: 'Node.js', level: 85, color: '#68a063' },
   { name: 'TypeScript', level: 80, color: '#3178c6' },
@@ -20,7 +27,8 @@ const skills = [
 
 export default function AboutPage() {
   const lang = useServerLanguage()
-  const t = (key) => getTranslation(lang)[key] || key
+  const dict = getTranslation(lang) as Record<string, string>
+  const t = (key: string): string => dict[key] || key
 
   return (
     <div>
@@ -38,7 +46,6 @@ export default function AboutPage() {
         </p>
       </MotionItem>
 
-      {/* Skills Section */}
       <MotionItem delay={0.2}>
         <h2 className="font-['Clash_Display'] text-2xl font-semibold mb-6">
           {t('about.skills')}
@@ -70,7 +77,6 @@ export default function AboutPage() {
         ))}
       </div>
 
-      {/* Connect Section */}
       <MotionItem delay={0.5}>
         <Card className="text-center">
           <h3 className="font-['Clash_Display'] text-xl font-semibold mb-3">

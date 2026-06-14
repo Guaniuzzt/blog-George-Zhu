@@ -1,4 +1,4 @@
-import Image from 'next/image'
+import Image, { type StaticImageData } from 'next/image'
 import dog1 from './../../public/images/dog1.png'
 import dog2 from './../../public/images/dog2.png'
 import dog3 from './../../public/images/dog3.png'
@@ -7,12 +7,19 @@ import H1 from '@/components/h1'
 import { MotionItem } from '@/components/page-transition'
 import { getTranslation } from '@/lib/i18n'
 import useServerLanguage from '@/hooks/use-server-language'
+import type { Metadata } from 'next'
 
-export const metadata = {
-  title: 'Photos'
+export const metadata: Metadata = {
+  title: 'Photos',
 }
 
-const photos = [
+interface Photo {
+  src: StaticImageData
+  alt: string
+  label: string
+}
+
+const photos: Photo[] = [
   { src: dog1, alt: 'My dog - photo 1', label: 'Good Boy #1' },
   { src: dog2, alt: 'My dog - photo 2', label: 'Good Boy #2' },
   { src: dog3, alt: 'My dog - photo 3', label: 'Good Boy #3' },
@@ -21,7 +28,8 @@ const photos = [
 
 export default function PhotosPage() {
   const lang = useServerLanguage()
-  const t = (key) => getTranslation(lang)[key] || key
+  const dict = getTranslation(lang) as Record<string, string>
+  const t = (key: string): string => dict[key] || key
 
   return (
     <div>
@@ -48,17 +56,14 @@ export default function PhotosPage() {
                 placeholder="blur"
               />
 
-              {/* Overlay */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
-              {/* Label */}
               <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out">
                 <span className="text-white text-sm font-['Clash_Display'] font-medium">
                   {photo.label}
                 </span>
               </div>
 
-              {/* Corner accent */}
               <div className="absolute top-3 right-3 w-8 h-8 border-t-2 border-r-2 border-white/0 group-hover:border-white/60 rounded-tr-lg transition-all duration-500" />
             </div>
           </MotionItem>
