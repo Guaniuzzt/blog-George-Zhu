@@ -25,7 +25,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body className="min-h-screen">
         <div className="fixed inset-0 grid-bg pointer-events-none opacity-[0.03] dark:opacity-[0.02]" />
 
-        <Header />
+        <Header lang={lang} />
 
         <main className="max-w-4xl mx-auto px-6 pt-28 pb-24 relative z-10">
           <PageTransition>{children}</PageTransition>

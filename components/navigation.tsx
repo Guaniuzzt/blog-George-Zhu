@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { motion } from 'framer-motion'
 import useLanguage from '@/hooks/use-language'
-import type { NavItem } from '@/types'
+import type { NavItem, Locale } from '@/types'
 
 const linkKeys: NavItem[] = [
   { href: '/', i18nKey: 'nav.home' },
@@ -14,9 +14,9 @@ const linkKeys: NavItem[] = [
   { href: '/blog', i18nKey: 'nav.blog' },
 ]
 
-export default function Navigation() {
+export default function Navigation({ lang }: { lang: Locale }) {
   const pathname = usePathname()
-  const { t } = useLanguage()
+  const { t } = useLanguage(lang)
 
   return (
     <nav className="hidden md:block">

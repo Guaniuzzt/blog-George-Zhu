@@ -6,8 +6,9 @@ import DarkMode from './dark-mode'
 import LanguageToggle from './language-toggle'
 import { useState } from 'react'
 import { motion, useScroll, useMotionValueEvent } from 'framer-motion'
+import type { Locale } from '@/types'
 
-export default function Header() {
+export default function Header({ lang }: { lang: Locale }) {
   const [scrolled, setScrolled] = useState(false)
   const { scrollY } = useScroll()
 
@@ -40,7 +41,7 @@ export default function Header() {
               <span className="text-[var(--text-primary)] hidden sm:inline">.dev</span>
             </motion.span>
           </Link>
-          <Navigation />
+          <Navigation lang={lang} />
         </div>
         <div className="flex items-center gap-3">
           <LanguageToggle />
