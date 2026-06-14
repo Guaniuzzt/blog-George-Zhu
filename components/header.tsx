@@ -1,9 +1,9 @@
 'use client'
 
-import Navigation from "./navigation"
-import Link from "next/link"
-import DarkMode from "./dark-mode"
-import LanguageToggle from "./language-toggle"
+import Navigation from './navigation'
+import Link from 'next/link'
+import DarkMode from './dark-mode'
+import LanguageToggle from './language-toggle'
 import { useState } from 'react'
 import { motion, useScroll, useMotionValueEvent } from 'framer-motion'
 
@@ -11,7 +11,7 @@ export default function Header() {
   const [scrolled, setScrolled] = useState(false)
   const { scrollY } = useScroll()
 
-  useMotionValueEvent(scrollY, 'change', (latest) => {
+  useMotionValueEvent(scrollY, 'change', (latest: number) => {
     setScrolled(latest > 40)
   })
 

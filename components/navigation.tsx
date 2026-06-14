@@ -1,11 +1,12 @@
 'use client'
 
-import Link from "next/link"
-import { usePathname } from "next/navigation"
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { motion } from 'framer-motion'
 import useLanguage from '@/hooks/use-language'
+import type { NavItem } from '@/types'
 
-const linkKeys = [
+const linkKeys: NavItem[] = [
   { href: '/', i18nKey: 'nav.home' },
   { href: '/about', i18nKey: 'nav.about' },
   { href: '/about/projects', i18nKey: 'nav.projects' },

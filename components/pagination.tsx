@@ -1,26 +1,27 @@
 'use client'
 
+import { Suspense } from 'react'
 import Link from 'next/link'
 import { useSearchParams, usePathname } from 'next/navigation'
 import { motion } from 'framer-motion'
+import type { PaginationProps } from '@/types'
 
-export default function Pagination({ pageCount }) {
+function PaginationInner({ pageCount }: PaginationProps) {
   const searchParams = useSearchParams()
   const pathname = usePathname()
 
   if (pageCount <= 1) return null
 
-  const pages = []
   const currentPage = Number(searchParams.get('page') ?? 1)
-
+  const pages: number[] = []
   for (let i = 1; i <= pageCount; i++) {
     pages.push(i)
   }
 
   return (
     <nav className="flex justify-center items-center gap-2">
-      {pages.map(pageNumber => {
-        const params = new URLSearchParams(searchParams)
+      {pages.map((pageNumber) => {
+        const params = new URLSearchParams(searchParams.toString())
         params.set('page', pageNumber.toString())
         const isActive = pageNumber === currentPage
 
@@ -45,5 +46,13 @@ export default function Pagination({ pageCount }) {
         )
       })}
     </nav>
+  )
+}
+
+export default function Pagination(props: PaginationProps) {
+  return (
+    <Suspense fallback={<div className="h-10" />}>
+      <PaginationInner {...props} />
+    </Suspense>
   )
 }

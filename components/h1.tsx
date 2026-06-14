@@ -1,8 +1,14 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import type { ReactNode } from 'react'
 
-export default function H1({ children, className = '' }) {
+interface H1Props {
+  children: ReactNode
+  className?: string
+}
+
+export default function H1({ children, className = '' }: H1Props) {
   return (
     <motion.h1
       className={`mb-8 font-['Clash_Display'] font-semibold text-3xl md:text-5xl tracking-tight leading-tight not-prose bg-gradient-to-r from-[var(--accent)] to-[var(--accent2)] bg-clip-text text-transparent ${className}`}

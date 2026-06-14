@@ -2,8 +2,15 @@
 
 import { motion } from 'framer-motion'
 import Link from 'next/link'
+import type { ReactNode } from 'react'
 
-export default function Card({ children, className = '', href }) {
+interface CardProps {
+  children: ReactNode
+  className?: string
+  href?: string
+}
+
+export default function Card({ children, className = '', href }: CardProps) {
   const cardContent = (
     <motion.div
       className={`group relative block rounded-2xl border border-[var(--border-color)] bg-[var(--card-bg)] p-6 transition-all duration-500 hover:border-[var(--accent)]/30 ${className}`}
@@ -16,17 +23,19 @@ export default function Card({ children, className = '', href }) {
         boxShadow: 'var(--card-shadow)',
       }}
     >
-      {/* Hover gradient border glow */}
       <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
         <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-[var(--accent)]/5 via-[var(--accent2)]/5 to-[var(--accent)]/5" />
       </div>
-
       {children}
     </motion.div>
   )
 
   if (href) {
-    return <Link href={href} className="block">{cardContent}</Link>
+    return (
+      <Link href={href} className="block">
+        {cardContent}
+      </Link>
+    )
   }
 
   return cardContent

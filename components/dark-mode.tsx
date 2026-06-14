@@ -7,7 +7,7 @@ export default function DarkMode() {
   const { theme, toggleTheme, mounted } = useDarkMode()
 
   if (!mounted) {
-    return <div className="w-14 h-7" /> // Prevent layout shift
+    return <div className="w-14 h-7" />
   }
 
   return (
@@ -18,7 +18,6 @@ export default function DarkMode() {
       whileTap={{ scale: 0.95 }}
       aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
     >
-      {/* Background */}
       <motion.div
         className="absolute inset-0 rounded-full"
         animate={{
@@ -30,10 +29,14 @@ export default function DarkMode() {
         transition={{ duration: 0.6 }}
       />
 
-      {/* Stars */}
       <AnimatePresence>
         {theme === 'dark' && (
-          <motion.div className="absolute inset-0" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+          <motion.div
+            className="absolute inset-0"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
             {[...Array(4)].map((_, i) => (
               <motion.div
                 key={i}
@@ -47,7 +50,6 @@ export default function DarkMode() {
         )}
       </AnimatePresence>
 
-      {/* Knob */}
       <motion.div
         className="absolute top-0.5 w-6 h-6 rounded-full"
         animate={{
@@ -61,10 +63,14 @@ export default function DarkMode() {
         transition={{ type: 'spring', stiffness: 500, damping: 30 }}
       />
 
-      {/* Sun rays */}
       <AnimatePresence>
         {theme === 'light' && (
-          <motion.div className="absolute inset-0" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+          <motion.div
+            className="absolute inset-0"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
             <motion.div
               className="absolute left-1.5 top-1 w-5 h-5"
               animate={{ rotate: 360 }}
