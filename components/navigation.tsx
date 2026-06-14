@@ -22,18 +22,25 @@ export default function Navigation({ lang }: { lang: Locale }) {
     <nav className="hidden md:block">
       <ul className="flex gap-1">
         {linkKeys.map((link, i) => {
+          // If another nav item is a child of this one, only exact-match.
+          // Otherwise allow prefix match (e.g. /blog matches /blog/some-post).
+          const hasChildInNav = linkKeys.some(
+            other => other.href !== link.href && other.href.startsWith(link.href + '/')
+          )
           const isActive =
             link.href === '/'
               ? pathname === '/'
-              : pathname.startsWith(link.href)
+              : hasChildInNav
+                ? pathname === link.href
+                : pathname === link.href || pathname.startsWith(link.href + '/')
 
           return (
             <li key={link.href}>
               <Link href={link.href}>
                 <motion.span
-                  className={`relative px-3 py-1.5 rounded-lg text-sm font-medium transition-colors duration-300 ${
+                  className={`relative px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-300 ${
                     isActive
-                      ? 'text-[var(--accent)]'
+                      ? 'text-[var(--accent)] bg-[var(--accent-glow)]'
                       : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
                   }`}
                   initial={{ opacity: 0, y: -10 }}
@@ -41,13 +48,6 @@ export default function Navigation({ lang }: { lang: Locale }) {
                   transition={{ delay: i * 0.06, duration: 0.4 }}
                 >
                   {t(link.i18nKey)}
-                  {isActive && (
-                    <motion.span
-                      className="absolute inset-0 bg-[var(--accent-glow)] rounded-lg -z-10"
-                      layoutId="nav-pill"
-                      transition={{ type: 'spring', stiffness: 380, damping: 30 }}
-                    />
-                  )}
                 </motion.span>
               </Link>
             </li>
