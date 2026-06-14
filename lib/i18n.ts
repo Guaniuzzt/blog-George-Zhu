@@ -1,3 +1,5 @@
+import type { Locale } from '@/types'
+
 export const translations = {
   en: {
     // Navigation
@@ -9,8 +11,10 @@ export const translations = {
 
     // Home page
     'home.greeting': "Hey, I'm George Zhu",
-    'home.tagline': 'A full-stack developer who crafts digital experiences at the intersection of code and creativity.',
-    'home.subtitle': 'I build performant web applications with modern technologies. When I\'m not coding, you\'ll find me exploring new tools, writing about tech, or capturing moments through my lens.',
+    'home.tagline':
+      'A full-stack developer who crafts digital experiences at the intersection of code and creativity.',
+    'home.subtitle':
+      "I build performant web applications with modern technologies. When I'm not coding, you'll find me exploring new tools, writing about tech, or capturing moments through my lens.",
     'home.viewProjects': 'View Projects',
     'home.readBlog': 'Read Blog',
     'home.latestPosts': 'Latest Posts',
@@ -18,11 +22,14 @@ export const translations = {
 
     // About page
     'about.title': 'About Me',
-    'about.p1': 'Hi, I\'m George Zhu — a full-stack developer passionate about building beautiful, performant web applications.',
-    'about.p2': 'With a focus on modern JavaScript ecosystems, I create end-to-end solutions from database design to pixel-perfect UI. I believe code should be both elegant and accessible, and I\'m always exploring the intersection of technology and creative expression.',
+    'about.p1':
+      "Hi, I'm George Zhu — a full-stack developer passionate about building beautiful, performant web applications.",
+    'about.p2':
+      "With a focus on modern JavaScript ecosystems, I create end-to-end solutions from database design to pixel-perfect UI. I believe code should be both elegant and accessible, and I'm always exploring the intersection of technology and creative expression.",
     'about.skills': 'Skills & Tools',
     'about.connect': "Let's Connect",
-    'about.connectDesc': "I'm always open to discussing new projects, creative ideas, or opportunities.",
+    'about.connectDesc':
+      "I'm always open to discussing new projects, creative ideas, or opportunities.",
     'about.viewProjects': 'View Projects',
     'about.github': 'GitHub Profile',
 
@@ -44,7 +51,7 @@ export const translations = {
 
     // Photos page
     'photos.title': 'Photos',
-    'photos.desc': "A glimpse into my world — my four-legged companion.",
+    'photos.desc': 'A glimpse into my world — my four-legged companion.',
 
     // 404
     '404.title': 'Page not found',
@@ -63,7 +70,8 @@ export const translations = {
     // Home page
     'home.greeting': '你好，我是 George Zhu',
     'home.tagline': '一名全栈开发者，在代码与创意的交汇处构建数字体验。',
-    'home.subtitle': '我使用现代技术构建高性能 Web 应用。不写代码时，我喜欢探索新工具、写技术文章、用镜头记录瞬间。',
+    'home.subtitle':
+      '我使用现代技术构建高性能 Web 应用。不写代码时，我喜欢探索新工具、写技术文章、用镜头记录瞬间。',
     'home.viewProjects': '查看项目',
     'home.readBlog': '阅读博客',
     'home.latestPosts': '最新文章',
@@ -71,8 +79,10 @@ export const translations = {
 
     // About page
     'about.title': '关于我',
-    'about.p1': '你好，我是 George Zhu — 一名全栈开发者，热衷于构建美观、高性能的 Web 应用。',
-    'about.p2': '专注于现代 JavaScript 生态系统，我能提供从数据库设计到像素级 UI 的端到端解决方案。我相信代码应该优雅且易于理解，并始终探索技术与创意表达的交汇点。',
+    'about.p1':
+      '你好，我是 George Zhu — 一名全栈开发者，热衷于构建美观、高性能的 Web 应用。',
+    'about.p2':
+      '专注于现代 JavaScript 生态系统，我能提供从数据库设计到像素级 UI 的端到端解决方案。我相信代码应该优雅且易于理解，并始终探索技术与创意表达的交汇点。',
     'about.skills': '技能 & 工具',
     'about.connect': '与我联系',
     'about.connectDesc': '我始终乐于探讨新项目、创意或合作机会。',
@@ -104,8 +114,13 @@ export const translations = {
     '404.desc': '您要查找的页面不存在或已被移动。',
     '404.backHome': '返回首页',
   },
-}
+} as const
 
-export function getTranslation(lang) {
-  return translations[lang] || translations.en
+// 翻译键（用于在调用 t() 时获得自动补全与类型校验）
+export type TranslationKey = keyof typeof translations['en']
+
+export function getTranslation(
+  lang: Locale
+): Record<TranslationKey, string> {
+  return translations[lang] ?? translations.en
 }

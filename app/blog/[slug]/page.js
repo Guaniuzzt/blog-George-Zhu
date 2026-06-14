@@ -1,16 +1,16 @@
 import { notFound } from 'next/navigation'
-import { getPost as getPostNotCached, getPosts } from '@/lib/posts'
+import { getPostBySlug as getPostBySlugNotCached, getPosts } from '@/lib/posts'
 import { cache } from 'react'
 import Link from 'next/link'
 import { MotionItem } from '@/components/page-transition'
 
-const getPost = cache(
-  async (slug) => await getPostNotCached(slug)
+const getPostBySlug = cache(
+  async (slug) => await getPostBySlugNotCached(slug)
 )
 
 export async function generateMetadata({ params }) {
   try {
-    const { frontmatter } = await getPost(params.slug)
+    const { frontmatter } = await getPostBySlug(params.slug)
     return {
       title: frontmatter.title,
       description: frontmatter.description || '',
@@ -31,7 +31,7 @@ export async function generateStaticParams() {
 export default async function BlogPage({ params }) {
   let post
   try {
-    post = await getPost(params.slug)
+    post = await getPostBySlug(params.slug)
   } catch (error) {
     notFound()
   }
