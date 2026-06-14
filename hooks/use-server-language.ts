@@ -1,20 +1,20 @@
 import { cookies, headers } from 'next/headers'
+import type { Locale } from '@/types'
 
-const useServerLanguage = () => {
+const useServerLanguage = (): Locale => {
   try {
     const cookieStore = cookies()
     const langCookie = cookieStore.get('lang')
 
-    // User explicitly chose a language → respect their choice
-    if (langCookie?.value) {
+    // 用户显式选择过语言 → 尊重其选择
+    if (langCookie?.value === 'en' || langCookie?.value === 'zh') {
       return langCookie.value
     }
 
-    // No cookie → detect by IP country
+    // 无 cookie → 按 IP 国家判断
     const headersList = headers()
     const country = headersList.get('x-vercel-ip-country')
 
-    // If in China, default to Chinese; otherwise English
     if (country === 'CN') {
       return 'zh'
     }
