@@ -40,7 +40,7 @@ function parseFrontmatter(fileContent: string): PostFrontmatter {
 
     frontmatter[key] = value
   }
-  return frontmatter as PostFrontmatter
+  return frontmatter as unknown as PostFrontmatter
 }
 
 // ============ 文件读取 ============
