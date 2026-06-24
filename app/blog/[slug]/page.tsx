@@ -15,14 +15,11 @@ interface BlogPostPageProps {
 export async function generateMetadata({
   params,
 }: BlogPostPageProps): Promise<Metadata> {
-  try {
-    const post = await getPostBySlug(params.slug)
-    return {
-      title: post.frontmatter.title,
-      description: post.frontmatter.description,
-    }
-  } catch {
-    return { title: 'Post not found' }
+  const post = await getPostBySlug(params.slug)
+  if (!post) return {}
+  return {
+    title: post.frontmatter.title,
+    description: post.frontmatter.description || '',
   }
 }
 
@@ -32,10 +29,8 @@ export async function generateStaticParams() {
 }
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
-  let post
-  try {
-    post = await getPostBySlug(params.slug)
-  } catch {
+  const post = await getPostBySlug(params.slug)
+  if (!post) {
     notFound()
   }
 

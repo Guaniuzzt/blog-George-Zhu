@@ -1,23 +1,6 @@
 import Card from '@/components/card'
 import { MotionItem } from '@/components/page-transition'
-import type { Repo } from '@/types'
-
-async function getRepos(): Promise<Repo[]> {
-  try {
-    const response = await fetch(
-      'https://api.github.com/users/Guaniuzzt/repos',
-      { next: { revalidate: 3600 } }
-    )
-    if (!response.ok) throw new Error('Failed to fetch')
-    return (await response.json()) as Repo[]
-  } catch {
-    // GitHub API 失败时回退到本地 json-server
-    const response = await fetch('http://localhost:3001/repos', {
-      cache: 'no-store',
-    })
-    return (await response.json()) as Repo[]
-  }
-}
+import { prisma } from '@/lib/prisma'
 
 const LANGUAGE_COLORS: Record<string, string> = {
   JavaScript: '#f7df1e',
@@ -39,63 +22,44 @@ function getLanguageColor(lang: string): string {
 }
 
 export default async function ProjectList() {
-  let repos: Repo[] = []
-  let error: string | null = null
-
-  try {
-    repos = await getRepos()
-  } catch {
-    error = 'Unable to load projects. Please try again later.'
-  }
-
-  if (error) {
-    return (
-      <MotionItem delay={0.2}>
-        <div className="text-center py-12 text-[var(--text-muted)]">
-          <p className="text-lg">{error}</p>
-        </div>
-      </MotionItem>
-    )
-  }
-
-  const sortedRepos = [...repos].sort(
-    (a, b) => (b.stargazers_count || 0) - (a.stargazers_count || 0)
-  )
+  const projects = await prisma.project.findMany({
+    orderBy: { stargazersCount: 'desc' },
+  })
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-      {sortedRepos.map((repo, i) => (
-        <MotionItem key={repo.id} delay={0.05 * i}>
-          <Card href={repo.html_url} className="h-full flex flex-col">
+      {projects.map((project, i) => (
+        <MotionItem key={project.id} delay={0.05 * i}>
+          <Card href={project.url ?? undefined} className="h-full flex flex-col">
             <div className="flex justify-between items-start mb-3 gap-2">
               <div className="flex items-center gap-2 min-w-0">
                 <span className="flex-shrink-0 w-2.5 h-2.5 rounded-full bg-[var(--accent)]" />
                 <h3 className="font-['Clash_Display'] font-semibold text-[var(--text-primary)] truncate">
-                  {repo.name ?? repo.title}
+                  {project.name}
                 </h3>
               </div>
-              {repo.stargazers_count > 0 && (
+              {project.stargazersCount > 0 && (
                 <div className="flex items-center gap-1 flex-shrink-0 px-2 py-0.5 rounded-lg bg-[var(--bg-tertiary)]">
                   <span className="text-yellow-500 text-xs">★</span>
                   <span className="text-xs font-mono text-[var(--text-secondary)]">
-                    {repo.stargazers_count}
+                    {project.stargazersCount}
                   </span>
                 </div>
               )}
             </div>
 
             <p className="text-sm text-[var(--text-secondary)] leading-relaxed flex-1 line-clamp-3">
-              {repo.description || 'No description'}
+              {project.description || 'No description'}
             </p>
 
-            {repo.language && (
+            {project.language && (
               <div className="mt-4 flex items-center gap-2">
                 <span
                   className="w-2 h-2 rounded-full"
-                  style={{ background: getLanguageColor(repo.language) }}
+                  style={{ background: getLanguageColor(project.language) }}
                 />
                 <span className="text-xs text-[var(--text-muted)] font-mono">
-                  {repo.language}
+                  {project.language}
                 </span>
               </div>
             )}
