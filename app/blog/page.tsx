@@ -6,6 +6,8 @@ import Card from '@/components/card'
 import { MotionItem } from '@/components/page-transition'
 import { getTranslation } from '@/lib/i18n'
 import useServerLanguage from '@/hooks/use-server-language'
+import { getCurrentUser } from '@/lib/auth'
+
 
 interface BlogPageProps {
   searchParams: {
@@ -21,6 +23,7 @@ export default async function BlogPostsPage({ searchParams }: BlogPageProps) {
   const page = Number(searchParams.page) || 1
   const limit = Number(searchParams.limit) || 6
   const order = searchParams.order ?? 'newest'
+  const user = await getCurrentUser()
 
   const { posts, totalPages } = await getPosts({
     tags,
@@ -36,6 +39,14 @@ export default async function BlogPostsPage({ searchParams }: BlogPageProps) {
   return (
     <>
       <H1>{t('blog.title')}</H1>
+      {user && (
+        <Link
+          href="/blog/new"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[var(--accent)] text-white text-sm font-medium hover:shadow-lg hover:shadow-[var(--accent)]/25 transition-all duration-300"
+        >
+          + New Post
+        </Link>
+      )}
 
       <MotionItem delay={0.1}>
         <p className="text-lg text-[var(--text-secondary)] mb-8 leading-relaxed">
