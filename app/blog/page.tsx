@@ -38,15 +38,20 @@ export default async function BlogPostsPage({ searchParams }: BlogPageProps) {
 
   return (
     <>
-      <H1>{t('blog.title')}</H1>
-      {user && (
-        <Link
-          href="/blog/new"
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[var(--accent)] text-white text-sm font-medium hover:shadow-lg hover:shadow-[var(--accent)]/25 transition-all duration-300"
-        >
-          + New Post
-        </Link>
-      )}
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-2">
+        <H1>{t('blog.title')}</H1>
+        {user && (
+          <Link
+            href="/blog/new"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[var(--accent)] text-white text-sm font-medium shadow-lg shadow-[var(--accent)]/20 hover:shadow-xl hover:shadow-[var(--accent)]/30 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 self-start md:self-auto shrink-0"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+            </svg>
+            New Post
+          </Link>
+        )}
+      </div>
 
       <MotionItem delay={0.1}>
         <p className="text-lg text-[var(--text-secondary)] mb-8 leading-relaxed">
