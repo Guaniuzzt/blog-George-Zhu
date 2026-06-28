@@ -15,6 +15,7 @@ model Post {
   content     String
   date        DateTime
   author      String?
+  authorId    String?               // Supabase Auth user.id（UUID）
   published   Boolean   @default(true)
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt

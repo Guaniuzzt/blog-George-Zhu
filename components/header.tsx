@@ -7,8 +7,10 @@ import LanguageToggle from './language-toggle'
 import { useState } from 'react'
 import { motion, useScroll, useMotionValueEvent } from 'framer-motion'
 import type { Locale } from '@/types'
+import UserMenu from './user-menu'
+import type { User } from '@supabase/supabase-js' 
 
-export default function Header({ lang }: { lang: Locale }) {
+export default function Header({ lang, user }: { lang: Locale; user: User | null }) {
   const [scrolled, setScrolled] = useState(false)
   const { scrollY } = useScroll()
 
@@ -44,6 +46,7 @@ export default function Header({ lang }: { lang: Locale }) {
           <Navigation lang={lang} />
         </div>
         <div className="flex items-center gap-3">
+          <UserMenu user={user} />
           <LanguageToggle />
           <DarkMode />
         </div>

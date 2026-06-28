@@ -7,6 +7,7 @@ import PageTransition from '@/components/page-transition'
 import useServerDarkMode from '@/hooks/use-server-dark-mode'
 import useServerLanguage from '@/hooks/use-server-language'
 import { SpeedInsights } from '@vercel/speed-insights/next'
+import { getCurrentUser } from '@/lib/auth'
 
 export const metadata: Metadata = {
   title: {
@@ -16,16 +17,17 @@ export const metadata: Metadata = {
   description: 'Full-stack developer & creative technologist',
 }
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+export default async function RootLayout({ children }: { children: ReactNode }) {
   const theme = useServerDarkMode()
   const lang = useServerLanguage()
+  const user = await getCurrentUser()
 
   return (
     <html lang={lang} className={theme}>
       <body className="min-h-screen">
         <div className="fixed inset-0 grid-bg pointer-events-none opacity-[0.03] dark:opacity-[0.02]" />
 
-        <Header lang={lang} />
+        <Header lang={lang} user={user} />
 
         <main className="max-w-4xl mx-auto px-6 pt-28 pb-24 relative z-10">
           <PageTransition>{children}</PageTransition>
