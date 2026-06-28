@@ -4,13 +4,11 @@ import Navigation from './navigation'
 import Link from 'next/link'
 import DarkMode from './dark-mode'
 import LanguageToggle from './language-toggle'
-import { useState } from 'react'
+import { useState, type ReactNode } from 'react'
 import { motion, useScroll, useMotionValueEvent } from 'framer-motion'
 import type { Locale } from '@/types'
-import UserMenu from './user-menu'
-import type { User } from '@supabase/supabase-js' 
 
-export default function Header({ lang, user }: { lang: Locale; user: User | null }) {
+export default function Header({ lang, userSlot }: { lang: Locale; userSlot: ReactNode }) {
   const [scrolled, setScrolled] = useState(false)
   const { scrollY } = useScroll()
 
@@ -46,7 +44,7 @@ export default function Header({ lang, user }: { lang: Locale; user: User | null
           <Navigation lang={lang} />
         </div>
         <div className="flex items-center gap-3">
-          <UserMenu user={user} />
+          {userSlot}
           <LanguageToggle />
           <DarkMode />
         </div>

@@ -25,22 +25,22 @@ export async function updateSession(request: NextRequest) {
     }
   )
 
-  // 刷新 session（会自动续期快过期的 token）
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-
-  // 未登录用户访问受保护路由 → 重定向到 /login
   const protectedPaths = ['/blog/new']
   const isProtected = protectedPaths.some((path) =>
     request.nextUrl.pathname.startsWith(path)
   )
 
-  if (isProtected && !user) {
-    const url = request.nextUrl.clone()
-    url.pathname = '/login'
-    url.searchParams.set('redirectTo', request.nextUrl.pathname)
-    return NextResponse.redirect(url)
+  if (isProtected) {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
+
+    if (!user) {
+      const url = request.nextUrl.clone()
+      url.pathname = '/login'
+      url.searchParams.set('redirectTo', request.nextUrl.pathname)
+      return NextResponse.redirect(url)
+    }
   }
 
   return supabaseResponse

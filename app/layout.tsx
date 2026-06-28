@@ -1,13 +1,14 @@
 import './globals.css'
 import type { Metadata } from 'next'
-import type { ReactNode } from 'react'
+import { Suspense, type ReactNode } from 'react'
+import Link from 'next/link'
 import Header from '@/components/header'
+import ServerUserMenu from '@/components/server-user-menu'
 import Chatbot from '@/components/chatbot'
 import PageTransition from '@/components/page-transition'
 import useServerDarkMode from '@/hooks/use-server-dark-mode'
 import useServerLanguage from '@/hooks/use-server-language'
 import { SpeedInsights } from '@vercel/speed-insights/next'
-import { getCurrentUser } from '@/lib/auth'
 
 export const metadata: Metadata = {
   title: {
@@ -17,17 +18,34 @@ export const metadata: Metadata = {
   description: 'Full-stack developer & creative technologist',
 }
 
-export default async function RootLayout({ children }: { children: ReactNode }) {
+function UserMenuFallback() {
+  return (
+    <Link
+      href="/login"
+      className="px-4 py-1.5 rounded-xl border border-[var(--border-color)] text-sm opacity-50 pointer-events-none"
+    >
+      Sign In
+    </Link>
+  )
+}
+
+export default function RootLayout({ children }: { children: ReactNode }) {
   const theme = useServerDarkMode()
   const lang = useServerLanguage()
-  const user = await getCurrentUser()
 
   return (
     <html lang={lang} className={theme}>
       <body className="min-h-screen">
         <div className="fixed inset-0 grid-bg pointer-events-none opacity-[0.03] dark:opacity-[0.02]" />
 
-        <Header lang={lang} user={user} />
+        <Header
+          lang={lang}
+          userSlot={
+            <Suspense fallback={<UserMenuFallback />}>
+              <ServerUserMenu />
+            </Suspense>
+          }
+        />
 
         <main className="max-w-4xl mx-auto px-6 pt-28 pb-24 relative z-10">
           <PageTransition>{children}</PageTransition>
