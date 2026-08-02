@@ -3,8 +3,8 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { motion } from 'framer-motion'
-import useLanguage from '@/hooks/use-language'
-import type { NavItem, Locale } from '@/types'
+import useLocale from '@/hooks/use-locale'
+import type { NavItem } from '@/types'
 
 const linkKeys: NavItem[] = [
   { href: '/', i18nKey: 'nav.home' },
@@ -14,29 +14,32 @@ const linkKeys: NavItem[] = [
   { href: '/blog', i18nKey: 'nav.blog' },
 ]
 
-export default function Navigation({ lang }: { lang: Locale }) {
+export default function Navigation() {
   const pathname = usePathname()
-  const { t } = useLanguage(lang)
+  const { t, routePrefix } = useLocale()
+
+  const stripLocale = (path: string) =>
+    path.replace(/^\/(cn|eng)/, '') || '/'
+
+  const currentPath = stripLocale(pathname)
 
   return (
     <nav className="hidden md:block">
       <ul className="flex gap-1">
         {linkKeys.map((link, i) => {
-          // If another nav item is a child of this one, only exact-match.
-          // Otherwise allow prefix match (e.g. /blog matches /blog/some-post).
           const hasChildInNav = linkKeys.some(
             other => other.href !== link.href && other.href.startsWith(link.href + '/')
           )
           const isActive =
             link.href === '/'
-              ? pathname === '/'
+              ? currentPath === '/'
               : hasChildInNav
-                ? pathname === link.href
-                : pathname === link.href || pathname.startsWith(link.href + '/')
+                ? currentPath === link.href
+                : currentPath === link.href || currentPath.startsWith(link.href + '/')
 
           return (
             <li key={link.href}>
-              <Link href={link.href}>
+              <Link href={`/${routePrefix}${link.href === '/' ? '' : link.href}`}>
                 <motion.span
                   className={`relative px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-300 ${
                     isActive

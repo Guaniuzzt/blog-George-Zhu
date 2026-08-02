@@ -4,8 +4,7 @@ import ProjectListLoading from './components/project-list-loading'
 import { ErrorBoundary } from 'react-error-boundary'
 import H1 from '@/components/h1'
 import { MotionItem } from '@/components/page-transition'
-import { getTranslation } from '@/lib/i18n'
-import useServerLanguage from '@/hooks/use-server-language'
+import { getTranslation, routeToLocale } from '@/lib/i18n'
 import type { Metadata } from 'next'
 import type { Locale } from '@/types'
 
@@ -23,8 +22,8 @@ function ErrorFallback({ lang }: { lang: Locale }) {
   )
 }
 
-export default async function ProjectsPage() {
-  const lang = useServerLanguage()
+export default async function ProjectsPage({ params }: { params: { lang: string } }) {
+  const lang = routeToLocale(params.lang)
   const dict = getTranslation(lang) as Record<string, string>
   const t = (key: string): string => dict[key] || key
 

@@ -3,14 +3,14 @@
 import Navigation from './navigation'
 import Link from 'next/link'
 import DarkMode from './dark-mode'
-import LanguageToggle from './language-toggle'
 import { useState, type ReactNode } from 'react'
 import { motion, useScroll, useMotionValueEvent } from 'framer-motion'
-import type { Locale } from '@/types'
+import useLocale from '@/hooks/use-locale'
 
-export default function Header({ lang, userSlot }: { lang: Locale; userSlot: ReactNode }) {
+export default function Header({ userSlot }: { userSlot: ReactNode }) {
   const [scrolled, setScrolled] = useState(false)
   const { scrollY } = useScroll()
+  const { routePrefix } = useLocale()
 
   useMotionValueEvent(scrollY, 'change', (latest: number) => {
     setScrolled(latest > 40)
@@ -29,7 +29,7 @@ export default function Header({ lang, userSlot }: { lang: Locale; userSlot: Rea
     >
       <div className="max-w-5xl mx-auto px-6 py-4 flex justify-between items-center">
         <div className="flex items-center gap-12">
-          <Link href="/" className="group">
+          <Link href={`/${routePrefix}`} className="group">
             <motion.span
               className="text-xl font-['Clash_Display'] font-semibold tracking-tight glitch-text"
               whileHover={{ scale: 1.02 }}
@@ -41,11 +41,10 @@ export default function Header({ lang, userSlot }: { lang: Locale; userSlot: Rea
               <span className="text-[var(--text-primary)] hidden sm:inline">.dev</span>
             </motion.span>
           </Link>
-          <Navigation lang={lang} />
+          <Navigation />
         </div>
         <div className="flex items-center gap-3">
           {userSlot}
-          <LanguageToggle />
           <DarkMode />
         </div>
       </div>

@@ -25,9 +25,11 @@ export async function updateSession(request: NextRequest) {
     }
   )
 
+  // Strip locale prefix before checking protected paths
+  const pathWithoutLocale = request.nextUrl.pathname.replace(/^\/(cn|eng)/, '')
   const protectedPaths = ['/blog/new']
   const isProtected = protectedPaths.some((path) =>
-    request.nextUrl.pathname.startsWith(path)
+    pathWithoutLocale.startsWith(path)
   )
 
   if (isProtected) {
@@ -37,7 +39,9 @@ export async function updateSession(request: NextRequest) {
 
     if (!user) {
       const url = request.nextUrl.clone()
-      url.pathname = '/login'
+      const localeMatch = request.nextUrl.pathname.match(/^\/(cn|eng)/)
+      const currentLocale = localeMatch ? localeMatch[1] : 'eng'
+      url.pathname = `/${currentLocale}/login`
       url.searchParams.set('redirectTo', request.nextUrl.pathname)
       return NextResponse.redirect(url)
     }

@@ -3,6 +3,7 @@
 import { prisma } from '@/lib/prisma'
 import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
+import { routeLocales } from '@/lib/i18n'
 
 function slugify(text: string): string {
   return text
@@ -23,7 +24,6 @@ interface CreatePostInput {
 export async function createPost(
   input: CreatePostInput
 ): Promise<{ slug?: string; error?: string }> {
-  // 1. 验证用户身份
   const supabase = await createClient()
   const {
     data: { user },
@@ -33,12 +33,10 @@ export async function createPost(
     return { error: 'You must be logged in to create a post.' }
   }
 
-  // 2. 验证输入
   if (!input.title.trim() || !input.content.trim()) {
     return { error: 'Title and content are required.' }
   }
 
-  // 3. 生成 slug（若重复则追加时间戳）
   let slug = slugify(input.title)
   const existing = await prisma.post.findUnique({ where: { slug } })
   if (existing) {
@@ -46,7 +44,6 @@ export async function createPost(
   }
 
   try {
-    // 4. 创建文章
     const post = await prisma.post.create({
       data: {
         slug,
@@ -60,7 +57,6 @@ export async function createPost(
       },
     })
 
-    // 5. 处理标签
     for (const tagName of input.tags) {
       const tagSlug = slugify(tagName)
       if (!tagSlug) continue
@@ -76,9 +72,11 @@ export async function createPost(
       })
     }
 
-    // 6. 重新验证缓存
-    revalidatePath('/blog')
-    revalidatePath(`/blog/${slug}`)
+    for (const locale of routeLocales) {
+      revalidatePath(`/${locale}/blog`)
+      revalidatePath(`/${locale}/blog/${slug}`)
+    }
+    revalidatePath(`/`)
 
     return { slug }
   } catch (err) {

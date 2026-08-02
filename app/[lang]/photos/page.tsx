@@ -1,12 +1,11 @@
 import Image, { type StaticImageData } from 'next/image'
-import dog1 from './../../public/images/dog1.png'
-import dog2 from './../../public/images/dog2.png'
-import dog3 from './../../public/images/dog3.png'
-import dog4 from './../../public/images/dog4.png'
+import dog1 from './../../../public/images/dog1.png'
+import dog2 from './../../../public/images/dog2.png'
+import dog3 from './../../../public/images/dog3.png'
+import dog4 from './../../../public/images/dog4.png'
 import H1 from '@/components/h1'
 import { MotionItem } from '@/components/page-transition'
-import { getTranslation } from '@/lib/i18n'
-import useServerLanguage from '@/hooks/use-server-language'
+import { getTranslation, routeToLocale } from '@/lib/i18n'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -26,8 +25,8 @@ const photos: Photo[] = [
   { src: dog4, alt: 'My dog - photo 4', label: 'Good Boy #4' },
 ]
 
-export default function PhotosPage() {
-  const lang = useServerLanguage()
+export default function PhotosPage({ params }: { params: { lang: string } }) {
+  const lang = routeToLocale(params.lang)
   const dict = getTranslation(lang) as Record<string, string>
   const t = (key: string): string => dict[key] || key
 

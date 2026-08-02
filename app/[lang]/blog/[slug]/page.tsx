@@ -1,6 +1,5 @@
 import { getPostBySlug, getPosts } from '@/lib/posts'
-import { getTranslation } from '@/lib/i18n'
-import useServerLanguage from '@/hooks/use-server-language'
+import { getTranslation, routeToLocale } from '@/lib/i18n'
 import { MotionItem } from '@/components/page-transition'
 import H1 from '@/components/h1'
 import Card from '@/components/card'
@@ -9,7 +8,7 @@ import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 
 interface BlogPostPageProps {
-  params: { slug: string }
+  params: { lang: string; slug: string }
 }
 
 export async function generateMetadata({
@@ -20,6 +19,12 @@ export async function generateMetadata({
   return {
     title: post.frontmatter.title,
     description: post.frontmatter.description || '',
+    alternates: {
+      languages: {
+        'zh-CN': `/cn/blog/${params.slug}`,
+        'en': `/eng/blog/${params.slug}`,
+      },
+    },
   }
 }
 
@@ -34,9 +39,10 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     notFound()
   }
 
-  const lang = useServerLanguage()
+  const lang = routeToLocale(params.lang)
   const dict = getTranslation(lang) as Record<string, string>
   const t = (key: string): string => dict[key] || key
+  const prefix = `/${params.lang}`
 
   return (
     <article>
@@ -47,11 +53,14 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
       <MotionItem delay={0.15}>
         <div className="flex items-center gap-4 mb-8 text-sm text-[var(--text-muted)]">
           <time dateTime={post.frontmatter.date}>
-            {new Date(post.frontmatter.date).toLocaleDateString('en-US', {
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric',
-            })}
+            {new Date(post.frontmatter.date).toLocaleDateString(
+              lang === 'zh' ? 'zh-CN' : 'en-US',
+              {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+              }
+            )}
           </time>
           {post.frontmatter.tags && post.frontmatter.tags.length > 0 && (
             <div className="flex flex-wrap gap-1.5">
@@ -77,7 +86,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             {t('blog.readArticle')} →
           </p>
           <Link
-            href="/blog"
+            href={`${prefix}/blog`}
             className="inline-flex items-center gap-2 px-5 py-2 rounded-xl bg-[var(--accent)] text-white text-sm font-medium hover:shadow-lg hover:shadow-[var(--accent)]/25 transition-all duration-300 hover:-translate-y-0.5"
           >
             ← {t('nav.blog')}

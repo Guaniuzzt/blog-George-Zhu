@@ -49,6 +49,7 @@ export interface PaginationProps {
 
 // ============ i18n ============
 export type Locale = 'en' | 'zh'
+export type RouteLocale = 'cn' | 'eng'
 
 // ============ 主题 ============
 export type Theme = 'dark' | 'light'

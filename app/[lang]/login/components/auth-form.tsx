@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
+import useLocale from '@/hooks/use-locale'
 
 type Mode = 'login' | 'register'
 
@@ -15,6 +16,7 @@ export default function AuthForm({ redirectTo }: { redirectTo?: string }) {
   const [loading, setLoading] = useState(false)
   const router = useRouter()
   const supabase = createClient()
+  const { routePrefix } = useLocale()
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -30,7 +32,7 @@ export default function AuthForm({ redirectTo }: { redirectTo?: string }) {
       if (error) {
         setError(error.message)
       } else {
-        router.push(redirectTo || '/blog')
+        router.push(redirectTo || `/${routePrefix}/blog`)
         router.refresh()
       }
     } else {

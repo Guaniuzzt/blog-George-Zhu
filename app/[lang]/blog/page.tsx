@@ -6,11 +6,10 @@ import H1 from '@/components/h1'
 import Card from '@/components/card'
 import NewPostButton from '@/components/new-post-button'
 import { MotionItem } from '@/components/page-transition'
-import { getTranslation } from '@/lib/i18n'
-import useServerLanguage from '@/hooks/use-server-language'
-
+import { getTranslation, routeToLocale } from '@/lib/i18n'
 
 interface BlogPageProps {
+  params: { lang: string }
   searchParams: {
     tags?: string
     page?: string
@@ -19,7 +18,7 @@ interface BlogPageProps {
   }
 }
 
-export default async function BlogPostsPage({ searchParams }: BlogPageProps) {
+export default async function BlogPostsPage({ params, searchParams }: BlogPageProps) {
   const tags = searchParams.tags?.split(',')
   const page = Number(searchParams.page) || 1
   const limit = Number(searchParams.limit) || 6
@@ -32,16 +31,17 @@ export default async function BlogPostsPage({ searchParams }: BlogPageProps) {
     limit,
   })
 
-  const lang = useServerLanguage()
+  const lang = routeToLocale(params.lang)
   const dict = getTranslation(lang) as Record<string, string>
   const t = (key: string): string => dict[key] || key
+  const prefix = `/${params.lang}`
 
   return (
     <>
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-2">
         <H1>{t('blog.title')}</H1>
         <Suspense>
-          <NewPostButton />
+          <NewPostButton routePrefix={params.lang} />
         </Suspense>
       </div>
 
@@ -60,7 +60,7 @@ export default async function BlogPostsPage({ searchParams }: BlogPageProps) {
           <span className="text-[var(--text-muted)]">{t('blog.sort')}</span>
           {order === 'newest' && (
             <Link
-              href="/blog?order=oldest"
+              href={`${prefix}/blog?order=oldest`}
               className="px-3 py-1 rounded-lg border border-[var(--border-color)] hover:border-[var(--accent)] hover:text-[var(--accent)] transition-all duration-300"
             >
               {t('blog.newest')}
@@ -68,7 +68,7 @@ export default async function BlogPostsPage({ searchParams }: BlogPageProps) {
           )}
           {order === 'oldest' && (
             <Link
-              href="/blog?order=newest"
+              href={`${prefix}/blog?order=newest`}
               className="px-3 py-1 rounded-lg border border-[var(--border-color)] hover:border-[var(--accent)] hover:text-[var(--accent)] transition-all duration-300"
             >
               {t('blog.oldest')}
@@ -83,7 +83,7 @@ export default async function BlogPostsPage({ searchParams }: BlogPageProps) {
             <div className="text-6xl mb-4">📝</div>
             <p className="text-xl text-[var(--text-muted)]">{t('blog.noPosts')}</p>
             <Link
-              href="/blog"
+              href={`${prefix}/blog`}
               className="mt-4 inline-block text-[var(--accent)] hover:underline"
             >
               {t('blog.clearFilters')}
@@ -94,7 +94,7 @@ export default async function BlogPostsPage({ searchParams }: BlogPageProps) {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {posts.map((post, i) => (
             <MotionItem key={post.slug} delay={0.05 * i}>
-              <Card href={`/blog/${post.slug}`}>
+              <Card href={`${prefix}/blog/${post.slug}`}>
                 <div className="flex items-center gap-2 text-xs text-[var(--text-muted)] font-mono mb-3">
                   <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)]" />
                   {post.frontmatter.date}

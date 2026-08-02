@@ -3,14 +3,14 @@ import { getPosts } from '@/lib/posts'
 import Link from 'next/link'
 import Card from '@/components/card'
 import { MotionItem } from '@/components/page-transition'
-import { getTranslation } from '@/lib/i18n'
-import useServerLanguage from '@/hooks/use-server-language'
+import { getTranslation, routeToLocale } from '@/lib/i18n'
 
-export default async function Home() {
+export default async function Home({ params }: { params: { lang: string } }) {
   const { posts } = await getPosts({ newest: true, limit: 3 })
-  const lang = useServerLanguage()
+  const lang = routeToLocale(params.lang)
   const dict = getTranslation(lang) as Record<string, string>
   const t = (key: string): string => dict[key] || key
+  const prefix = `/${params.lang}`
 
   return (
     <>
@@ -39,14 +39,14 @@ export default async function Home() {
           <MotionItem delay={0.35}>
             <div className="flex flex-wrap gap-3">
               <Link
-                href="/about/projects"
+                href={`${prefix}/about/projects`}
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[var(--accent)] text-white font-semibold text-sm hover:shadow-lg hover:shadow-[var(--accent)]/25 transition-all duration-300 hover:-translate-y-0.5"
               >
                 {t('home.viewProjects')}
                 <span className="text-lg">→</span>
               </Link>
               <Link
-                href="/blog"
+                href={`${prefix}/blog`}
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-[var(--border-color)] text-[var(--text-primary)] font-semibold text-sm hover:border-[var(--accent)] hover:text-[var(--accent)] transition-all duration-300 hover:-translate-y-0.5"
               >
                 {t('home.readBlog')}
@@ -70,7 +70,7 @@ export default async function Home() {
         <div className="grid grid-cols-1 gap-6">
           {posts.map((post, i) => (
             <MotionItem key={post.slug} delay={0.1 * i}>
-              <Card href={`/blog/${post.slug}`} className="!p-0 overflow-hidden">
+              <Card href={`${prefix}/blog/${post.slug}`} className="!p-0 overflow-hidden">
                 <div className="p-6">
                   <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6">
                     <div className="flex-shrink-0">
@@ -116,7 +116,7 @@ export default async function Home() {
         <MotionItem delay={0.5}>
           <div className="mt-8 text-center">
             <Link
-              href="/blog"
+              href={`${prefix}/blog`}
               className="inline-flex items-center gap-2 text-sm font-medium text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors duration-300"
             >
               <span>{t('home.viewAll')}</span>

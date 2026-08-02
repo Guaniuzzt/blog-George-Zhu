@@ -4,7 +4,7 @@ import { createClient } from '@/lib/supabase/server'
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url)
   const code = searchParams.get('code')
-  const next = searchParams.get('next') ?? '/blog'
+  const next = searchParams.get('next') ?? '/eng/blog'
 
   if (code) {
     const supabase = await createClient()
@@ -15,5 +15,5 @@ export async function GET(request: Request) {
   }
 
   // 出错回 login
-  return NextResponse.redirect(`${origin}/login?error=auth_callback_failed`)
+  return NextResponse.redirect(`${origin}/eng/login?error=auth_callback_failed`)
 } 

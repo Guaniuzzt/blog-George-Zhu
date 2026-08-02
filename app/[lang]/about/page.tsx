@@ -2,8 +2,7 @@ import H1 from "@/components/h1"
 import { MotionItem } from "@/components/page-transition"
 import Link from "next/link"
 import Card from "@/components/card"
-import { getTranslation } from "@/lib/i18n"
-import useServerLanguage from "@/hooks/use-server-language"
+import { getTranslation, routeToLocale } from "@/lib/i18n"
 
 export const metadata = {
   title: 'About'
@@ -18,9 +17,10 @@ const skills = [
   { name: 'Docker', level: 70, color: '#2496ed' },
 ]
 
-export default function AboutPage() {
-  const lang = useServerLanguage()
+export default function AboutPage({ params }: { params: { lang: string } }) {
+  const lang = routeToLocale(params.lang)
   const t = (key: string) => (getTranslation(lang) as Record<string, string>)[key] || key
+  const prefix = `/${params.lang}`
 
   return (
     <div>
@@ -81,7 +81,7 @@ export default function AboutPage() {
           </p>
           <div className="flex justify-center gap-4">
             <Link
-              href="/about/projects"
+              href={`${prefix}/about/projects`}
               className="px-5 py-2 rounded-xl bg-[var(--accent)] text-white text-sm font-medium hover:shadow-lg hover:shadow-[var(--accent)]/25 transition-all duration-300 hover:-translate-y-0.5"
             >
               {t('about.viewProjects')}

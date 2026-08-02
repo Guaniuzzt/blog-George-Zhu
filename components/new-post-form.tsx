@@ -2,7 +2,8 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { createPost } from '@/app/blog/new/actions'
+import { createPost } from '@/app/[lang]/blog/new/actions'
+import useLocale from '@/hooks/use-locale'
 
 interface NewPostFormProps {
   existingTags: string[]
@@ -16,6 +17,7 @@ export default function NewPostForm({ existingTags }: NewPostFormProps) {
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const router = useRouter()
+  const { routePrefix } = useLocale()
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -36,7 +38,7 @@ export default function NewPostForm({ existingTags }: NewPostFormProps) {
       setError(result.error)
       setLoading(false)
     } else {
-      router.push(`/blog/${result.slug}`)
+      router.push(`/${routePrefix}/blog/${result.slug}`)
       router.refresh()
     }
   }
