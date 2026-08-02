@@ -56,9 +56,8 @@ export const translations = {
 
     // Projects page
     'projects.title': 'Projects',
-    'projects.desc': "Open-source repositories and side projects I've built.",
-    'projects.subdesc': 'Pulled live from my GitHub profile.',
-    'projects.error': 'Cannot fetch projects at the moment',
+    'projects.desc': 'A showcase of projects I\'ve crafted with care.',
+    'projects.subdesc': 'Click on any project to explore its details.',
 
     // Photos page
     'photos.title': 'Photos',
@@ -112,9 +111,8 @@ export const translations = {
 
     // Projects page
     'projects.title': '项目',
-    'projects.desc': '我构建的开源仓库和业余项目。',
-    'projects.subdesc': '实时从我的 GitHub 主页拉取。',
-    'projects.error': '暂时无法获取项目数据',
+    'projects.desc': '我用心打造的精选项目展示。',
+    'projects.subdesc': '点击任意项目了解详细信息。',
 
     // Photos page
     'photos.title': '照片',

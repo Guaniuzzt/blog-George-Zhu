@@ -1,29 +1,16 @@
-import { Suspense } from 'react'
-import ProjectList from './components/project-list'
-import ProjectListLoading from './components/project-list-loading'
-import { ErrorBoundary } from 'react-error-boundary'
 import H1 from '@/components/h1'
 import { MotionItem } from '@/components/page-transition'
 import { getTranslation, routeToLocale } from '@/lib/i18n'
-import type { Metadata } from 'next'
+import ProjectCarousel from './components/project-carousel'
 import type { Locale } from '@/types'
+import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Projects',
 }
 
-function ErrorFallback({ lang }: { lang: Locale }) {
-  const dict = getTranslation(lang) as Record<string, string>
-  const t = (key: string): string => dict[key] || key
-  return (
-    <div className="text-center py-12">
-      <p className="text-lg text-[var(--text-muted)]">{t('projects.error')}</p>
-    </div>
-  )
-}
-
 export default async function ProjectsPage({ params }: { params: { lang: string } }) {
-  const lang = routeToLocale(params.lang)
+  const lang = routeToLocale(params.lang) as Locale
   const dict = getTranslation(lang) as Record<string, string>
   const t = (key: string): string => dict[key] || key
 
@@ -40,11 +27,9 @@ export default async function ProjectsPage({ params }: { params: { lang: string 
         </p>
       </MotionItem>
 
-      <ErrorBoundary fallback={<ErrorFallback lang={lang} />}>
-        <Suspense fallback={<ProjectListLoading />}>
-          <ProjectList />
-        </Suspense>
-      </ErrorBoundary>
+      <MotionItem delay={0.2}>
+        <ProjectCarousel lang={lang} />
+      </MotionItem>
     </div>
   )
 }
