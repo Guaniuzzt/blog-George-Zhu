@@ -123,7 +123,7 @@ export const projects: ProjectShowcase[] = [
       zh: '电商全栈平台',
     },
     thumbnail: '/images/projects/ecommerce-thumbnail.png',
-    urls: {},
+    urls: { cn: 'https://eshop.guaniuzzt.me' },
     description: {
       en: 'A production-ready full-stack e-commerce platform built with Next.js 15 (App Router) and React 19. Features product catalog with categories & search, persistent shopping cart, Stripe-powered checkout, order management, user authentication via NextAuth, and an admin area for managing products and orders.',
       zh: '基于 Next.js 15（App Router）与 React 19 构建的生产级全栈电商平台。包含商品目录（分类 / 搜索）、持久化购物车、Stripe 结算支付、订单管理、NextAuth 用户认证，以及用于管理商品与订单的后台管理区。',
