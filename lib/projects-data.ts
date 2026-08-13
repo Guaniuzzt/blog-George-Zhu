@@ -116,4 +116,106 @@ export const projects: ProjectShowcase[] = [
       },
     ],
   },
+  {
+    id: 'ecommerce-next15',
+    name: {
+      en: 'Next.js 15 E-Commerce',
+      zh: '电商全栈平台',
+    },
+    thumbnail: '/images/projects/ecommerce-thumbnail.png',
+    urls: {},
+    description: {
+      en: 'A production-ready full-stack e-commerce platform built with Next.js 15 (App Router) and React 19. Features product catalog with categories & search, persistent shopping cart, Stripe-powered checkout, order management, user authentication via NextAuth, and an admin area for managing products and orders.',
+      zh: '基于 Next.js 15（App Router）与 React 19 构建的生产级全栈电商平台。包含商品目录（分类 / 搜索）、持久化购物车、Stripe 结算支付、订单管理、NextAuth 用户认证，以及用于管理商品与订单的后台管理区。',
+    },
+    modules: [
+      { en: 'Product Catalog', zh: '商品目录' },
+      { en: 'Category & Search', zh: '分类与搜索' },
+      { en: 'Shopping Cart', zh: '购物车' },
+      { en: 'Stripe Checkout', zh: 'Stripe 结算' },
+      { en: 'Order Management', zh: '订单管理' },
+      { en: 'User Auth (NextAuth)', zh: '用户认证 (NextAuth)' },
+      { en: 'Account Center', zh: '账户中心' },
+      { en: 'Admin Dashboard', zh: '后台管理' },
+      { en: 'Stripe Webhooks', zh: 'Stripe Webhook' },
+      { en: 'Dark / Light Theme', zh: '深色 / 浅色主题' },
+    ],
+    screenshots: [
+      '/images/projects/ecommerce-home.png',
+      '/images/projects/ecommerce-product.png',
+      '/images/projects/ecommerce-category.png',
+    ],
+    techStack: [
+      {
+        name: 'Next.js 15',
+        description: {
+          en: 'Latest Next.js with App Router, Server Actions and Turbopack dev server. Handles routing, server-side rendering, API routes and static optimization out of the box.',
+          zh: '最新的 Next.js，采用 App Router、Server Actions 与 Turbopack 开发服务。开箱即用地处理路由、SSR、API 路由与静态优化。',
+        },
+      },
+      {
+        name: 'React 19',
+        description: {
+          en: 'Uses the latest React with Server Components and improved form actions for building interactive product listings, cart, and checkout flows.',
+          zh: '使用最新的 React，配合 Server Components 与改进的表单 Actions 构建交互式的商品列表、购物车与结算流程。',
+        },
+      },
+      {
+        name: 'TypeScript',
+        description: {
+          en: 'Full type safety from Prisma-generated database types through Server Actions to UI components, catching integration errors at compile time.',
+          zh: '从 Prisma 生成的数据库类型到 Server Actions 再到 UI 组件的全链路类型安全，在编译期捕获集成错误。',
+        },
+      },
+      {
+        name: 'Prisma + PostgreSQL',
+        description: {
+          en: 'Type-safe ORM modeling Product, Category, Cart, CartItem, Order, OrderItem and User entities. Migrations and a seed script bootstrap the shop data in PostgreSQL.',
+          zh: '类型安全的 ORM，建模 Product / Category / Cart / CartItem / Order / OrderItem / User 等实体，通过迁移与 seed 脚本在 PostgreSQL 中初始化商城数据。',
+        },
+      },
+      {
+        name: 'NextAuth v5',
+        description: {
+          en: 'Credential-based authentication with bcryptjs password hashing. Sessions gate the account area, order history, and admin routes via middleware.',
+          zh: '基于账号密码的身份认证，使用 bcryptjs 加密。通过中间件保护账户中心、订单历史与管理员路由。',
+        },
+      },
+      {
+        name: 'Stripe',
+        description: {
+          en: 'Stripe Checkout Sessions handle payments. A dedicated webhook endpoint verifies signatures and marks orders as paid / fulfilled asynchronously.',
+          zh: '使用 Stripe Checkout Sessions 处理支付。独立的 Webhook 端点校验签名，并异步将订单标记为已支付 / 已完成。',
+        },
+      },
+      {
+        name: 'React Hook Form + Zod',
+        description: {
+          en: 'Form state and validation for login, registration, checkout and admin product forms. Zod schemas are shared between client and server for one source of truth.',
+          zh: '登录、注册、结算与商品后台表单的状态管理与校验。客户端和服务端共享同一份 Zod 校验 Schema，保证唯一事实来源。',
+        },
+      },
+      {
+        name: 'Tailwind CSS 4 + shadcn/ui',
+        description: {
+          en: 'Utility-first styling combined with Radix-based shadcn/ui primitives (dialog, dropdown, label, separator) for accessible, composable UI components.',
+          zh: '实用优先的 Tailwind CSS 4，结合基于 Radix 的 shadcn/ui 组件（Dialog / Dropdown / Label / Separator），构建可访问、可组合的 UI。',
+        },
+      },
+      {
+        name: 'SWR',
+        description: {
+          en: 'Client-side data fetching with caching and revalidation for cart state and other interactive pieces that need to stay in sync with the server.',
+          zh: '客户端数据获取库，带缓存与重新验证，用于购物车状态等需要与服务端保持同步的交互场景。',
+        },
+      },
+      {
+        name: 'Docker + CloudBase',
+        description: {
+          en: 'Dockerfile plus a cloudbaserc.json configuration make the app deployable to Tencent CloudBase (or any container platform) as a self-contained image.',
+          zh: 'Dockerfile 与 cloudbaserc.json 配置让应用可以作为自包含镜像部署到腾讯云 CloudBase（或任意容器平台）。',
+        },
+      },
+    ],
+  },
 ]
