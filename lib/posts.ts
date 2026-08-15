@@ -1,16 +1,15 @@
 import React from 'react'
 import { compileMDX } from 'next-mdx-remote/rsc'
 import { prisma } from './prisma'
+import { unstable_cache } from 'next/cache'
 import H1 from '@/components/h1'
 import type { Post } from '@/types'
 import type { Prisma } from '@/lib/generated/prisma/client'
 
-// 带标签关联的 Prisma 文章类型
 type PostWithTags = Prisma.PostGetPayload<{
   include: { tags: { include: { tag: true } } }
 }>
 
-// Prisma 记录 → 前端使用的 frontmatter（不含编译内容）
 function toFrontmatter(record: PostWithTags) {
   return {
     title: record.title,
@@ -32,46 +31,70 @@ export async function getPosts({
   limit?: number
   tags?: string[]
 } = {}): Promise<{ posts: Post[]; total: number; totalPages: number }> {
-  const where: Prisma.PostWhereInput = {
-    published: true,
-    ...(tags && tags.length > 0
-      ? { tags: { some: { tag: { name: { in: tags } } } } }
-      : {}),
-  }
+  const cacheKey = `posts-${newest}-${page}-${limit}-${(tags ?? []).sort().join(',')}`
 
-  const [records, total] = await Promise.all([
-    prisma.post.findMany({
-      where,
-      include: { tags: { include: { tag: true } } },
-      orderBy: { date: newest ? 'desc' : 'asc' },
-      skip: (page - 1) * limit,
-      take: limit,
-    }),
-    prisma.post.count({ where }),
-  ])
+  const fetchPosts = unstable_cache(
+    async () => {
+      const where: Prisma.PostWhereInput = {
+        published: true,
+        ...(tags && tags.length > 0
+          ? { tags: { some: { tag: { name: { in: tags } } } } }
+          : {}),
+      }
 
-  return {
-    posts: records.map((record) => ({
-      slug: record.slug,
-      frontmatter: toFrontmatter(record),
-      content: null, // 列表不需要正文
-    })),
-    total,
-    totalPages: Math.ceil(total / limit),
-  }
+      const [records, total] = await Promise.all([
+        prisma.post.findMany({
+          where,
+          include: { tags: { include: { tag: true } } },
+          orderBy: { date: newest ? 'desc' : 'asc' },
+          skip: (page - 1) * limit,
+          take: limit,
+        }),
+        prisma.post.count({ where }),
+      ])
+
+      return {
+        posts: records.map((record) => ({
+          slug: record.slug,
+          frontmatter: toFrontmatter(record),
+          content: null,
+        })),
+        total,
+        totalPages: Math.ceil(total / limit),
+      }
+    },
+    [cacheKey],
+    { revalidate: 60, tags: ['posts'] }
+  )
+
+  return fetchPosts()
 }
 
 export async function getPostBySlug(slug: string): Promise<Post | null> {
-  const record = await prisma.post.findUnique({
-    where: { slug },
-    include: { tags: { include: { tag: true } } },
-  })
+  const fetchPost = unstable_cache(
+    async () => {
+      const record = await prisma.post.findUnique({
+        where: { slug },
+        include: { tags: { include: { tag: true } } },
+      })
 
-  if (!record) return null
+      if (!record) return null
 
-  // 把存储的 MDX 源码编译成可渲染的 React 节点
+      return {
+        slug: record.slug,
+        frontmatter: toFrontmatter(record),
+        rawContent: record.content,
+      }
+    },
+    [`post-${slug}`],
+    { revalidate: 60, tags: ['posts', `post-${slug}`] }
+  )
+
+  const cached = await fetchPost()
+  if (!cached) return null
+
   const { content } = await compileMDX({
-    source: record.content,
+    source: cached.rawContent,
     components: {
       h1: (props) => React.createElement(H1, props),
     },
@@ -79,13 +102,21 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
   })
 
   return {
-    slug: record.slug,
-    frontmatter: toFrontmatter(record),
+    slug: cached.slug,
+    frontmatter: cached.frontmatter,
     content,
   }
 }
 
 export async function getAllTags(): Promise<string[]> {
-  const tags = await prisma.tag.findMany({ orderBy: { name: 'asc' } })
-  return tags.map((t) => t.name)
+  const fetchTags = unstable_cache(
+    async () => {
+      const tags = await prisma.tag.findMany({ orderBy: { name: 'asc' } })
+      return tags.map((t) => t.name)
+    },
+    ['all-tags'],
+    { revalidate: 120, tags: ['tags'] }
+  )
+
+  return fetchTags()
 }

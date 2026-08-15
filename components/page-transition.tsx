@@ -2,7 +2,7 @@
 
 import { motion, AnimatePresence, type Variants } from 'framer-motion'
 import { usePathname } from 'next/navigation'
-import type { ReactNode } from 'react'
+import { useRef, type ReactNode } from 'react'
 
 const pageVariants: Variants = {
   initial: { opacity: 0, y: 24, scale: 0.98, filter: 'blur(4px)' },
@@ -40,6 +40,12 @@ export default function PageTransition({
   className = '',
 }: PageTransitionProps) {
   const pathname = usePathname()
+  const isFirstRender = useRef(true)
+
+  if (isFirstRender.current) {
+    isFirstRender.current = false
+    return <div className={className}>{children}</div>
+  }
 
   return (
     <AnimatePresence mode="wait">

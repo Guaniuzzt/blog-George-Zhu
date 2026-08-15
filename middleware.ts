@@ -4,6 +4,8 @@ import { updateSession } from '@/lib/supabase/middleware'
 const routeLocales = ['cn', 'eng']
 const defaultLocale = 'eng'
 
+const protectedPathPrefixes = ['/blog/new']
+
 function getPreferredLocale(request: NextRequest): string {
   const acceptLang = request.headers.get('accept-language') ?? ''
   if (acceptLang.startsWith('zh') || acceptLang.includes(',zh')) {
@@ -18,10 +20,14 @@ function getPreferredLocale(request: NextRequest): string {
   return defaultLocale
 }
 
+function isProtectedPath(pathname: string): boolean {
+  const pathWithoutLocale = pathname.replace(/^\/(cn|eng)/, '')
+  return protectedPathPrefixes.some((prefix) => pathWithoutLocale.startsWith(prefix))
+}
+
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
 
-  // API routes: no locale prefix needed
   if (pathname.startsWith('/auth/') || pathname.startsWith('/posts')) {
     return await updateSession(request)
   }
@@ -37,7 +43,11 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(url)
   }
 
-  return await updateSession(request)
+  if (isProtectedPath(pathname)) {
+    return await updateSession(request)
+  }
+
+  return NextResponse.next()
 }
 
 export const config = {

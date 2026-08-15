@@ -2,7 +2,7 @@
 
 import { prisma } from '@/lib/prisma'
 import { createClient } from '@/lib/supabase/server'
-import { revalidatePath } from 'next/cache'
+import { revalidatePath, revalidateTag } from 'next/cache'
 import { routeLocales } from '@/lib/i18n'
 
 function slugify(text: string): string {
@@ -77,6 +77,8 @@ export async function createPost(
       revalidatePath(`/${locale}/blog/${slug}`)
     }
     revalidatePath(`/`)
+    revalidateTag('posts')
+    revalidateTag('tags')
 
     return { slug }
   } catch (err) {
