@@ -23,7 +23,7 @@ export default function Header({ userSlot }: { userSlot: ReactNode }) {
           ? 'bg-[var(--bg-primary)]/80 backdrop-blur-xl border-b border-[var(--border-color)]'
           : 'bg-transparent'
       }`}
-      initial={{ y: -80, opacity: 0 }}
+      initial={false}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
     >

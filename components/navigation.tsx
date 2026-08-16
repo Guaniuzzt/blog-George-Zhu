@@ -2,7 +2,6 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { motion } from 'framer-motion'
 import useLocale from '@/hooks/use-locale'
 import type { NavItem } from '@/types'
 
@@ -40,18 +39,15 @@ export default function Navigation() {
           return (
             <li key={link.href}>
               <Link href={`/${routePrefix}${link.href === '/' ? '' : link.href}`}>
-                <motion.span
+                <span
                   className={`relative px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-300 ${
                     isActive
                       ? 'text-[var(--accent)] bg-[var(--accent-glow)]'
                       : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
                   }`}
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.06, duration: 0.4 }}
                 >
                   {t(link.i18nKey)}
-                </motion.span>
+                </span>
               </Link>
             </li>
           )

@@ -1,7 +1,6 @@
-import { Suspense, type ReactNode } from 'react'
-import Link from 'next/link'
+import { type ReactNode } from 'react'
 import Header from '@/components/header'
-import ServerUserMenu from '@/components/server-user-menu'
+import UserMenu from '@/components/user-menu'
 import Chatbot from '@/components/chatbot'
 import PageTransition from '@/components/page-transition'
 import { routeLocales, routeToLocale, localeToRoute } from '@/lib/i18n'
@@ -13,6 +12,8 @@ import type { RouteLocale } from '@/types'
 export function generateStaticParams() {
   return routeLocales.map((lang) => ({ lang }))
 }
+
+export const revalidate = 60
 
 export async function generateMetadata({
   params,
@@ -37,17 +38,6 @@ export async function generateMetadata({
       },
     },
   }
-}
-
-function UserMenuFallback({ routePrefix }: { routePrefix: string }) {
-  return (
-    <Link
-      href={`/${routePrefix}/login`}
-      className="px-4 py-1.5 rounded-xl border border-[var(--border-color)] text-sm opacity-50 pointer-events-none"
-    >
-      Sign In
-    </Link>
-  )
 }
 
 export default function LocaleLayout({
@@ -75,11 +65,7 @@ export default function LocaleLayout({
       <div className="fixed inset-0 grid-bg pointer-events-none opacity-[0.03] dark:opacity-[0.02]" />
 
       <Header
-        userSlot={
-          <Suspense fallback={<UserMenuFallback routePrefix={routePrefix} />}>
-            <ServerUserMenu />
-          </Suspense>
-        }
+        userSlot={<UserMenu />}
       />
 
       <main className="max-w-4xl mx-auto px-6 pt-28 pb-24 relative z-10">

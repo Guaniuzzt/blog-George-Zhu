@@ -12,7 +12,15 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <head>
         <link rel="preconnect" href="https://api.fontshare.com" crossOrigin="anonymous" />
         <link rel="preload" href={fontUrl} as="style" />
-        <link rel="stylesheet" href={fontUrl} />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){var l=document.createElement("link");l.rel="stylesheet";l.href="${fontUrl}";document.head.appendChild(l)})()`,
+          }}
+        />
+        <noscript>
+          {/* eslint-disable-next-line @next/next/no-css-tags */}
+          <link rel="stylesheet" href={fontUrl} />
+        </noscript>
       </head>
       <body className="min-h-screen">{children}</body>
     </html>

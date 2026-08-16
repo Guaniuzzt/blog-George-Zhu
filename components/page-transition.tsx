@@ -21,15 +21,6 @@ const pageVariants: Variants = {
   },
 }
 
-const childVariants: Variants = {
-  initial: { opacity: 0, y: 16 },
-  animate: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.5, ease: [0.4, 0, 0.2, 1] },
-  },
-}
-
 interface PageTransitionProps {
   children: ReactNode
   className?: string
@@ -72,17 +63,10 @@ interface MotionItemProps {
 export function MotionItem({
   children,
   className = '',
-  delay = 0,
 }: MotionItemProps) {
   return (
-    <motion.div
-      variants={childVariants}
-      initial="initial"
-      animate="animate"
-      transition={{ delay }}
-      className={className}
-    >
+    <div className={className}>
       {children}
-    </motion.div>
+    </div>
   )
 }

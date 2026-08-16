@@ -1,20 +1,40 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
 import useLocale from '@/hooks/use-locale'
 import type { User } from '@supabase/supabase-js'
 
-export default function UserMenu({ user }: { user: User | null }) {
+export default function UserMenu() {
+  const [user, setUser] = useState<User | null>(null)
+  const [loading, setLoading] = useState(true)
   const router = useRouter()
   const supabase = createClient()
   const { routePrefix } = useLocale()
 
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => {
+      setUser(data.user)
+      setLoading(false)
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   async function handleSignOut() {
     await supabase.auth.signOut()
+    setUser(null)
     router.push(`/${routePrefix}`)
     router.refresh()
+  }
+
+  if (loading) {
+    return (
+      <span className="px-4 py-1.5 rounded-xl border border-[var(--border-color)] text-sm opacity-50">
+        Sign In
+      </span>
+    )
   }
 
   if (!user) {
