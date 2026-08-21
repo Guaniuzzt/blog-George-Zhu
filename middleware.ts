@@ -28,6 +28,11 @@ function isProtectedPath(pathname: string): boolean {
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
 
+  // Speed Insights / Analytics ingest at /_vercel/*; locale redirects would drop those beacons.
+  if (pathname.startsWith('/_next') || pathname.startsWith('/_vercel')) {
+    return NextResponse.next()
+  }
+
   if (pathname.startsWith('/auth/') || pathname.startsWith('/posts')) {
     return await updateSession(request)
   }
@@ -52,6 +57,6 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+    '/((?!_next/static|_next/image|_vercel|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|js)$).*)',
   ],
 }
