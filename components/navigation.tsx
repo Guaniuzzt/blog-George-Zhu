@@ -7,10 +7,10 @@ import type { NavItem } from '@/types'
 
 const linkKeys: NavItem[] = [
   { href: '/', i18nKey: 'nav.home' },
-  { href: '/about', i18nKey: 'nav.about' },
-  { href: '/about/projects', i18nKey: 'nav.projects' },
-  { href: '/photos', i18nKey: 'nav.photos' },
   { href: '/blog', i18nKey: 'nav.blog' },
+  { href: '/about/projects', i18nKey: 'nav.projects' },
+  { href: '/about', i18nKey: 'nav.about' },
+  { href: '/photos', i18nKey: 'nav.photos' },
 ]
 
 export default function Navigation() {

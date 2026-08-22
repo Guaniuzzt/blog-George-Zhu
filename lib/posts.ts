@@ -1,9 +1,9 @@
-import React from 'react'
+import React, { cache } from 'react'
 import { compileMDX } from 'next-mdx-remote/rsc'
 import { prisma } from './prisma'
 import { unstable_cache } from 'next/cache'
 import H1 from '@/components/h1'
-import type { Post } from '@/types'
+import type { Post, PostFrontmatter } from '@/types'
 import type { Prisma } from '@/lib/generated/prisma/client'
 
 type PostWithTags = Prisma.PostGetPayload<{
@@ -70,7 +70,13 @@ export async function getPosts({
   return fetchPosts()
 }
 
-export async function getPostBySlug(slug: string): Promise<Post | null> {
+type CachedPostRecord = {
+  slug: string
+  frontmatter: PostFrontmatter
+  rawContent: string
+}
+
+const getPostRecord = cache(async (slug: string): Promise<CachedPostRecord | null> => {
   const fetchPost = unstable_cache(
     async () => {
       const record = await prisma.post.findUnique({
@@ -90,7 +96,17 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
     { revalidate: 60, tags: ['posts', `post-${slug}`] }
   )
 
-  const cached = await fetchPost()
+  return fetchPost()
+})
+
+export const getPostMetaBySlug = cache(async (slug: string) => {
+  const record = await getPostRecord(slug)
+  if (!record) return null
+  return { slug: record.slug, frontmatter: record.frontmatter }
+})
+
+export const getPostBySlug = cache(async (slug: string): Promise<Post | null> => {
+  const cached = await getPostRecord(slug)
   if (!cached) return null
 
   const { content } = await compileMDX({
@@ -106,7 +122,7 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
     frontmatter: cached.frontmatter,
     content,
   }
-}
+})
 
 export async function getAllTags(): Promise<string[]> {
   const fetchTags = unstable_cache(

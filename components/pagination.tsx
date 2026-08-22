@@ -1,9 +1,9 @@
 'use client'
 
 import { Suspense } from 'react'
-import Link from 'next/link'
 import { useSearchParams, usePathname } from 'next/navigation'
 import { motion } from 'framer-motion'
+import { BlogPendingLink } from '@/components/blog-pending'
 import type { PaginationProps } from '@/types'
 
 function PaginationInner({ pageCount }: PaginationProps) {
@@ -26,7 +26,7 @@ function PaginationInner({ pageCount }: PaginationProps) {
         const isActive = pageNumber === currentPage
 
         return (
-          <Link
+          <BlogPendingLink
             key={pageNumber}
             href={`${pathname}?${params.toString()}`}
             className="relative"
@@ -42,7 +42,7 @@ function PaginationInner({ pageCount }: PaginationProps) {
             >
               {pageNumber}
             </motion.span>
-          </Link>
+          </BlogPendingLink>
         )
       })}
     </nav>

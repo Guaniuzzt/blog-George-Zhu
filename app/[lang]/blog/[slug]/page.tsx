@@ -1,9 +1,12 @@
-import { getPostBySlug, getPosts } from '@/lib/posts'
+import { getPostMetaBySlug, getPosts } from '@/lib/posts'
 import { getTranslation, routeToLocale } from '@/lib/i18n'
 import { MotionItem } from '@/components/page-transition'
+import { BlogPostContentSkeleton } from '@/components/blog-skeleton'
+import PostContent from './post-content'
 import H1 from '@/components/h1'
 import Card from '@/components/card'
 import Link from 'next/link'
+import { Suspense } from 'react'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 
@@ -14,7 +17,7 @@ interface BlogPostPageProps {
 export async function generateMetadata({
   params,
 }: BlogPostPageProps): Promise<Metadata> {
-  const post = await getPostBySlug(params.slug)
+  const post = await getPostMetaBySlug(params.slug)
   if (!post) return {}
   return {
     title: post.frontmatter.title,
@@ -33,8 +36,10 @@ export async function generateStaticParams() {
   return posts.map((post) => ({ slug: post.slug }))
 }
 
+export const revalidate = 60
+
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
-  const post = await getPostBySlug(params.slug)
+  const post = await getPostMetaBySlug(params.slug)
   if (!post) {
     notFound()
   }
@@ -74,11 +79,9 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         </div>
       </MotionItem>
 
-      <MotionItem delay={0.2}>
-        <div className="prose prose-lg dark:prose-invert max-w-none mb-12">
-          {post.content}
-        </div>
-      </MotionItem>
+      <Suspense fallback={<BlogPostContentSkeleton />}>
+        <PostContent slug={params.slug} />
+      </Suspense>
 
       <MotionItem delay={0.3}>
         <Card className="text-center">

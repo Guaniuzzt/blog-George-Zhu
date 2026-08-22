@@ -2,7 +2,6 @@ import { type ReactNode } from 'react'
 import Header from '@/components/header'
 import UserMenu from '@/components/user-menu'
 import Chatbot from '@/components/chatbot'
-import PageTransition from '@/components/page-transition'
 import { routeLocales, routeToLocale, localeToRoute } from '@/lib/i18n'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import { notFound } from 'next/navigation'
@@ -69,7 +68,7 @@ export default function LocaleLayout({
       />
 
       <main className="max-w-4xl mx-auto px-6 pt-28 pb-24 relative z-10">
-        <PageTransition>{children}</PageTransition>
+        {children}
       </main>
 
       <Chatbot />
