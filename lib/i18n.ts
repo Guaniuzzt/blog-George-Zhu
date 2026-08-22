@@ -42,7 +42,8 @@ export const translations = {
     'about.connectDesc':
       "I'm always open to discussing new projects, creative ideas, or opportunities.",
     'about.viewProjects': 'View Projects',
-    'about.github': 'GitHub Profile',
+    'about.wechat': 'WeChat',
+    'about.email': 'Email',
 
     // Blog page
     'blog.title': 'Blog',
@@ -97,7 +98,8 @@ export const translations = {
     'about.connect': '与我联系',
     'about.connectDesc': '我始终乐于探讨新项目、创意或合作机会。',
     'about.viewProjects': '查看项目',
-    'about.github': 'GitHub 主页',
+    'about.wechat': '微信',
+    'about.email': '邮箱',
 
     // Blog page
     'blog.title': '博客',

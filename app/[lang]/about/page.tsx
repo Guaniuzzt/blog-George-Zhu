@@ -79,21 +79,27 @@ export default function AboutPage({ params }: { params: { lang: string } }) {
           <p className="text-[var(--text-secondary)] mb-4 text-sm max-w-md mx-auto">
             {t('about.connectDesc')}
           </p>
-          <div className="flex justify-center gap-4">
+          <div className="text-sm text-[var(--text-secondary)] mb-6 space-y-1">
+            <p>
+              {t('about.wechat')}：zhuzetao777
+            </p>
+            <p>
+              {t('about.email')}：
+              <a
+                href="mailto:415108490@qq.com"
+                className="hover:text-[var(--accent)] transition-colors duration-300"
+              >
+                415108490@qq.com
+              </a>
+            </p>
+          </div>
+          <div className="flex justify-center">
             <Link
               href={`${prefix}/about/projects`}
               className="px-5 py-2 rounded-xl bg-[var(--accent)] text-white text-sm font-medium hover:shadow-lg hover:shadow-[var(--accent)]/25 transition-all duration-300 hover:-translate-y-0.5"
             >
               {t('about.viewProjects')}
             </Link>
-            <a
-              href="https://github.com/Guaniuzzt"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-5 py-2 rounded-xl border border-[var(--border-color)] text-sm font-medium text-[var(--text-secondary)] hover:border-[var(--accent)] hover:text-[var(--accent)] transition-all duration-300 hover:-translate-y-0.5"
-            >
-              {t('about.github')}
-            </a>
           </div>
         </Card>
       </MotionItem>
