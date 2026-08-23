@@ -24,12 +24,21 @@ async function seedPostsAndTags() {
   const contentDir = path.join(process.cwd(), 'content')
   const files = fs.readdirSync(contentDir).filter((f) => f.endsWith('.mdx'))
 
+  // 清理课程占位文章（slug 为 first / second 的旧记录）
+  for (const legacySlug of ['first', 'second']) {
+    const removed = await prisma.post.deleteMany({ where: { slug: legacySlug } })
+    if (removed.count > 0) {
+      console.log(`✖ removed legacy placeholder post: ${legacySlug}`)
+    }
+  }
+
   for (const file of files) {
     const raw = fs.readFileSync(path.join(contentDir, file), 'utf-8')
     const { data, content } = matter(raw)
 
     const slug = file.replace(/\.mdx$/, '')
     const tagNames: string[] = Array.isArray(data.tags) ? data.tags : []
+    const locale: string = data.locale === 'zh' ? 'zh' : 'en'
 
     // 先 upsert 文章本身
     const post = await prisma.post.upsert({
@@ -40,6 +49,7 @@ async function seedPostsAndTags() {
         content,
         date: data.date ? new Date(data.date) : new Date(),
         author: data.author ?? null,
+        locale,
         published: true,
       },
       create: {
@@ -49,6 +59,7 @@ async function seedPostsAndTags() {
         content,
         date: data.date ? new Date(data.date) : new Date(),
         author: data.author ?? null,
+        locale,
         published: true,
       },
     })
@@ -68,7 +79,15 @@ async function seedPostsAndTags() {
       })
     }
 
-    console.log(`✔ seeded post: ${slug} (${tagNames.length} tags)`)
+    console.log(`✔ seeded post: ${slug} (${locale}, ${tagNames.length} tags)`)
+  }
+
+  // 清理孤儿标签（删除占位文章后不再被引用的标签）
+  const orphanTags = await prisma.tag.deleteMany({
+    where: { posts: { none: {} } },
+  })
+  if (orphanTags.count > 0) {
+    console.log(`✖ removed ${orphanTags.count} orphan tag(s)`)
   }
 }
 

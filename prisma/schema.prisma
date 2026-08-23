@@ -14,9 +14,10 @@ model Post {
   description String
   content     String
   date        DateTime
+  locale      String    @default("en") // 内容语言：'zh' | 'en'
   author      String?
   authorId    String?               // Supabase Auth user.id（UUID）
-  published   Boolean   @default(true)
+  published   Boolean   @default(false)
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   tags        PostTag[]

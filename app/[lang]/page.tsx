@@ -9,8 +9,8 @@ export const dynamic = 'force-static'
 export const revalidate = 60
 
 export default async function Home({ params }: { params: { lang: string } }) {
-  const { posts } = await getPosts({ newest: true, limit: 3 })
   const lang = routeToLocale(params.lang)
+  const { posts } = await getPosts({ newest: true, limit: 3, locale: lang })
   const dict = getTranslation(lang) as Record<string, string>
   const t = (key: string): string => dict[key] || key
   const prefix = `/${params.lang}`

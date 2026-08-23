@@ -7,6 +7,10 @@ export interface PostFrontmatter {
   date: string
   tags?: string[]
   author?: string
+  /** 草稿 / 已发布状态（管理列表用；公开数据恒为 true） */
+  published?: boolean
+  /** 最近更新时间（ISO 日期字符串，JSON-LD dateModified 用） */
+  updatedAt?: string
 }
 
 export interface Post {

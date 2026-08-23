@@ -1,0 +1,120 @@
+---
+title: "CSS Flexbox Deep Dive: The Mental Model That Finally Clicked"
+description: "Flexbox stops being confusing once you internalize one rule: everything is main axis vs cross axis. A practical tour with real layout recipes"
+date: "2024-01-14"
+tags:
+  - css
+  - flexbox
+  - layout
+locale: "en"
+---
+
+# CSS Flexbox Deep Dive
+
+Flexbox has a reputation for being finicky. In reality it has exactly one central idea, and once it clicks, every property becomes predictable:
+
+> **Flexbox works on two axes, and every property belongs to one of them. `justify-*` controls the main axis, `align-*` controls the cross axis.**
+
+That's it. Everything else follows.
+
+## The two axes
+
+The main axis is set by `flex-direction`; the cross axis is always perpendicular to it.
+
+```css
+.container {
+  display: flex;
+  flex-direction: row;        /* main = horizontal, cross = vertical */
+  justify-content: center;    /* move items along the MAIN axis */
+  align-items: center;        /* move items along the CROSS axis */
+}
+```
+
+The classic beginner bug — "I wanted to center vertically but `justify-content` did nothing" — is almost always a direction mix-up. In `flex-direction: column`, the main axis is vertical, so `justify-content` moves items **vertically**. Once you check direction first, centering anything becomes mechanical.
+
+## Container properties cheat sheet
+
+| Property | Axis | What it does |
+|---|---|---|
+| `flex-direction` | — | Chooses the main axis (row / column) |
+| `justify-content` | main | Distributes items along the main axis |
+| `align-items` | cross | Aligns items along the cross axis |
+| `align-content` | cross | Aligns *wrapped lines* (needs `flex-wrap` + multi-line) |
+| `flex-wrap` | — | Lets items flow onto new lines |
+| `gap` | — | Space between items, no margin hacks |
+
+## Item properties: the flex shorthand
+
+```css
+.item {
+  flex: 1 1 0%; /* grow | shrink | basis */
+}
+```
+
+- **`flex-grow`** — how eagerly an item claims free space
+- **`flex-shrink`** — how willingly it gives space back when cramped
+- **`flex-basis`** — its starting size before growing/shrinking
+
+Three values everyone should memorize:
+
+```css
+flex: 1;        /* 1 1 0%  — equal-width columns */
+flex: auto;     /* 1 1 auto — grow from content size */
+flex: none;     /* 0 0 auto — fixed, never resize */
+```
+
+The difference between `flex: 1` and `flex: auto` bites a lot of people: with `flex: 1`, `basis` is `0`, so longer content doesn't make a column wider — everything is split evenly. With `flex: auto`, items keep their natural proportions first, then share the remainder.
+
+## Recipes worth memorizing
+
+**Responsive navbar:**
+
+```css
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+}
+
+.nav-links {
+  display: flex;
+  gap: 2rem;
+}
+```
+
+**Media object (avatar + text, text wraps):**
+
+```css
+.media {
+  display: flex;
+  gap: 1rem;
+}
+
+.media img { flex: none; width: 48px; }
+
+.media-body { flex: 1; min-width: 0; } /* min-width: 0 kills text overflow */
+```
+
+That `min-width: 0` is the single most valuable flexbox trick — flex items refuse to shrink below their content width unless you allow it, which is why long unbroken strings blow out layouts.
+
+**Sticky footer:**
+
+```css
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main { flex: 1; }
+```
+
+## Flexbox vs Grid
+
+One sentence each:
+
+- **Flexbox** — one dimension, content-driven. "Put these in a row and space them out."
+- **Grid** — two dimensions, layout-driven. "Build this exact template and drop content in."
+
+They compose well: Grid carves the page into regions, Flexbox aligns the pieces inside each region. For component-level alignment, flexbox is still the fastest tool in the box.

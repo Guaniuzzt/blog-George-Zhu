@@ -1,0 +1,90 @@
+---
+title: "Next.js Server Components 实战笔记：哪些代码该留在服务端"
+description: "从实际项目里总结的 Server Components 使用心法：什么时候用 Server Component、什么时候必须 'use client'，以及数据获取和缓存的正确姿势"
+date: "2026-06-20"
+tags:
+  - nextjs
+  - react
+  - server-components
+locale: "zh"
+---
+
+# Next.js Server Components 实战笔记
+
+App Router 写了几个项目之后，最大的收获不是学会了什么新 API，而是对「**哪些代码应该跑在服务端**」有了手感。这篇笔记整理一下我实际的判断流程。
+
+## 一条判断规则
+
+写任何组件前先问一句话：
+
+> **这个组件需要在浏览器里响应交互（state / effect / 事件监听）吗？**
+
+- 需要 → `'use client'`
+- 不需要 → 默认留在服务端
+
+听起来简单，但实际写起来容易走两个极端：要么整个页面全部 `'use client'`（回到了 Pages Router 时代），要么为了「纯 RSC」把交互拆得稀碎。比较健康的比例是：**页面骨架和数据获取全在服务端，只有交互孤岛是 client 组件**。
+
+## 服务端组件的真正好处
+
+不是「少打了几个字」，而是三件具体的事：
+
+**1. 数据获取贴着数据库跑**
+
+```tsx
+// app/blog/page.tsx — Server Component
+export default async function BlogPage() {
+  const { posts } = await getPosts({ locale: 'zh', limit: 6 })
+  return <PostList posts={posts} />
+}
+```
+
+没有 `useEffect`，没有 loading 闪烁，没有瀑布请求。列表页渲染时数据已经在手里了。
+
+**2. 依赖不进客户端 bundle**
+
+`gray-matter`、MDX 编译器、Prisma client——这些只在服务端用。Server Component 里 import 的库不会被打进发给浏览器的 JS，这是实打实的包体积节省。
+
+**3. 密钥和内部实现天然隔离**
+
+`process.env.DATABASE_URL` 可以直接在 Server Component 里用，不需要一层 API 路由做代理。
+
+## 必须用 Client Component 的三种场景
+
+1. **状态**：`useState` / `useReducer` / 表单受控输入
+2. **副作用**：`useEffect`、事件监听、浏览器 API（`window`、`localStorage`）
+3. **第三方库**：需要 ref 或 DOM 的库（动画、图表、地图）
+
+一个容易被忽略的点：**把 props 从 Server Component 传给 Client Component 是可以的**，但传的东西必须能序列化。函数和 class 实例传不过去。所以交互的边界要画在「数据已就绪」的地方——服务端取数，客户端只负责交互。
+
+## 组合模式：一个页面的典型拆法
+
+```
+app/blog/[slug]/page.tsx        → Server：查库、组装 metadata、渲染骨架
+app/blog/[slug]/post-content.tsx → Server：MDX 编译 + prose 样式
+components/dark-mode.tsx        → Client：主题切换按钮
+components/pagination.tsx       → Client：翻页交互
+```
+
+页面入口永远在服务端，交互的「叶子」才是 client。这样首页、列表页几乎零客户端 JS，只有真正需要交互的组件会被水合。
+
+## 缓存是第二课
+
+RSC 的数据获取绕过了 `getServerSideProps` 的心智模型，取而代之的是三层缓存：
+
+| 手段 | 作用 |
+|---|---|
+| `revalidate = 60` | 页面级 ISR：静态渲染，60 秒后过期重新生成 |
+| `unstable_cache` | 函数级：把查库结果缓存起来，带 tag |
+| `revalidateTag` | 精确失效：数据变了只刷带这个 tag 的缓存 |
+
+这套组合对外表现为：**访问者永远拿到缓存的静态页面，发布文章时主动把相关缓存全部打掉**。对一个内容站来说，这就是「快」和「新」之间的最优解。
+
+## 踩过的坑
+
+- **Server Component 里不能写事件**：`onClick` 直接报错，别挣扎，拆成 client 子组件。
+- **`cookies()` 会让页面变动态**：鉴权判断尽量收敛到少数路由，别让全站页面都为此退化为每请求渲染。
+- **客户端组件 import 服务端模块会炸**：`lib/prisma.ts` 这类模块只能出现在 Server Component 的 import 链路里。
+
+## 小结
+
+Server Components 的核心价值是**边界清晰**：数据、鉴权、编译留在服务端；交互、动效、浏览器能力放客户端。边界画对了，性能和可维护性是顺带的结果。

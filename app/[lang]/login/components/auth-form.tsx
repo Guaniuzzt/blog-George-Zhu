@@ -7,6 +7,19 @@ import useLocale from '@/hooks/use-locale'
 
 type Mode = 'login' | 'register'
 
+function signupErrorMessage(error: { message: string; code?: string }) {
+  switch (error.code) {
+    case 'email_address_not_authorized':
+      return 'Supabase default SMTP can only email members of this project organization. Use a team member email, or configure custom SMTP in the Auth dashboard.'
+    case 'over_email_send_rate_limit':
+      return 'Too many confirmation emails were sent. Wait a bit and try again.'
+    case 'email_address_invalid':
+      return 'This email domain is not allowed. Use a real inbox address.'
+    default:
+      return error.message
+  }
+}
+
 export default function AuthForm({ redirectTo }: { redirectTo?: string }) {
   const [mode, setMode] = useState<Mode>('login')
   const [email, setEmail] = useState('')
@@ -36,7 +49,7 @@ export default function AuthForm({ redirectTo }: { redirectTo?: string }) {
         router.refresh()
       }
     } else {
-      const { error } = await supabase.auth.signUp({
+      const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: {
@@ -44,7 +57,14 @@ export default function AuthForm({ redirectTo }: { redirectTo?: string }) {
         },
       })
       if (error) {
-        setError(error.message)
+        setError(signupErrorMessage(error))
+      } else if (data.session) {
+        router.push(redirectTo || `/${routePrefix}/blog`)
+        router.refresh()
+      } else if (!data.user?.identities?.length) {
+        // Supabase returns 200 with an empty identities list when the email
+        // already exists, and does not send another confirmation email.
+        setError('This email is already registered. Try signing in instead.')
       } else {
         setMessage('Check your email for a confirmation link.')
       }

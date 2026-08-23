@@ -1,6 +1,8 @@
 import { ImageResponse } from 'next/og'
-
-export const runtime = 'edge'
+import { readFile } from 'fs/promises'
+import { join } from 'path'
+import { getPostMetaBySlug } from '@/lib/posts'
+import { SITE_AUTHOR } from '@/lib/site'
 
 export const alt = 'Blog post'
 export const size = {
@@ -9,37 +11,79 @@ export const size = {
 }
 export const contentType = 'image/png'
 
-const titles: Record<string, string> = {
-  first: 'Hello First!',
-  second: 'Hello Second!',
-}
-
 export default async function Image({
   params,
 }: {
-  params: { slug: string }
+  params: { lang: string; slug: string }
 }) {
-  const interSemiBold = fetch(
-    new URL('./inter.ttf', import.meta.url)
-  ).then((res) => res.arrayBuffer())
+  const post = await getPostMetaBySlug(params.slug)
+
+  // 草稿 / 不存在：不暴露文章信息
+  const isHidden = !post || post.frontmatter.published === false
+  const title = isHidden ? 'Draft' : post.frontmatter.title
+  const description = isHidden ? '' : post.frontmatter.description
+  const clippedTitle = title.length > 72 ? `${title.slice(0, 72)}…` : title
+  const clippedDesc =
+    description.length > 110 ? `${description.slice(0, 110)}…` : description
+  const author = post?.frontmatter.author ?? SITE_AUTHOR
+
+  // Node runtime 下从文件系统读字体（Prisma 不兼容 edge runtime）
+  const interSemiBold = readFile(
+    join(process.cwd(), 'app/[lang]/blog/[slug]/inter.ttf')
+  )
 
   return new ImageResponse(
     (
       <div
         style={{
-          fontSize: 84,
+          fontSize: 64,
           background: 'white',
           width: '100%',
           height: '100%',
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
+          alignItems: 'flex-start',
+          padding: '64px 80px',
         }}
       >
-        <div style={{ margin: 25 }}>{titles[params.slug] ?? params.slug}</div>
-        <div style={{ margin: 25, fontSize: 32 }}>
-          This is a desc of the blog post
+        <div
+          style={{
+            fontSize: 28,
+            color: '#888',
+            marginBottom: 24,
+            display: 'flex',
+            alignItems: 'center',
+            gap: 12,
+          }}
+        >
+          <span
+            style={{
+              width: 12,
+              height: 12,
+              borderRadius: 9999,
+              background: '#10b981',
+              display: 'flex',
+            }}
+          />
+          {author}
         </div>
+        <div
+          style={{
+            display: 'flex',
+            fontSize: 64,
+            lineHeight: 1.2,
+            color: '#111',
+            fontWeight: 600,
+          }}
+        >
+          {clippedTitle}
+        </div>
+        {clippedDesc && (
+          <div style={{ marginTop: 28, fontSize: 30, color: '#555', lineHeight: 1.4 }}>
+            {clippedDesc}
+          </div>
+        )}
       </div>
     ),
     {

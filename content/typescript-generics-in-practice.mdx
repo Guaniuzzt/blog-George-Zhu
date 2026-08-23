@@ -1,0 +1,110 @@
+---
+title: "TypeScript Generics in Practice: From Wrapper Types to API Responses"
+description: "How generics actually get used in production code — reusable type guards, typed API clients, and the patterns worth stealing for your own projects"
+date: "2026-05-31"
+tags:
+  - typescript
+  - generics
+locale: "en"
+---
+
+# TypeScript Generics in Practice
+
+Generics tutorials love `<T>` boxes and identity functions. Real codebases use generics for something else: **eliminating the moment you stop trusting a type**. Here are the patterns I actually reach for.
+
+## The one-line mental model
+
+A generic is a **function argument for the type system**. Whenever you write the same type logic twice with one name changed, that name should be a type parameter.
+
+```typescript
+// Before: two functions, same shape
+function firstOrNullUsers(users: User[]): User | null
+function firstOrNullPosts(posts: Post[]): Post | null
+
+// After: one function
+function firstOrNull<T>(items: T[]): T | null {
+  return items.length > 0 ? items[0] : null
+}
+```
+
+## Pattern 1: Typed API responses
+
+Every JSON API response is `unknown` until you validate it. Generics let you describe the *shape* while keeping the validation runtime-agnostic:
+
+```typescript
+interface ApiResponse<T> {
+  data: T
+  error: string | null
+  status: number
+}
+
+async function fetchJson<T>(
+  url: string,
+  parse: (raw: unknown) => T
+): Promise<ApiResponse<T>> {
+  try {
+    const res = await fetch(url)
+    const raw: unknown = await res.json()
+    return { data: parse(raw), error: null, status: res.status }
+  } catch (e) {
+    return {
+      data: null as unknown as T,
+      error: e instanceof Error ? e.message : 'Unknown error',
+      status: 500,
+    }
+  }
+}
+```
+
+The `parse` callback is doing the heavy lifting — generics just make sure the *return type* matches whatever the parser produces. No lying to the compiler.
+
+## Pattern 2: Constrained type parameters
+
+`extends` turns a wildcard into a contract. This is how you get autocomplete and type safety at the same time:
+
+```typescript
+function pluck<T, K extends keyof T>(items: T[], key: K): T[K][] {
+  return items.map((item) => item[key])
+}
+
+const posts = [{ id: 1, title: 'Hello' }, { id: 2, title: 'World' }]
+
+pluck(posts, 'title') // string[] — typed correctly
+pluck(posts, 'namr')  // Compile error: typo caught
+```
+
+## Pattern 3: Discriminated unions with generic payloads
+
+When modeling state machines, pair a generic with a literal discriminant:
+
+```typescript
+type RequestState<T> =
+  | { status: 'idle' }
+  | { status: 'loading' }
+  | { status: 'success'; data: T }
+  | { status: 'error'; message: string }
+
+// The compiler now forces you to narrow before touching data
+function render(state: RequestState<Post[]>): string {
+  switch (state.status) {
+    case 'success':
+      return `${state.data.length} posts` // data is Post[] here
+    case 'error':
+      return `Failed: ${state.message}`
+    default:
+      return '...'
+  }
+}
+```
+
+## When NOT to use generics
+
+- **Only one call site** — a plain type alias is clearer.
+- **The type parameter doesn't affect the output** — you're adding ceremony, not safety.
+- **You're fighting inference** — if you have to annotate every call, the generic isn't pulling its weight.
+
+## Takeaway
+
+Generics shine when they **connect** things: an input parser to its output type, a key to a property, a discriminant to a payload. Treat them as plumbing for type flow, not as architecture.
+
+The moment a generic makes a signature hard to read, stop — a concrete type that's obviously correct beats a clever abstraction that isn't.

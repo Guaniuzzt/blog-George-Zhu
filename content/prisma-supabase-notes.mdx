@@ -1,0 +1,106 @@
+---
+title: "用 Prisma + Supabase 给博客搭后端：从 schema 到线上数据库"
+description: "Postgres 托管在 Supabase、ORM 用 Prisma、部署在 Vercel——这套组合的完整落地记录，包括连接串选择、seed 策略和迁移流程"
+date: "2026-06-25"
+tags:
+  - prisma
+  - supabase
+  - postgres
+locale: "zh"
+---
+
+# 用 Prisma + Supabase 给博客搭后端
+
+个人博客的「后端」听起来很重，其实核心就一张 `posts` 表。这篇记录从零把 Postgres 跑起来的完整路径，重点是几个容易卡住的决策点。
+
+## 为什么是这个组合
+
+- **Supabase**：托管的 Postgres，免费额度对个人站绰绰有余，自带认证可以直接用
+- **Prisma**：schema 即文档，`migrate dev` 生成迁移文件，类型安全的查询 API
+- **Vercel**：Serverless 部署，和 Prisma + Supabase 的组合有成熟的参考架构
+
+## 第一个坑：连接串有三种
+
+Supabase 给 Postgres 提供三种连接方式，选错会莫名其妙地超时：
+
+| 连接串 | 端口 | 适用场景 |
+|---|---|---|
+| Direct | 5432 | 本地开发、`prisma migrate` |
+| Session pooler | 5432 | 兼容 IPv4 的长连接 |
+| Transaction pooler | 6543 | Serverless（Vercel）多连接复用 |
+
+关键认知：**Serverless 环境每个函数实例都会新建连接**，直连会很快耗尽 Postgres 的连接数上限。所以生产环境走 6543 的 Transaction pooler，本地开发和跑迁移用 5432。
+
+## Schema 先行
+
+```prisma
+model Post {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  title       String
+  description String
+  content     String
+  date        DateTime
+  locale      String   @default("zh")
+  published   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  tags        PostTag[]
+}
+```
+
+两个值得坚持的习惯：
+
+1. **`slug` 加 `@unique`**——URL 即主键的语义，也天然防重复发文
+2. **`published` 默认 `false`**——新文章先落草稿，发布是显式动作，这比「写了就上线」安全得多
+
+## 迁移流程
+
+```bash
+# 改完 schema.prisma 之后
+npx prisma migrate dev --name add_post_locale
+```
+
+这条命令做三件事：生成 SQL 迁移文件、应用到数据库、重新生成 client。迁移文件进 git，线上部署时只需要：
+
+```bash
+npx prisma migrate deploy
+```
+
+**经验**：永远不要在没跑 `migrate dev` 的情况下手改数据库结构。schema.prisma 和真实数据库的偏差是排查地狱的开始。
+
+## Seed：内容与代码同仓
+
+文章源文件（MDX）放在仓库 `content/` 目录，`prisma/seed.ts` 负责把它们 upsert 进数据库：
+
+```typescript
+const post = await prisma.post.upsert({
+  where: { slug },
+  update: { title, content, locale },
+  create: { slug, title, content, locale, published: true },
+})
+```
+
+用 `upsert` 而不是 `create` 的原因：seed 是幂等的，改了 MDX 重跑一次就好，不会报唯一约束冲突。
+
+生产部署时通过 CI 或手动执行 `npm run db:seed`，本地开发则随手可跑。
+
+## 查询层的缓存
+
+Prisma 直查只是第一步，内容站还需要考虑重复查库的开销。Next.js 的 `unstable_cache` 可以把查询结果按 tag 缓存：
+
+```typescript
+const fetchPosts = unstable_cache(
+  async () => prisma.post.findMany({ where: { published: true, locale } }),
+  ['posts-zh'],
+  { revalidate: 60, tags: ['posts'] }
+)
+```
+
+发布/编辑文章时用 `revalidateTag('posts')` 精确失效。这样读路径几乎不碰数据库，写路径即时生效。
+
+一个安全细节：**草稿查询不要进缓存**。缓存是全局共享的，草稿一旦被缓存，未登录的访问者也可能看到。
+
+## 小结
+
+这套组合的复杂度都在「第一次配置」：连接串选型、迁移流程、seed 策略。跑通之后，加字段 = 改 schema + 一条 migrate 命令，发文 = upsert 一行记录，心智负担非常低。对独立开发者来说，这可能就是「够用且不将就」的后端形态。

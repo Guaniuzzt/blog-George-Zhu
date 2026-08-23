@@ -28,9 +28,10 @@ export async function updateSession(request: NextRequest) {
   // Strip locale prefix before checking protected paths
   const pathWithoutLocale = request.nextUrl.pathname.replace(/^\/(cn|eng)/, '')
   const protectedPaths = ['/blog/new']
-  const isProtected = protectedPaths.some((path) =>
-    pathWithoutLocale.startsWith(path)
-  )
+  const protectedPatterns = [/^\/blog\/[^/]+\/edit$/, /^\/blog\/[^/]+\/preview$/]
+  const isProtected =
+    protectedPaths.some((path) => pathWithoutLocale.startsWith(path)) ||
+    protectedPatterns.some((pattern) => pattern.test(pathWithoutLocale))
 
   if (isProtected) {
     const {

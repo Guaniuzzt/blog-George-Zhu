@@ -3,6 +3,7 @@ import Header from '@/components/header'
 import UserMenu from '@/components/user-menu'
 import Chatbot from '@/components/chatbot'
 import { routeLocales, routeToLocale, localeToRoute } from '@/lib/i18n'
+import { SITE_URL } from '@/lib/site'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
@@ -23,6 +24,7 @@ export async function generateMetadata({
   const lang = routeToLocale(params.lang)
 
   return {
+    metadataBase: new URL(SITE_URL),
     title: {
       template: '%s | George Zhu',
       default: 'George Zhu',
@@ -35,6 +37,9 @@ export async function generateMetadata({
       languages: {
         'zh-CN': `/${localeToRoute('zh')}`,
         'en': `/${localeToRoute('en')}`,
+      },
+      types: {
+        'application/rss+xml': `/${localeToRoute(lang)}/feed.xml`,
       },
     },
   }
