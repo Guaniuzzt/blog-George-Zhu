@@ -9,6 +9,8 @@ export const metadata: Metadata = {
   title: 'Projects',
 }
 
+export const dynamic = 'force-static'
+
 export default async function ProjectsPage({ params }: { params: { lang: string } }) {
   const lang = routeToLocale(params.lang) as Locale
   const dict = getTranslation(lang) as Record<string, string>
