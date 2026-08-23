@@ -7,7 +7,7 @@ import type { Locale, RouteLocale } from '@/types'
 export default function useLocale() {
   const pathname = usePathname()
   const segment = pathname.split('/')[1]
-  const routePrefix: RouteLocale = segment === 'cn' ? 'cn' : 'eng'
+  const routePrefix: RouteLocale = segment === 'eng' ? 'eng' : 'cn'
   const lang: Locale = routeToLocale(routePrefix)
 
   const t = (key: string): string => {

@@ -31,7 +31,7 @@ export default function Header({ userSlot }: { userSlot: ReactNode }) {
         <div className="flex items-center gap-12">
           <Link href={`/${routePrefix}`} className="group">
             <motion.span
-              className="text-xl font-['Clash_Display'] font-semibold tracking-tight glitch-text"
+              className="text-xl font-display font-semibold tracking-tight glitch-text"
               whileHover={{ scale: 1.02 }}
               transition={{ type: 'spring', stiffness: 400, damping: 10 }}
             >

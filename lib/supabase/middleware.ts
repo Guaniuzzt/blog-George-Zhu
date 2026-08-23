@@ -40,7 +40,7 @@ export async function updateSession(request: NextRequest) {
     if (!user) {
       const url = request.nextUrl.clone()
       const localeMatch = request.nextUrl.pathname.match(/^\/(cn|eng)/)
-      const currentLocale = localeMatch ? localeMatch[1] : 'eng'
+      const currentLocale = localeMatch ? localeMatch[1] : 'cn'
       url.pathname = `/${currentLocale}/login`
       url.searchParams.set('redirectTo', request.nextUrl.pathname)
       return NextResponse.redirect(url)

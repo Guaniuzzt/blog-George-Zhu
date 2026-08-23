@@ -1,7 +1,7 @@
 import type { Locale, RouteLocale } from '@/types'
 
 export const routeLocales: RouteLocale[] = ['cn', 'eng']
-export const defaultRouteLocale: RouteLocale = 'eng'
+export const defaultRouteLocale: RouteLocale = 'cn'
 
 export function routeToLocale(route: string): Locale {
   return route === 'cn' ? 'zh' : 'en'

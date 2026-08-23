@@ -12,6 +12,8 @@ export const metadata: Metadata = {
   title: 'Photos',
 }
 
+export const dynamic = 'force-static'
+
 interface Photo {
   src: StaticImageData
   alt: string
@@ -58,7 +60,7 @@ export default function PhotosPage({ params }: { params: { lang: string } }) {
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
               <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out">
-                <span className="text-white text-sm font-['Clash_Display'] font-medium">
+                <span className="text-white text-sm font-display font-medium">
                   {photo.label}
                 </span>
               </div>

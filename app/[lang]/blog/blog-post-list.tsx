@@ -58,7 +58,7 @@ export default async function BlogPostList({
                 {post.frontmatter.date}
               </div>
 
-              <h3 className="text-xl font-['Clash_Display'] font-semibold text-[var(--text-primary)] group-hover:text-[var(--accent)] transition-colors duration-300 mb-3 line-clamp-2">
+              <h3 className="text-xl font-display font-semibold text-[var(--text-primary)] group-hover:text-[var(--accent)] transition-colors duration-300 mb-3 line-clamp-2">
                 {post.frontmatter.title}
               </h3>
 

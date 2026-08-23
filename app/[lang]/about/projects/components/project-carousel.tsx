@@ -54,7 +54,7 @@ function ProjectBlock({
         <div className="absolute bottom-0 left-0 right-0 p-4">
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-[var(--accent)] animate-pulse-neon" />
-            <h3 className="font-['Clash_Display'] font-semibold text-white text-sm tracking-wide drop-shadow-lg">
+            <h3 className="font-display font-semibold text-white text-sm tracking-wide drop-shadow-lg">
               {displayName}
             </h3>
           </div>
@@ -155,7 +155,7 @@ function ProjectDetailModal({
           <div className="mb-8">
             <div className="flex items-center gap-3 mb-4">
               <span className="w-3 h-3 rounded-full bg-[var(--accent)] animate-pulse-neon" />
-              <h2 className="font-['Clash_Display'] font-bold text-2xl text-[var(--text-primary)]">
+              <h2 className="font-display font-bold text-2xl text-[var(--text-primary)]">
                 {displayName}
               </h2>
             </div>
@@ -190,7 +190,7 @@ function ProjectDetailModal({
 
           {/* Functional Modules */}
           <div className="mb-8">
-            <h3 className="font-['Clash_Display'] font-semibold text-lg text-[var(--text-primary)] mb-3 flex items-center gap-2">
+            <h3 className="font-display font-semibold text-lg text-[var(--text-primary)] mb-3 flex items-center gap-2">
               <span className="w-6 h-1 bg-[var(--accent)] rounded-full" />
               {isZh ? '功能模块' : 'Functional Modules'}
             </h3>
@@ -210,7 +210,7 @@ function ProjectDetailModal({
           {/* Screenshots */}
           {project.screenshots.length > 0 && (
             <div className="mb-8">
-              <h3 className="font-['Clash_Display'] font-semibold text-lg text-[var(--text-primary)] mb-3 flex items-center gap-2">
+              <h3 className="font-display font-semibold text-lg text-[var(--text-primary)] mb-3 flex items-center gap-2">
                 <span className="w-6 h-1 bg-[var(--accent2)] rounded-full" />
                 {isZh ? '项目截图' : 'Screenshots'}
               </h3>
@@ -230,7 +230,7 @@ function ProjectDetailModal({
 
           {/* Tech Stack */}
           <div>
-            <h3 className="font-['Clash_Display'] font-semibold text-lg text-[var(--text-primary)] mb-3 flex items-center gap-2">
+            <h3 className="font-display font-semibold text-lg text-[var(--text-primary)] mb-3 flex items-center gap-2">
               <span className="w-6 h-1 bg-[var(--accent)] rounded-full" />
               {isZh ? '技术栈' : 'Tech Stack'}
             </h3>

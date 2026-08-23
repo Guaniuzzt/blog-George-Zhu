@@ -11,7 +11,7 @@ export default function NotFound() {
     <div className="min-h-[70vh] flex flex-col items-center justify-center text-center relative">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <motion.div
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[20rem] font-['Clash_Display'] font-bold text-[var(--bg-tertiary)] select-none"
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[20rem] font-display font-bold text-[var(--bg-tertiary)] select-none"
           animate={{ opacity: [0.1, 0.2, 0.1], scale: [1, 1.02, 1] }}
           transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
         >
@@ -25,7 +25,7 @@ export default function NotFound() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
       >
-        <h1 className="text-8xl md:text-9xl font-['Clash_Display'] font-bold mb-4 bg-gradient-to-r from-[var(--accent)] via-[var(--accent2)] to-[var(--accent)] bg-clip-text text-transparent glitch-text">
+        <h1 className="text-8xl md:text-9xl font-display font-bold mb-4 bg-gradient-to-r from-[var(--accent)] via-[var(--accent2)] to-[var(--accent)] bg-clip-text text-transparent glitch-text">
           404
         </h1>
 

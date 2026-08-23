@@ -11,9 +11,9 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        mono: ['"JetBrains Mono"', '"Fira Code"', 'monospace'],
-        display: ['"Clash Display"', '"Satoshi"', 'sans-serif'],
-        body: ['"Satoshi"', '"Inter"', 'sans-serif'],
+        mono: ['var(--font-mono)', 'ui-monospace', 'monospace'],
+        display: ['var(--font-clash)', 'sans-serif'],
+        body: ['var(--font-satoshi)', 'sans-serif'],
       },
       colors: {
         acid: {

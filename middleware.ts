@@ -2,23 +2,9 @@ import { type NextRequest, NextResponse } from 'next/server'
 import { updateSession } from '@/lib/supabase/middleware'
 
 const routeLocales = ['cn', 'eng']
-const defaultLocale = 'eng'
+const defaultLocale = 'cn'
 
 const protectedPathPrefixes = ['/blog/new']
-
-function getPreferredLocale(request: NextRequest): string {
-  const acceptLang = request.headers.get('accept-language') ?? ''
-  if (acceptLang.startsWith('zh') || acceptLang.includes(',zh')) {
-    return 'cn'
-  }
-
-  const country = request.headers.get('x-vercel-ip-country')
-  if (country === 'CN') {
-    return 'cn'
-  }
-
-  return defaultLocale
-}
 
 function isProtectedPath(pathname: string): boolean {
   const pathWithoutLocale = pathname.replace(/^\/(cn|eng)/, '')
@@ -42,10 +28,9 @@ export async function middleware(request: NextRequest) {
   )
 
   if (!pathnameHasLocale) {
-    const locale = getPreferredLocale(request)
     const url = request.nextUrl.clone()
-    url.pathname = `/${locale}${pathname === '/' ? '' : pathname}`
-    return NextResponse.redirect(url)
+    url.pathname = `/${defaultLocale}${pathname === '/' ? '' : pathname}`
+    return NextResponse.rewrite(url)
   }
 
   if (isProtectedPath(pathname)) {
@@ -56,7 +41,9 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
+  // `.+` (not `.*`) so `/` skips middleware and uses the next.config rewrite to `/cn`.
+  // Exact `/cn` and `/eng` also skip so the Singapore ISR cache can be served without a rewrite hop.
   matcher: [
-    '/((?!_next/static|_next/image|_vercel|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|js)$).*)',
+    '/((?!_next/static|_next/image|_vercel|favicon.ico|cn$|eng$|.*\\.(?:svg|png|jpg|jpeg|gif|webp|js)$).+)',
   ],
 }

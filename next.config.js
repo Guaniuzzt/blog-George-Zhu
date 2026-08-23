@@ -3,6 +3,9 @@ const withMDX = require('@next/mdx')()
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   pageExtensions: ['js', 'jsx', 'mdx', 'ts', 'tsx'],
+  async rewrites() {
+    return [{ source: '/', destination: '/cn' }]
+  },
   images: {
     formats: ['image/avif', 'image/webp'],
     deviceSizes: [640, 750, 828, 1080, 1200],

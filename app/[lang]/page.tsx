@@ -5,6 +5,9 @@ import Card from '@/components/card'
 import { MotionItem } from '@/components/page-transition'
 import { getTranslation, routeToLocale } from '@/lib/i18n'
 
+export const dynamic = 'force-static'
+export const revalidate = 60
+
 export default async function Home({ params }: { params: { lang: string } }) {
   const { posts } = await getPosts({ newest: true, limit: 3 })
   const lang = routeToLocale(params.lang)
@@ -80,14 +83,14 @@ export default async function Home({ params }: { params: { lang: string } }) {
                             month: 'short',
                           })}
                         </span>
-                        <span className="text-xl font-['Clash_Display'] font-semibold text-[var(--accent)] leading-none">
+                        <span className="text-xl font-display font-semibold text-[var(--accent)] leading-none">
                           {new Date(post.frontmatter.date).getDate()}
                         </span>
                       </div>
                     </div>
 
                     <div className="flex-1 min-w-0">
-                      <h3 className="text-lg font-['Clash_Display'] font-medium text-[var(--text-primary)] group-hover:text-[var(--accent)] transition-colors duration-300 truncate">
+                      <h3 className="text-lg font-display font-medium text-[var(--text-primary)] group-hover:text-[var(--accent)] transition-colors duration-300 truncate">
                         {post.frontmatter.title}
                       </h3>
                       {post.frontmatter.tags && (

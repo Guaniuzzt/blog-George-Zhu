@@ -21,7 +21,7 @@ window.initializeChatbot = () => {
     zIndex: "9999",
     boxShadow: "0 0 20px var(--accent-glow), 0 4px 16px rgba(0,0,0,0.25)",
     transition: "transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-    fontFamily: '"Satoshi", system-ui, sans-serif',
+    fontFamily: 'var(--font-satoshi), system-ui, sans-serif',
   });
 
   button.addEventListener("mouseenter", () => {
@@ -58,7 +58,7 @@ window.initializeChatbot = () => {
       zIndex: "9999",
       display: "flex",
       flexDirection: "column",
-      fontFamily: '"Satoshi", system-ui, sans-serif',
+      fontFamily: 'var(--font-satoshi), system-ui, sans-serif',
       opacity: "0",
       transform: "translateY(8px) scale(0.96)",
       transition: "opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1), transform 0.25s cubic-bezier(0.4, 0, 0.2, 1)",
@@ -81,7 +81,7 @@ window.initializeChatbot = () => {
       borderBottom: "1px solid var(--border-color)",
     });
     header.innerHTML = `
-      <span style="font-family:'Clash Display', sans-serif; font-weight:600; font-size:16px; font-size:16px; background:var(--gradient-1); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; letter-spacing:-0.02em;">
+      <span style="font-family:var(--font-clash), sans-serif; font-weight:600; font-size:16px; background:var(--gradient-1); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; letter-spacing:-0.02em;">
         Chatbot
       </span>
       <span id="chatbot-close" style="cursor:pointer; font-size:18px; color:var(--text-muted); transition:color 0.2s; line-height:1;">✕</span>
@@ -136,7 +136,7 @@ window.initializeChatbot = () => {
       fontSize: "14px",
       outline: "none",
       boxSizing: "border-box",
-      fontFamily: '"Satoshi", system-ui, sans-serif',
+      fontFamily: 'var(--font-satoshi), system-ui, sans-serif',
       backgroundColor: "var(--bg-secondary)",
       color: "var(--text-primary)",
       transition: "border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1)",

@@ -8,6 +8,8 @@ export const metadata = {
   title: 'About'
 }
 
+export const dynamic = 'force-static'
+
 const skills = [
   { name: 'React / Next.js', level: 90, color: '#61dafb' },
   { name: 'Node.js', level: 85, color: '#68a063' },
@@ -40,7 +42,7 @@ export default function AboutPage({ params }: { params: { lang: string } }) {
 
       {/* Skills Section */}
       <MotionItem delay={0.2}>
-        <h2 className="font-['Clash_Display'] text-2xl font-semibold mb-6">
+        <h2 className="font-display text-2xl font-semibold mb-6">
           {t('about.skills')}
         </h2>
       </MotionItem>
@@ -73,7 +75,7 @@ export default function AboutPage({ params }: { params: { lang: string } }) {
       {/* Connect Section */}
       <MotionItem delay={0.5}>
         <Card className="text-center">
-          <h3 className="font-['Clash_Display'] text-xl font-semibold mb-3">
+          <h3 className="font-display text-xl font-semibold mb-3">
             {t('about.connect')}
           </h3>
           <p className="text-[var(--text-secondary)] mb-4 text-sm max-w-md mx-auto">
