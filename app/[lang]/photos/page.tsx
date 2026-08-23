@@ -1,8 +1,8 @@
 import Image, { type StaticImageData } from 'next/image'
-import dog1 from './../../../public/images/dog1.png'
-import dog2 from './../../../public/images/dog2.png'
-import dog3 from './../../../public/images/dog3.png'
-import dog4 from './../../../public/images/dog4.png'
+import dog1 from './../../../public/images/dog1.webp'
+import dog2 from './../../../public/images/dog2.webp'
+import dog3 from './../../../public/images/dog3.webp'
+import dog4 from './../../../public/images/dog4.webp'
 import H1 from '@/components/h1'
 import { MotionItem } from '@/components/page-transition'
 import { getTranslation, routeToLocale } from '@/lib/i18n'
@@ -53,7 +53,7 @@ export default function PhotosPage({ params }: { params: { lang: string } }) {
                 alt={photo.alt}
                 sizes="(max-width: 768px) 100vw, 50vw"
                 priority={i < 2}
-                quality={50}
+                quality={75}
                 placeholder="blur"
               />
 
