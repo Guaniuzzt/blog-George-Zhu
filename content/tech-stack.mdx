@@ -47,10 +47,7 @@ Blog content is authored in **MDX**, blending Markdown with React components:
 
 ## 🎬 Framer Motion — Animations
 
-Page transitions and entrance animations are driven by **Framer Motion**:
-
-- `PageTransition` wraps pages for route-change animations
-- `MotionItem` enables staggered entrance effects for list items
+Entrance animations are CSS-only (`IntersectionObserver` + `.rv` / `.mask-line`), with `prefers-reduced-motion` turning them off.
 
 ## 🌐 Deployment & Monitoring
 

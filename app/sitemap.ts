@@ -29,11 +29,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         url: `${SITE_URL}/${locale}/about/projects`,
         changeFrequency: 'monthly',
         priority: 0.5,
-      },
-      {
-        url: `${SITE_URL}/${locale}/photos`,
-        changeFrequency: 'monthly',
-        priority: 0.3,
       }
     )
   }

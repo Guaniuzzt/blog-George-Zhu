@@ -22,28 +22,6 @@ export interface Post {
   readingTime?: number
 }
 
-// ============ 项目 / 作品 ============
-// 既兼容 GitHub API 返回的字段，也兼容本地 db.json 的字段。
-export interface Repo {
-  id: number | string
-  name: string
-  title?: string // db.json fallback 使用的字段名
-  description: string | null
-  stargazers_count: number
-  html_url?: string
-  language?: string | null
-}
-
-// 迁移到 Prisma 后前端使用的项目类型
-export interface Project {
-  id: string
-  name: string
-  description: string | null
-  url: string | null
-  language: string | null
-  stargazersCount: number
-}
-
 // ============ 分页 ============
 // ⚠️ 与实际 components/pagination.tsx 对齐：组件只接收 pageCount，
 // 当前页从 URL searchParams 中读取。

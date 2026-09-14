@@ -25,6 +25,5 @@ declare namespace NodeJS {
     NEXT_PUBLIC_SUPABASE_URL?: string
     NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY?: string
     DATABASE_URL?: string
-    GITHUB_TOKEN?: string
   }
 }

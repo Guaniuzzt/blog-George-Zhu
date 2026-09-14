@@ -1,9 +1,12 @@
 import { getCurrentUser } from '@/lib/auth'
 import Link from 'next/link'
+import { getTranslation, routeToLocale } from '@/lib/i18n'
 
 export default async function NewPostButton({ routePrefix }: { routePrefix: string }) {
   const user = await getCurrentUser()
   if (!user) return null
+
+  const dict = getTranslation(routeToLocale(routePrefix))
 
   return (
     <Link
@@ -13,7 +16,7 @@ export default async function NewPostButton({ routePrefix }: { routePrefix: stri
       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
       </svg>
-      New Post
+      {dict['admin.newPost']}
     </Link>
   )
 }

@@ -23,7 +23,7 @@ interface PostFormProps {
 
 export default function PostForm({ existingTags, initial }: PostFormProps) {
   const isEdit = Boolean(initial)
-  const { routePrefix } = useLocale()
+  const { routePrefix, t } = useLocale()
   const routeDefaultLocale: Locale = routePrefix === 'cn' ? 'zh' : 'en'
 
   const [title, setTitle] = useState(initial?.title ?? '')
@@ -73,35 +73,35 @@ export default function PostForm({ existingTags, initial }: PostFormProps) {
     <form onSubmit={(e) => e.preventDefault()} className="space-y-6 max-w-3xl">
       <div>
         <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1">
-          Title *
+          {t('editor.title')}
         </label>
         <input
           type="text"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           required
-          placeholder="My Awesome Post"
+          placeholder={t('editor.titlePlaceholder')}
           className="w-full px-4 py-2.5 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)] text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)]"
         />
       </div>
 
       <div>
         <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1">
-          Description *
+          {t('editor.description')}
         </label>
         <input
           type="text"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           required
-          placeholder="A brief summary of the post"
+          placeholder={t('editor.descriptionPlaceholder')}
           className="w-full px-4 py-2.5 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)] text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)]"
         />
       </div>
 
       <div>
         <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1">
-          Language
+          {t('editor.language')}
         </label>
         <select
           value={locale}
@@ -112,13 +112,13 @@ export default function PostForm({ existingTags, initial }: PostFormProps) {
           <option value="en">English (en)</option>
         </select>
         <p className="mt-1 text-xs text-[var(--text-muted)]">
-          The post will only be listed under the matching language site.
+          {t('editor.languageHint')}
         </p>
       </div>
 
       <div>
         <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1">
-          Tags (comma-separated)
+          {t('editor.tags')}
         </label>
         <input
           type="text"
@@ -159,14 +159,14 @@ export default function PostForm({ existingTags, initial }: PostFormProps) {
 
       <div>
         <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1">
-          Content (Markdown) *
+          {t('editor.content')}
         </label>
         <textarea
           value={content}
           onChange={(e) => setContent(e.target.value)}
           required
           rows={20}
-          placeholder="Write your article in Markdown..."
+          placeholder={t('editor.contentPlaceholder')}
           className="w-full px-4 py-3 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)] text-[var(--text-primary)] font-mono text-sm leading-relaxed focus:outline-none focus:ring-2 focus:ring-[var(--accent)] resize-y"
         />
       </div>
@@ -181,10 +181,10 @@ export default function PostForm({ existingTags, initial }: PostFormProps) {
           className="px-6 py-2.5 rounded-xl bg-[var(--accent)] text-white font-medium hover:shadow-lg hover:shadow-[var(--accent)]/25 transition-all duration-300 disabled:opacity-50"
         >
           {loading === 'publish'
-            ? 'Saving...'
+            ? t('editor.saving')
             : isEdit && initial?.published
-              ? 'Save Changes'
-              : 'Publish'}
+              ? t('editor.saveChanges')
+              : t('admin.publish')}
         </button>
         <button
           type="button"
@@ -193,17 +193,17 @@ export default function PostForm({ existingTags, initial }: PostFormProps) {
           className="px-6 py-2.5 rounded-xl border border-[var(--border-color)] text-[var(--text-secondary)] hover:border-[var(--accent)] transition-all duration-300 disabled:opacity-50"
         >
           {loading === 'draft'
-            ? 'Saving...'
+            ? t('editor.saving')
             : isEdit && initial?.published
-              ? 'Save & Unpublish'
-              : 'Save as Draft'}
+              ? t('editor.saveUnpublish')
+              : t('editor.saveDraft')}
         </button>
         <button
           type="button"
           onClick={() => router.back()}
           className="px-6 py-2.5 rounded-xl text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-all duration-300"
         >
-          Cancel
+          {t('editor.cancel')}
         </button>
       </div>
     </form>

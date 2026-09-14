@@ -3,11 +3,13 @@
 import { Suspense } from 'react'
 import { useSearchParams, usePathname } from 'next/navigation'
 import { BlogPendingLink } from '@/components/blog-pending'
+import useLocale from '@/hooks/use-locale'
 import type { PaginationProps } from '@/types'
 
 function PaginationInner({ pageCount }: PaginationProps) {
   const searchParams = useSearchParams()
   const pathname = usePathname()
+  const { t } = useLocale()
 
   if (pageCount <= 1) return null
 
@@ -18,7 +20,7 @@ function PaginationInner({ pageCount }: PaginationProps) {
   }
 
   return (
-    <nav className="flex justify-center items-center gap-2" aria-label="Pagination">
+    <nav className="flex justify-center items-center gap-2" aria-label={t('pagination.label')}>
       {pages.map((pageNumber) => {
         const params = new URLSearchParams(searchParams.toString())
         params.set('page', pageNumber.toString())

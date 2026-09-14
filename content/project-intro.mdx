@@ -36,17 +36,16 @@ All pages are **Server Components** by default — data fetching happens on the 
 
 ```
 app/
-├── layout.tsx          → RSC — shared layout with grid background
+├── layout.tsx          → RSC — shared layout
 ├── page.tsx            → RSC — fetches latest posts, renders server-side
 ├── blog/
 │   ├── page.tsx        → RSC — paginated post list with tag filtering
 │   └── [slug]/
 │       ├── page.tsx    → RSC — MDX article rendering
 │       └── opengraph-image.tsx → Edge Runtime — dynamic OG images
-├── about/
-│   ├── page.tsx        → RSC — about & skills
-│   └── projects/       → Client — GitHub API live data
-└── photos/             → RSC — static photo gallery
+└── about/
+    ├── page.tsx        → RSC — about & skills
+    └── projects/       → RSC — static project cards
 ```
 
 ### MDX Content Layer — with performance caching
@@ -61,8 +60,8 @@ Content is authored in MDX files with YAML frontmatter. A custom `lib/posts.ts` 
 
 Dark mode preference is handled entirely on the **server side**: the `<html>` tag receives the correct `class` before any client JavaScript executes, eliminating the infamous "flash of unstyled content" (FOUC).
 
-- Default: dark theme
-- Persistence ready via cookies (no external dependency)
+- Default: light theme
+- Persistence via cookies (no external dependency)
 
 ### Internationalization (i18n)
 
@@ -81,20 +80,20 @@ const translations = {
 
 ### Page Transitions & Micro-interactions
 
-Smooth page transitions powered by Framer Motion:
+Entrance motion is CSS-only (`IntersectionObserver` + `.rv` / `.mask-line`):
 
-- **Page-level**: `AnimatePresence` with blur + fade + slide effects on route changes
-- **Staggered children**: `MotionItem` components animate in with configurable delays, creating a cascading entrance effect for cards and lists
-- **Hover states**: Cards scale slightly and shift accent colors on hover
+- **Page-level**: a short fade/slide on template remount, disabled when `prefers-reduced-motion` is set
+- **Scroll reveal**: sections fade in as they enter the viewport
+- **Hover states**: cards lift slightly with a paper-like shadow
 
 ### Tailwind Design System
 
-A custom **neon-dark aesthetic** defined entirely in `tailwind.config.ts`:
+A custom **editorial / paper aesthetic** defined in CSS variables:
 
 ```
-Custom Colors:  acid (green palette), neon (pink/blue/purple/green)
-Custom Fonts:   Clash Display (headings), Satoshi (body), JetBrains Mono (code)
-Custom Effects: noise texture, grid backgrounds, glitch, float, scan-line
+Custom Colors:  paper off-white, ink, indigo accent
+Custom Fonts:   Inter (body), Noto Serif SC / Songti SC (headings), JetBrains Mono (code)
+Custom Effects: reveal-on-scroll, mask-line titles, marquee, paper card shadows
 CSS Variables:  --accent, --bg-primary, --text-secondary (theme-agnostic)
 ```
 

@@ -42,13 +42,7 @@ export default async function DraftPreviewPage({ params }: PreviewPageProps) {
   return (
     <article className="mx-auto w-full max-w-[720px]">
       <div className="mb-8 rounded-2xl border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-sm text-amber-800 dark:text-amber-400">
-        {isDraft
-          ? lang === 'zh'
-            ? '草稿预览 — 此内容仅你可见，未发布'
-            : 'Draft preview — only visible to you, not published'
-          : lang === 'zh'
-            ? '此文章已发布。预览页面不对搜索引擎开放。'
-            : 'This post is published. This preview page is not indexed.'}
+        {isDraft ? t('preview.draft') : t('preview.published')}
       </div>
 
       <PostHeader

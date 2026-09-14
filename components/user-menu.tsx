@@ -12,7 +12,7 @@ export default function UserMenu() {
   const [loading, setLoading] = useState(true)
   const router = useRouter()
   const supabase = createClient()
-  const { routePrefix } = useLocale()
+  const { routePrefix, t } = useLocale()
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => {
@@ -32,7 +32,7 @@ export default function UserMenu() {
   if (loading) {
     return (
       <span className="flex h-9 items-center rounded-full border border-[var(--border-color)] px-4 text-sm opacity-50">
-        Sign In
+        {t('admin.signIn')}
       </span>
     )
   }
@@ -43,7 +43,7 @@ export default function UserMenu() {
         href={`/${routePrefix}/login`}
         className="flex h-9 items-center rounded-full border border-[var(--border-color)] px-4 text-sm transition-all duration-300 hover:border-[var(--text-primary)] hover:text-[var(--text-primary)]"
       >
-        Sign In
+        {t('admin.signIn')}
       </Link>
     )
   }
@@ -57,7 +57,7 @@ export default function UserMenu() {
         onClick={handleSignOut}
         className="flex h-9 items-center rounded-full border border-[var(--border-color)] px-3 text-sm transition-all duration-300 hover:border-red-400 hover:text-red-400"
       >
-        Sign Out
+        {t('admin.signOut')}
       </button>
     </div>
   )

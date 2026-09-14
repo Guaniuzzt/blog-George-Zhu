@@ -1,7 +1,6 @@
 import { Suspense } from 'react'
 import H1 from '@/components/h1'
 import NewPostButton from '@/components/new-post-button'
-import { MotionItem } from '@/components/page-transition'
 import { BlogPostsSkeleton } from '@/components/blog-skeleton'
 import {
   BlogPendingLink,
@@ -50,37 +49,31 @@ export default async function BlogPostsPage({ params, searchParams }: BlogPagePr
         </Suspense>
       </div>
 
-      <MotionItem delay={0.1}>
-        <p className="text-lg text-[var(--text-secondary)] mb-8 leading-relaxed">
-          {t('blog.desc')}
-        </p>
-      </MotionItem>
+      <p className="text-lg text-[var(--text-secondary)] mb-8 leading-relaxed">
+        {t('blog.desc')}
+      </p>
 
-      <MotionItem delay={0.15}>
-        <hr />
-      </MotionItem>
+      <hr />
 
-      <MotionItem delay={0.2}>
-        <div className="flex items-center gap-2 mb-8 text-sm">
-          <span className="text-[var(--text-muted)]">{t('blog.sort')}</span>
-          {order === 'newest' && (
-            <BlogPendingLink
-              href={`${prefix}/blog?order=oldest`}
-              className="rounded-full border border-[var(--border-color)] px-3 py-1 text-[13px] text-[var(--text-secondary)] transition-colors duration-300 hover:border-[var(--text-primary)] hover:text-[var(--text-primary)]"
-            >
-              {t('blog.newest')}
-            </BlogPendingLink>
-          )}
-          {order === 'oldest' && (
-            <BlogPendingLink
-              href={`${prefix}/blog?order=newest`}
-              className="rounded-full border border-[var(--border-color)] px-3 py-1 text-[13px] text-[var(--text-secondary)] transition-colors duration-300 hover:border-[var(--text-primary)] hover:text-[var(--text-primary)]"
-            >
-              {t('blog.oldest')}
-            </BlogPendingLink>
-          )}
-        </div>
-      </MotionItem>
+      <div className="flex items-center gap-2 mb-8 text-sm">
+        <span className="text-[var(--text-muted)]">{t('blog.sort')}</span>
+        {order === 'newest' && (
+          <BlogPendingLink
+            href={`${prefix}/blog?order=oldest`}
+            className="rounded-full border border-[var(--border-color)] px-3 py-1 text-[13px] text-[var(--text-secondary)] transition-colors duration-300 hover:border-[var(--text-primary)] hover:text-[var(--text-primary)]"
+          >
+            {t('blog.newest')}
+          </BlogPendingLink>
+        )}
+        {order === 'oldest' && (
+          <BlogPendingLink
+            href={`${prefix}/blog?order=newest`}
+            className="rounded-full border border-[var(--border-color)] px-3 py-1 text-[13px] text-[var(--text-secondary)] transition-colors duration-300 hover:border-[var(--text-primary)] hover:text-[var(--text-primary)]"
+          >
+            {t('blog.oldest')}
+          </BlogPendingLink>
+        )}
+      </div>
 
       <BlogPendingOutlet fallback={<BlogPostsSkeleton />}>
         <Suspense key={`${order}-${page}-${tagsKey}`} fallback={<BlogPostsSkeleton />}>

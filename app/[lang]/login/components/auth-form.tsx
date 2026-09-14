@@ -29,7 +29,7 @@ export default function AuthForm({ redirectTo }: { redirectTo?: string }) {
   const [loading, setLoading] = useState(false)
   const router = useRouter()
   const supabase = createClient()
-  const { routePrefix } = useLocale()
+  const { routePrefix, t } = useLocale()
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -64,9 +64,9 @@ export default function AuthForm({ redirectTo }: { redirectTo?: string }) {
       } else if (!data.user?.identities?.length) {
         // Supabase returns 200 with an empty identities list when the email
         // already exists, and does not send another confirmation email.
-        setError('This email is already registered. Try signing in instead.')
+        setError(t('login.alreadyRegistered'))
       } else {
-        setMessage('Check your email for a confirmation link.')
+        setMessage(t('login.checkEmail'))
       }
     }
 
@@ -77,7 +77,7 @@ export default function AuthForm({ redirectTo }: { redirectTo?: string }) {
     <form onSubmit={handleSubmit} className="max-w-md space-y-4">
       <div>
         <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1">
-          Email
+          {t('login.email')}
         </label>
         <input
           type="email"
@@ -90,7 +90,7 @@ export default function AuthForm({ redirectTo }: { redirectTo?: string }) {
 
       <div>
         <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1">
-          Password
+          {t('login.password')}
         </label>
         <input
           type="password"
@@ -114,30 +114,34 @@ export default function AuthForm({ redirectTo }: { redirectTo?: string }) {
         disabled={loading}
         className="w-full py-2.5 rounded-xl bg-[var(--accent)] text-white font-medium hover:shadow-lg hover:shadow-[var(--accent)]/25 transition-all duration-300 disabled:opacity-50"
       >
-        {loading ? 'Loading...' : mode === 'login' ? 'Sign In' : 'Sign Up'}
+        {loading
+          ? t('login.loading')
+          : mode === 'login'
+            ? t('login.signIn')
+            : t('login.signUp')}
       </button>
 
       <p className="text-sm text-[var(--text-muted)] text-center">
         {mode === 'login' ? (
           <>
-            Don&apos;t have an account?{' '}
+            {t('login.noAccount')}{' '}
             <button
               type="button"
               onClick={() => setMode('register')}
               className="text-[var(--accent)] hover:underline"
             >
-              Register
+              {t('login.register')}
             </button>
           </>
         ) : (
           <>
-            Already have an account?{' '}
+            {t('login.hasAccount')}{' '}
             <button
               type="button"
               onClick={() => setMode('login')}
               className="text-[var(--accent)] hover:underline"
             >
-              Sign In
+              {t('login.signIn')}
             </button>
           </>
         )}

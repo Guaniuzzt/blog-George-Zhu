@@ -22,7 +22,7 @@ export default function PostAdminActions({
   const [isAuthed, setIsAuthed] = useState(false)
   const [busy, setBusy] = useState(false)
   const router = useRouter()
-  const { routePrefix } = useLocale()
+  const { routePrefix, t } = useLocale()
 
   useEffect(() => {
     const supabase = createClient()
@@ -54,9 +54,7 @@ export default function PostAdminActions({
 
   async function handleDelete() {
     const confirmed = window.confirm(
-      published
-        ? 'Delete this post permanently? This cannot be undone.'
-        : 'Delete this draft permanently? This cannot be undone.'
+      published ? t('admin.deletePostConfirm') : t('admin.deleteDraftConfirm')
     )
     if (!confirmed) return
 
@@ -83,7 +81,7 @@ export default function PostAdminActions({
       >
         <Link
           href={`/${routePrefix}/blog/${slug}/edit`}
-          title="Edit"
+          title={t('admin.edit')}
           className="flex h-8 w-8 items-center justify-center rounded-full border border-[var(--border-color)] text-[var(--text-muted)] transition-colors duration-300 hover:border-[var(--text-primary)] hover:text-[var(--text-primary)]"
         >
           <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -94,7 +92,7 @@ export default function PostAdminActions({
           type="button"
           onClick={handleTogglePublish}
           disabled={busy}
-          title={published ? 'Unpublish' : 'Publish'}
+          title={published ? t('admin.unpublish') : t('admin.publish')}
           className="flex h-8 w-8 items-center justify-center rounded-full border border-[var(--border-color)] text-[var(--text-muted)] transition-colors duration-300 hover:border-[var(--text-primary)] hover:text-[var(--text-primary)] disabled:opacity-50"
         >
           {published ? (
@@ -112,7 +110,7 @@ export default function PostAdminActions({
           type="button"
           onClick={handleDelete}
           disabled={busy}
-          title="Delete"
+          title={t('admin.delete')}
           className="flex h-8 w-8 items-center justify-center rounded-full border border-[var(--border-color)] text-[var(--text-muted)] transition-colors duration-300 hover:border-red-500 hover:text-red-500 disabled:opacity-50"
         >
           <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -132,7 +130,7 @@ export default function PostAdminActions({
         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
         </svg>
-        Edit
+        {t('admin.edit')}
       </Link>
       <button
         type="button"
@@ -140,7 +138,11 @@ export default function PostAdminActions({
         disabled={busy}
         className="inline-flex items-center gap-2 px-5 py-2 rounded-xl border border-[var(--border-color)] text-sm text-[var(--text-secondary)] hover:border-[var(--accent)] hover:text-[var(--accent)] transition-all duration-300 disabled:opacity-50"
       >
-        {busy ? 'Working...' : published ? 'Unpublish' : 'Publish'}
+        {busy
+          ? t('admin.working')
+          : published
+            ? t('admin.unpublish')
+            : t('admin.publish')}
       </button>
       <button
         type="button"
@@ -148,7 +150,7 @@ export default function PostAdminActions({
         disabled={busy}
         className="inline-flex items-center gap-2 px-5 py-2 rounded-xl border border-[var(--border-color)] text-sm text-[var(--text-secondary)] hover:border-red-500 hover:text-red-500 transition-all duration-300 disabled:opacity-50"
       >
-        Delete
+        {t('admin.delete')}
       </button>
     </div>
   )

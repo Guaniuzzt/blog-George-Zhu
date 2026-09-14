@@ -52,6 +52,11 @@
   box-sizing: border-box;
 }
 
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
 html {
   scroll-behavior: smooth;
 }
@@ -103,6 +108,10 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
   .page-enter {
     animation: none;
   }
@@ -390,6 +399,12 @@ body {
 
   .marquee-track {
     animation: none;
+  }
+
+  .proj-card:hover,
+  .btn-primary:hover,
+  .btn-ghost:hover {
+    transform: none;
   }
 }
 

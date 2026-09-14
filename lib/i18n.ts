@@ -17,7 +17,6 @@ export const translations = {
     'nav.home': 'Home',
     'nav.about': 'About',
     'nav.projects': 'Projects',
-    'nav.photos': 'Photos',
     'nav.blog': 'Blog',
     'nav.switchLang': 'Switch language',
     'nav.menu': 'Menu',
@@ -29,7 +28,7 @@ export const translations = {
     'home.tagline':
       'A full-stack developer who crafts digital experiences at the intersection of code and creativity.',
     'home.subtitle':
-      "I build performant web applications with modern technologies. When I'm not coding, you'll find me exploring new tools, writing about tech, or capturing moments through my lens.",
+      "I build performant web applications with modern technologies. When I'm not coding, you'll find me exploring new tools or writing about tech.",
     'home.viewProjects': 'View Projects',
     'home.readBlog': 'Read Blog',
     'home.latestPosts': 'Latest Posts',
@@ -88,10 +87,6 @@ export const translations = {
     'projects.subdesc': 'Open a card to visit the live site.',
     'projects.visit': 'Visit site',
 
-    // Photos page
-    'photos.title': 'Photos',
-    'photos.desc': 'A glimpse into my world — my four-legged companion.',
-
     // 404
     '404.title': 'Page not found',
     '404.desc': "The page you're looking for doesn't exist or has been moved.",
@@ -106,6 +101,60 @@ export const translations = {
     'cta.title': 'Be first to know when a new post lands',
     'cta.desc': 'Subscribe via RSS to get the latest notes as they go out.',
     'cta.rss': 'RSS feed',
+
+    'login.title': 'Login / Register',
+    'login.subtitle': 'Sign in to create and manage blog posts.',
+    'login.email': 'Email',
+    'login.password': 'Password',
+    'login.signIn': 'Sign In',
+    'login.signUp': 'Sign Up',
+    'login.loading': 'Loading...',
+    'login.register': 'Register',
+    'login.noAccount': "Don't have an account?",
+    'login.hasAccount': 'Already have an account?',
+    'login.alreadyRegistered':
+      'This email is already registered. Try signing in instead.',
+    'login.checkEmail': 'Check your email for a confirmation link.',
+
+    'admin.newPost': 'New Post',
+    'admin.signIn': 'Sign In',
+    'admin.signOut': 'Sign Out',
+    'admin.edit': 'Edit',
+    'admin.delete': 'Delete',
+    'admin.publish': 'Publish',
+    'admin.unpublish': 'Unpublish',
+    'admin.working': 'Working...',
+    'admin.deletePostConfirm':
+      'Delete this post permanently? This cannot be undone.',
+    'admin.deleteDraftConfirm':
+      'Delete this draft permanently? This cannot be undone.',
+
+    'editor.newTitle': 'Write a New Post',
+    'editor.newDesc':
+      'Write your article in Markdown. Save it as a draft first, or publish it right away — drafts are only visible to you.',
+    'editor.editTitle': 'Edit Post',
+    'editor.title': 'Title *',
+    'editor.titlePlaceholder': 'My Awesome Post',
+    'editor.description': 'Description *',
+    'editor.descriptionPlaceholder': 'A brief summary of the post',
+    'editor.language': 'Language',
+    'editor.languageHint':
+      'The post will only be listed under the matching language site.',
+    'editor.tags': 'Tags (comma-separated)',
+    'editor.content': 'Content (Markdown) *',
+    'editor.contentPlaceholder': 'Write your article in Markdown...',
+    'editor.saving': 'Saving...',
+    'editor.saveChanges': 'Save Changes',
+    'editor.saveUnpublish': 'Save & Unpublish',
+    'editor.saveDraft': 'Save as Draft',
+    'editor.cancel': 'Cancel',
+
+    'preview.draft':
+      'Draft preview — only visible to you, not published',
+    'preview.published':
+      'This post is published. This preview page is not indexed.',
+
+    'pagination.label': 'Pagination',
   },
 
   zh: {
@@ -113,7 +162,6 @@ export const translations = {
     'nav.home': '首页',
     'nav.about': '关于',
     'nav.projects': '项目',
-    'nav.photos': '照片',
     'nav.blog': '博客',
     'nav.switchLang': '切换语言',
     'nav.menu': '菜单',
@@ -124,7 +172,7 @@ export const translations = {
     'home.greeting': '你好，我是 George Zhu',
     'home.tagline': '一名全栈开发者，在代码与创意的交汇处构建数字体验。',
     'home.subtitle':
-      '我使用现代技术构建高性能 Web 应用。不写代码时，我喜欢探索新工具、写技术文章、用镜头记录瞬间。',
+      '我使用现代技术构建高性能 Web 应用。不写代码时，我喜欢探索新工具、写技术文章。',
     'home.viewProjects': '查看项目',
     'home.readBlog': '阅读博客',
     'home.latestPosts': '最新文章',
@@ -182,10 +230,6 @@ export const translations = {
     'projects.subdesc': '打开卡片即可访问线上站点。',
     'projects.visit': '访问站点',
 
-    // Photos page
-    'photos.title': '照片',
-    'photos.desc': '我的世界一角 — 我的四脚伙伴。',
-
     // 404
     '404.title': '页面未找到',
     '404.desc': '您要查找的页面不存在或已被移动。',
@@ -200,6 +244,54 @@ export const translations = {
     'cta.title': '新文章发布时，第一时间知道',
     'cta.desc': '通过 RSS 订阅，获取最新的技术笔记。',
     'cta.rss': 'RSS 订阅',
+
+    'login.title': '登录 / 注册',
+    'login.subtitle': '登录后可以创建和管理博客文章。',
+    'login.email': '邮箱',
+    'login.password': '密码',
+    'login.signIn': '登录',
+    'login.signUp': '注册',
+    'login.loading': '加载中...',
+    'login.register': '注册',
+    'login.noAccount': '还没有账号？',
+    'login.hasAccount': '已经有账号了？',
+    'login.alreadyRegistered': '这个邮箱已经注册过了，请直接登录。',
+    'login.checkEmail': '请查收邮箱里的确认链接。',
+
+    'admin.newPost': '写新文章',
+    'admin.signIn': '登录',
+    'admin.signOut': '退出',
+    'admin.edit': '编辑',
+    'admin.delete': '删除',
+    'admin.publish': '发布',
+    'admin.unpublish': '下架',
+    'admin.working': '处理中...',
+    'admin.deletePostConfirm': '确定永久删除这篇文章？此操作无法撤销。',
+    'admin.deleteDraftConfirm': '确定永久删除这篇草稿？此操作无法撤销。',
+
+    'editor.newTitle': '写新文章',
+    'editor.newDesc':
+      '用 Markdown 写文章。可以先存成草稿，也可以直接发布 — 草稿只有你自己能看到。',
+    'editor.editTitle': '编辑文章',
+    'editor.title': '标题 *',
+    'editor.titlePlaceholder': '我的新文章',
+    'editor.description': '摘要 *',
+    'editor.descriptionPlaceholder': '用一两句话概括这篇文章',
+    'editor.language': '语言',
+    'editor.languageHint': '文章只会出现在对应语言的站点里。',
+    'editor.tags': '标签（逗号分隔）',
+    'editor.content': '正文（Markdown）*',
+    'editor.contentPlaceholder': '用 Markdown 写正文…',
+    'editor.saving': '保存中...',
+    'editor.saveChanges': '保存修改',
+    'editor.saveUnpublish': '保存并下架',
+    'editor.saveDraft': '存为草稿',
+    'editor.cancel': '取消',
+
+    'preview.draft': '草稿预览 — 此内容仅你可见，未发布',
+    'preview.published': '此文章已发布。预览页面不对搜索引擎开放。',
+
+    'pagination.label': '分页',
   },
 } as const
 

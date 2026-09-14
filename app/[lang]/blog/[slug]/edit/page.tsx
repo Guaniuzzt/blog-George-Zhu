@@ -1,14 +1,18 @@
 import PostForm from '@/components/post-form'
 import H1 from '@/components/h1'
-import { MotionItem } from '@/components/page-transition'
 import { getAllTags, getPostForEdit } from '@/lib/posts'
+import { getTranslation, routeToLocale } from '@/lib/i18n'
 import { notFound } from 'next/navigation'
 import type { Locale } from '@/types'
-
-export const metadata = { title: 'Edit Post' }
+import type { Metadata } from 'next'
 
 interface EditPostPageProps {
   params: { lang: string; slug: string }
+}
+
+export function generateMetadata({ params }: EditPostPageProps): Metadata {
+  const dict = getTranslation(routeToLocale(params.lang))
+  return { title: dict['editor.editTitle'] }
 }
 
 export default async function EditPostPage({ params }: EditPostPageProps) {
@@ -18,36 +22,33 @@ export default async function EditPostPage({ params }: EditPostPageProps) {
   }
 
   const existingTags = await getAllTags()
+  const dict = getTranslation(routeToLocale(params.lang))
 
   return (
     <>
       <div className="flex flex-wrap items-center gap-3 mb-2">
-        <H1>Edit Post</H1>
+        <H1>{dict['editor.editTitle']}</H1>
         {!post.published && (
           <span className="px-2.5 py-0.5 rounded-full bg-amber-500/15 text-amber-500 text-xs font-medium border border-amber-500/30">
-            Draft
+            {dict['blog.draft']}
           </span>
         )}
       </div>
-      <MotionItem delay={0.1}>
-        <p className="font-mono text-xs text-[var(--text-muted)] mb-8">
-          /{post.locale}/blog/{post.slug}
-        </p>
-      </MotionItem>
-      <MotionItem delay={0.15}>
-        <PostForm
-          existingTags={existingTags}
-          initial={{
-            slug: post.slug,
-            title: post.title,
-            description: post.description,
-            content: post.content,
-            locale: post.locale as Locale,
-            published: post.published,
-            tags: post.tags,
-          }}
-        />
-      </MotionItem>
+      <p className="font-mono text-xs text-[var(--text-muted)] mb-8">
+        /{post.locale}/blog/{post.slug}
+      </p>
+      <PostForm
+        existingTags={existingTags}
+        initial={{
+          slug: post.slug,
+          title: post.title,
+          description: post.description,
+          content: post.content,
+          locale: post.locale as Locale,
+          published: post.published,
+          tags: post.tags,
+        }}
+      />
     </>
   )
 }

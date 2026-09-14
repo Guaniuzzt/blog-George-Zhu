@@ -1,25 +1,33 @@
 import AuthForm from './components/auth-form'
 import H1 from '@/components/h1'
-import { MotionItem } from '@/components/page-transition'
+import { getTranslation, routeToLocale } from '@/lib/i18n'
+import type { Metadata } from 'next'
 
-export const metadata = { title: 'Login' }
+export function generateMetadata({
+  params,
+}: {
+  params: { lang: string }
+}): Metadata {
+  const dict = getTranslation(routeToLocale(params.lang))
+  return { title: dict['login.title'] }
+}
 
 export default function LoginPage({
+  params,
   searchParams,
 }: {
+  params: { lang: string }
   searchParams: { redirectTo?: string }
 }) {
+  const dict = getTranslation(routeToLocale(params.lang))
+
   return (
     <>
-      <H1>Login / Register</H1>
-      <MotionItem delay={0.1}>
-        <p className="text-[var(--text-secondary)] mb-8">
-          Sign in to create and manage blog posts.
-        </p>
-      </MotionItem>
-      <MotionItem delay={0.15}>
-        <AuthForm redirectTo={searchParams.redirectTo} />
-      </MotionItem>
+      <H1>{dict['login.title']}</H1>
+      <p className="text-[var(--text-secondary)] mb-8">
+        {dict['login.subtitle']}
+      </p>
+      <AuthForm redirectTo={searchParams.redirectTo} />
     </>
   )
 }
