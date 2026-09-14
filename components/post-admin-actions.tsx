@@ -78,13 +78,13 @@ export default function PostAdminActions({
   if (variant === 'card') {
     return (
       <div
-        className="flex items-center gap-1 mt-3"
-        onClick={(e) => e.preventDefault()}
+        className="flex items-center gap-1.5"
+        onClick={(e) => e.stopPropagation()}
       >
         <Link
           href={`/${routePrefix}/blog/${slug}/edit`}
           title="Edit"
-          className="p-1.5 rounded-lg border border-[var(--border-color)] text-[var(--text-muted)] hover:border-[var(--accent)] hover:text-[var(--accent)] transition-all duration-300"
+          className="flex h-8 w-8 items-center justify-center rounded-full border border-[var(--border-color)] text-[var(--text-muted)] transition-colors duration-300 hover:border-[var(--text-primary)] hover:text-[var(--text-primary)]"
         >
           <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
@@ -95,7 +95,7 @@ export default function PostAdminActions({
           onClick={handleTogglePublish}
           disabled={busy}
           title={published ? 'Unpublish' : 'Publish'}
-          className="p-1.5 rounded-lg border border-[var(--border-color)] text-[var(--text-muted)] hover:border-[var(--accent)] hover:text-[var(--accent)] transition-all duration-300 disabled:opacity-50"
+          className="flex h-8 w-8 items-center justify-center rounded-full border border-[var(--border-color)] text-[var(--text-muted)] transition-colors duration-300 hover:border-[var(--text-primary)] hover:text-[var(--text-primary)] disabled:opacity-50"
         >
           {published ? (
             <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -113,7 +113,7 @@ export default function PostAdminActions({
           onClick={handleDelete}
           disabled={busy}
           title="Delete"
-          className="p-1.5 rounded-lg border border-[var(--border-color)] text-[var(--text-muted)] hover:border-red-500 hover:text-red-500 transition-all duration-300 disabled:opacity-50"
+          className="flex h-8 w-8 items-center justify-center rounded-full border border-[var(--border-color)] text-[var(--text-muted)] transition-colors duration-300 hover:border-red-500 hover:text-red-500 disabled:opacity-50"
         >
           <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />

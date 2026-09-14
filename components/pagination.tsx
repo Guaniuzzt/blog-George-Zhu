@@ -2,7 +2,6 @@
 
 import { Suspense } from 'react'
 import { useSearchParams, usePathname } from 'next/navigation'
-import { motion } from 'framer-motion'
 import { BlogPendingLink } from '@/components/blog-pending'
 import type { PaginationProps } from '@/types'
 
@@ -19,7 +18,7 @@ function PaginationInner({ pageCount }: PaginationProps) {
   }
 
   return (
-    <nav className="flex justify-center items-center gap-2">
+    <nav className="flex justify-center items-center gap-2" aria-label="Pagination">
       {pages.map((pageNumber) => {
         const params = new URLSearchParams(searchParams.toString())
         params.set('page', pageNumber.toString())
@@ -29,19 +28,13 @@ function PaginationInner({ pageCount }: PaginationProps) {
           <BlogPendingLink
             key={pageNumber}
             href={`${pathname}?${params.toString()}`}
-            className="relative"
+            className={`inline-flex h-9 w-9 items-center justify-center rounded-full text-[13px] font-mono transition-colors duration-300 ${
+              isActive
+                ? 'bg-[var(--text-primary)] text-[var(--bg-primary)]'
+                : 'border border-[var(--border-color)] text-[var(--text-secondary)] hover:border-[var(--text-primary)] hover:text-[var(--text-primary)]'
+            }`}
           >
-            <motion.span
-              className={`inline-flex items-center justify-center w-10 h-10 rounded-xl text-sm font-mono font-medium transition-colors duration-300 ${
-                isActive
-                  ? 'text-white bg-[var(--accent)]'
-                  : 'text-[var(--text-secondary)] hover:text-[var(--accent)] hover:bg-[var(--bg-secondary)]'
-              }`}
-              whileHover={!isActive ? { scale: 1.1 } : {}}
-              whileTap={!isActive ? { scale: 0.95 } : {}}
-            >
-              {pageNumber}
-            </motion.span>
+            <span className={isActive ? 'font-medium' : undefined}>{pageNumber}</span>
           </BlogPendingLink>
         )
       })}
@@ -51,7 +44,7 @@ function PaginationInner({ pageCount }: PaginationProps) {
 
 export default function Pagination(props: PaginationProps) {
   return (
-    <Suspense fallback={<div className="h-10" />}>
+    <Suspense fallback={<div className="h-9" />}>
       <PaginationInner {...props} />
     </Suspense>
   )

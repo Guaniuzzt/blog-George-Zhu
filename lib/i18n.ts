@@ -72,6 +72,8 @@ export const translations = {
     'blog.noPosts': 'No posts found',
     'blog.clearFilters': 'Clear filters',
     'blog.readArticle': 'Read article',
+    'blog.draft': 'Draft',
+    'blog.viewAll': 'View all →',
 
     // Projects page
     'projects.title': 'Projects',
@@ -146,6 +148,8 @@ export const translations = {
     'blog.noPosts': '暂无文章',
     'blog.clearFilters': '清除筛选',
     'blog.readArticle': '阅读文章',
+    'blog.draft': '草稿',
+    'blog.viewAll': '查看全部 →',
 
     // Projects page
     'projects.title': '项目',

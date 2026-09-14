@@ -64,7 +64,7 @@ export default async function BlogPostsPage({ params, searchParams }: BlogPagePr
           {order === 'newest' && (
             <BlogPendingLink
               href={`${prefix}/blog?order=oldest`}
-              className="px-3 py-1 rounded-lg border border-[var(--border-color)] hover:border-[var(--accent)] hover:text-[var(--accent)] transition-all duration-300"
+              className="rounded-full border border-[var(--border-color)] px-3 py-1 text-[13px] text-[var(--text-secondary)] transition-colors duration-300 hover:border-[var(--text-primary)] hover:text-[var(--text-primary)]"
             >
               {t('blog.newest')}
             </BlogPendingLink>
@@ -72,7 +72,7 @@ export default async function BlogPostsPage({ params, searchParams }: BlogPagePr
           {order === 'oldest' && (
             <BlogPendingLink
               href={`${prefix}/blog?order=newest`}
-              className="px-3 py-1 rounded-lg border border-[var(--border-color)] hover:border-[var(--accent)] hover:text-[var(--accent)] transition-all duration-300"
+              className="rounded-full border border-[var(--border-color)] px-3 py-1 text-[13px] text-[var(--text-secondary)] transition-colors duration-300 hover:border-[var(--text-primary)] hover:text-[var(--text-primary)]"
             >
               {t('blog.oldest')}
             </BlogPendingLink>
