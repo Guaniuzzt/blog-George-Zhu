@@ -5,4 +5,4 @@ export const SITE_URL = (
 export const SITE_NAME = "George Zhu's Blog"
 export const SITE_AUTHOR = 'George Zhu'
 export const SITE_EMAIL = '415108490@qq.com'
-export const SITE_X_URL = 'https://x.com/'
+export const SITE_WECHAT = 'zhuzetao777'

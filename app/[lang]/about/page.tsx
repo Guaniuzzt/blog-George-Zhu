@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import Reveal from '@/components/reveal'
 import { getTranslation, routeToLocale } from '@/lib/i18n'
-import { SITE_AUTHOR, SITE_EMAIL } from '@/lib/site'
+import { SITE_AUTHOR, SITE_EMAIL, SITE_WECHAT } from '@/lib/site'
 
 export const metadata = {
   title: 'About',
@@ -71,19 +71,28 @@ export default function AboutPage({ params }: { params: { lang: string } }) {
               </span>
             ))}
           </div>
-          <div className="rv rv-d3 mt-8 flex flex-wrap items-center gap-4">
+          <div className="rv rv-d3 mt-8 flex flex-col items-start gap-6">
             <Link
               href={`${prefix}/about/projects`}
               className="btn-primary inline-flex items-center gap-2 rounded-full bg-[var(--accent)] px-7 py-3.5 text-[14.5px] font-medium text-white"
             >
               {t('about.viewProjects')}
             </Link>
-            <a
-              href={`mailto:${SITE_EMAIL}`}
-              className="link-underline text-[14px] font-medium text-[var(--text-primary)]"
-            >
-              {SITE_EMAIL}
-            </a>
+            <ul className="space-y-2 text-[14px] leading-relaxed">
+              <li>
+                <span className="text-[var(--text-muted)]">{t('about.wechat')}：</span>
+                <span className="text-[var(--text-primary)]">{SITE_WECHAT}</span>
+              </li>
+              <li>
+                <span className="text-[var(--text-muted)]">{t('about.email')}：</span>
+                <a
+                  href={`mailto:${SITE_EMAIL}`}
+                  className="link-underline font-medium text-[var(--text-primary)]"
+                >
+                  {SITE_EMAIL}
+                </a>
+              </li>
+            </ul>
           </div>
         </div>
       </div>
