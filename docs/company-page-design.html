@@ -1,0 +1,1503 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nebula Labs · 公司展示页面设计稿</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;700&family=Syne:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* ================================
+         Design tokens (对齐 blog 项目)
+      ================================ */
+      :root {
+        --bg-primary: #fafaf9;
+        --bg-secondary: #f0efe9;
+        --bg-tertiary: #e6e4dd;
+        --text-primary: #1a1a1a;
+        --text-secondary: #555555;
+        --text-muted: #999999;
+        --border-color: rgba(0, 0, 0, 0.08);
+        --border-strong: #1a1a1a;
+        --accent: #ff2d95;
+        --accent-glow: rgba(255, 45, 149, 0.3);
+        --accent2: #00d4ff;
+        --accent2-glow: rgba(0, 212, 255, 0.3);
+        --card-bg: #ffffff;
+        --card-shadow: 0 1px 3px rgba(0, 0, 0, 0.04),
+          0 1px 2px rgba(0, 0, 0, 0.06);
+        --card-shadow-hover: 0 10px 40px rgba(0, 0, 0, 0.1);
+        --noise-opacity: 0.02;
+        --gradient-1: linear-gradient(
+          135deg,
+          #ff2d95 0%,
+          #b066ff 50%,
+          #00d4ff 100%
+        );
+        --gradient-2: linear-gradient(135deg, #39ff14 0%, #00d4ff 100%);
+
+        --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont,
+          'Segoe UI', system-ui, sans-serif;
+        --font-display: 'Syne', var(--font-body);
+        --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+      }
+
+      html.dark {
+        --bg-primary: #0a0a0f;
+        --bg-secondary: #111118;
+        --bg-tertiary: #1a1a24;
+        --text-primary: #e8e8ed;
+        --text-secondary: #9999aa;
+        --text-muted: #555566;
+        --border-color: rgba(255, 255, 255, 0.06);
+        --border-strong: rgba(255, 255, 255, 0.15);
+        --card-bg: #15151f;
+        --card-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        --card-shadow-hover: 0 10px 40px rgba(0, 0, 0, 0.5);
+        --noise-opacity: 0.03;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        font-family: var(--font-body);
+        line-height: 1.7;
+        overflow-x: hidden;
+        -webkit-font-smoothing: antialiased;
+        transition: background-color 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+          color 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      /* 噪点覆盖层 */
+      body::before {
+        content: '';
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        pointer-events: none;
+        opacity: var(--noise-opacity);
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+        background-repeat: repeat;
+        background-size: 200px 200px;
+      }
+      ::selection {
+        background: var(--accent);
+        color: #fff;
+      }
+      html.dark ::selection {
+        color: #000;
+      }
+      ::-webkit-scrollbar {
+        width: 6px;
+      }
+      ::-webkit-scrollbar-track {
+        background: var(--bg-secondary);
+      }
+      ::-webkit-scrollbar-thumb {
+        background: var(--accent);
+        border-radius: 3px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: var(--accent2);
+      }
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      /* ================================
+         Layout helpers
+      ================================ */
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 24px;
+      }
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-family: var(--font-mono);
+        font-size: 12px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--text-secondary);
+        padding: 6px 12px;
+        border: 1px solid var(--border-color);
+        border-radius: 999px;
+        background: var(--bg-secondary);
+      }
+      .eyebrow .dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 999px;
+        background: var(--accent);
+        box-shadow: 0 0 8px var(--accent-glow);
+      }
+      .section-title {
+        font-family: var(--font-display);
+        font-weight: 600;
+        letter-spacing: -0.02em;
+        font-size: clamp(1.8rem, 4vw, 2.75rem);
+        line-height: 1.15;
+        margin: 16px 0 12px;
+      }
+      .section-desc {
+        color: var(--text-secondary);
+        max-width: 640px;
+        font-size: 1.02rem;
+      }
+      .grad-text {
+        background: var(--gradient-1);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+      hr.rule {
+        border: none;
+        height: 1px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          var(--border-color) 20%,
+          var(--accent) 50%,
+          var(--border-color) 80%,
+          transparent
+        );
+        margin: 96px 0;
+      }
+
+      /* ================================
+         Navigation
+      ================================ */
+      .nav {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        backdrop-filter: saturate(140%) blur(14px);
+        -webkit-backdrop-filter: saturate(140%) blur(14px);
+        background: color-mix(in oklab, var(--bg-primary) 78%, transparent);
+        border-bottom: 1px solid var(--border-color);
+      }
+      .nav-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 68px;
+      }
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: 18px;
+        letter-spacing: -0.02em;
+      }
+      .logo-mark {
+        width: 26px;
+        height: 26px;
+        border-radius: 8px;
+        background: var(--gradient-1);
+        box-shadow: 0 0 0 1px var(--border-color),
+          0 6px 24px var(--accent-glow);
+        position: relative;
+      }
+      .logo-mark::after {
+        content: '';
+        position: absolute;
+        inset: 6px;
+        border-radius: 4px;
+        background: var(--bg-primary);
+      }
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 28px;
+      }
+      .nav-links a {
+        font-size: 14px;
+        color: var(--text-secondary);
+        position: relative;
+        transition: color 0.2s ease;
+      }
+      .nav-links a:hover {
+        color: var(--text-primary);
+      }
+      .nav-links a::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: -6px;
+        width: 0;
+        height: 2px;
+        background: var(--gradient-1);
+        transition: width 0.3s ease;
+      }
+      .nav-links a:hover::after {
+        width: 100%;
+      }
+      .nav-actions {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .theme-toggle {
+        width: 36px;
+        height: 36px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 999px;
+        border: 1px solid var(--border-color);
+        background: var(--bg-secondary);
+        cursor: pointer;
+        color: var(--text-primary);
+        transition: transform 0.2s ease, border-color 0.2s ease;
+      }
+      .theme-toggle:hover {
+        transform: rotate(15deg);
+        border-color: var(--accent);
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        height: 44px;
+        padding: 0 20px;
+        border-radius: 999px;
+        font-family: var(--font-body);
+        font-weight: 500;
+        font-size: 14px;
+        letter-spacing: 0.01em;
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease,
+          background-color 0.2s ease, color 0.2s ease,
+          border-color 0.2s ease;
+        border: 1px solid transparent;
+      }
+      .btn-primary {
+        background: var(--text-primary);
+        color: var(--bg-primary);
+      }
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 30px var(--accent-glow);
+      }
+      .btn-ghost {
+        background: transparent;
+        color: var(--text-primary);
+        border-color: var(--border-color);
+      }
+      .btn-ghost:hover {
+        border-color: var(--text-primary);
+      }
+      .btn-sm {
+        height: 36px;
+        padding: 0 14px;
+        font-size: 13px;
+      }
+
+      /* ================================
+         Hero
+      ================================ */
+      .hero {
+        position: relative;
+        padding: 96px 0 120px;
+        overflow: hidden;
+      }
+      .hero-grid {
+        position: absolute;
+        inset: 0;
+        background-image: linear-gradient(
+            var(--border-color) 1px,
+            transparent 1px
+          ),
+          linear-gradient(90deg, var(--border-color) 1px, transparent 1px);
+        background-size: 56px 56px;
+        mask-image: radial-gradient(
+          ellipse at 50% 30%,
+          #000 0%,
+          transparent 70%
+        );
+        -webkit-mask-image: radial-gradient(
+          ellipse at 50% 30%,
+          #000 0%,
+          transparent 70%
+        );
+        pointer-events: none;
+      }
+      .hero-glow {
+        position: absolute;
+        width: 720px;
+        height: 720px;
+        border-radius: 50%;
+        background: radial-gradient(
+          circle,
+          var(--accent-glow) 0%,
+          transparent 60%
+        );
+        top: -220px;
+        left: 50%;
+        transform: translateX(-50%);
+        filter: blur(20px);
+        pointer-events: none;
+        z-index: 0;
+      }
+      .hero-glow.two {
+        width: 480px;
+        height: 480px;
+        top: 220px;
+        left: 8%;
+        transform: none;
+        background: radial-gradient(
+          circle,
+          var(--accent2-glow) 0%,
+          transparent 60%
+        );
+      }
+      .hero-inner {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+      .hero h1 {
+        font-family: var(--font-display);
+        font-weight: 700;
+        letter-spacing: -0.035em;
+        font-size: clamp(2.6rem, 7vw, 5.4rem);
+        line-height: 1.02;
+        margin: 20px 0 22px;
+        max-width: 960px;
+      }
+      .hero-sub {
+        font-size: clamp(1rem, 1.4vw, 1.15rem);
+        color: var(--text-secondary);
+        max-width: 640px;
+        margin-bottom: 36px;
+      }
+      .hero-cta {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      .hero-meta {
+        margin-top: 64px;
+        width: 100%;
+        max-width: 900px;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 12px;
+        border: 1px solid var(--border-color);
+        border-radius: 20px;
+        padding: 6px;
+        background: var(--card-bg);
+        box-shadow: var(--card-shadow);
+      }
+      .hero-meta > div {
+        padding: 18px 18px;
+        border-radius: 16px;
+        text-align: left;
+        transition: background 0.2s ease;
+      }
+      .hero-meta > div:hover {
+        background: var(--bg-secondary);
+      }
+      .hero-meta .k {
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: clamp(1.4rem, 2.6vw, 2rem);
+        letter-spacing: -0.02em;
+      }
+      .hero-meta .v {
+        font-family: var(--font-mono);
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.14em;
+        color: var(--text-muted);
+        margin-top: 6px;
+      }
+
+      /* ================================
+         Logo marquee (客户/合作)
+      ================================ */
+      .marquee {
+        border-block: 1px solid var(--border-color);
+        background: var(--bg-secondary);
+        overflow: hidden;
+      }
+      .marquee-track {
+        display: flex;
+        gap: 64px;
+        padding: 22px 0;
+        white-space: nowrap;
+        animation: marquee 40s linear infinite;
+        color: var(--text-muted);
+        font-family: var(--font-display);
+        font-weight: 600;
+        font-size: 18px;
+        letter-spacing: -0.01em;
+      }
+      .marquee-track span {
+        opacity: 0.7;
+        transition: opacity 0.2s ease, color 0.2s ease;
+      }
+      .marquee-track span:hover {
+        opacity: 1;
+        color: var(--text-primary);
+      }
+      @keyframes marquee {
+        0% {
+          transform: translateX(0);
+        }
+        100% {
+          transform: translateX(-50%);
+        }
+      }
+
+      /* ================================
+         Section common
+      ================================ */
+      section.block {
+        padding: 96px 0;
+      }
+      .section-head {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 24px;
+        margin-bottom: 48px;
+        flex-wrap: wrap;
+      }
+
+      /* ================================
+         Services (Bento)
+      ================================ */
+      .bento {
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        grid-auto-rows: minmax(180px, auto);
+        gap: 16px;
+      }
+      .bento-card {
+        grid-column: span 2;
+        position: relative;
+        padding: 28px;
+        border-radius: 20px;
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        box-shadow: var(--card-shadow);
+        overflow: hidden;
+        transition: transform 0.3s ease, box-shadow 0.3s ease,
+          border-color 0.3s ease;
+      }
+      .bento-card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--card-shadow-hover);
+        border-color: color-mix(in oklab, var(--accent) 40%, var(--border-color));
+      }
+      .bento-card.wide {
+        grid-column: span 4;
+      }
+      .bento-card.tall {
+        grid-row: span 2;
+      }
+      .bento-card h3 {
+        font-family: var(--font-display);
+        font-weight: 600;
+        font-size: 1.35rem;
+        letter-spacing: -0.02em;
+        margin: 14px 0 8px;
+      }
+      .bento-card p {
+        color: var(--text-secondary);
+        font-size: 0.95rem;
+      }
+      .bento-card .idx {
+        font-family: var(--font-mono);
+        font-size: 11px;
+        letter-spacing: 0.14em;
+        color: var(--text-muted);
+      }
+      .bento-icon {
+        width: 42px;
+        height: 42px;
+        border-radius: 12px;
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--accent);
+      }
+      .bento-highlight {
+        background: linear-gradient(
+          135deg,
+          color-mix(in oklab, var(--accent) 12%, var(--card-bg)) 0%,
+          var(--card-bg) 60%
+        );
+        border-color: color-mix(in oklab, var(--accent) 30%, var(--border-color));
+      }
+      .bento-figure {
+        position: absolute;
+        right: -30px;
+        bottom: -30px;
+        width: 220px;
+        height: 220px;
+        border-radius: 999px;
+        background: var(--gradient-1);
+        filter: blur(60px);
+        opacity: 0.25;
+        pointer-events: none;
+      }
+
+      /* ================================
+         About / Story
+      ================================ */
+      .about {
+        display: grid;
+        grid-template-columns: 1.05fr 1fr;
+        gap: 64px;
+        align-items: center;
+      }
+      .about-media {
+        position: relative;
+        aspect-ratio: 5 / 4;
+        border-radius: 24px;
+        overflow: hidden;
+        border: 1px solid var(--border-color);
+        background: var(--bg-secondary);
+        box-shadow: var(--card-shadow);
+      }
+      .about-media::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+            135deg,
+            color-mix(in oklab, var(--accent) 25%, transparent),
+            transparent 40%
+          ),
+          linear-gradient(
+            225deg,
+            color-mix(in oklab, var(--accent2) 20%, transparent),
+            transparent 45%
+          );
+      }
+      .about-media::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background-image: linear-gradient(
+            var(--border-color) 1px,
+            transparent 1px
+          ),
+          linear-gradient(90deg, var(--border-color) 1px, transparent 1px);
+        background-size: 32px 32px;
+        opacity: 0.9;
+      }
+      .about-media .badge {
+        position: absolute;
+        left: 24px;
+        top: 24px;
+        padding: 8px 12px;
+        border-radius: 999px;
+        font-family: var(--font-mono);
+        font-size: 11px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        color: var(--text-secondary);
+        z-index: 1;
+      }
+      .about-media .stamp {
+        position: absolute;
+        right: 24px;
+        bottom: 24px;
+        z-index: 1;
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: 3rem;
+        letter-spacing: -0.03em;
+        line-height: 1;
+        color: var(--text-primary);
+      }
+      .about-media .stamp small {
+        display: block;
+        font-family: var(--font-mono);
+        font-weight: 400;
+        font-size: 10px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        margin-top: 6px;
+      }
+      .values {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        margin-top: 28px;
+      }
+      .value {
+        padding: 20px;
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
+        background: var(--card-bg);
+        transition: transform 0.2s ease, border-color 0.2s ease;
+      }
+      .value:hover {
+        transform: translateY(-3px);
+        border-color: var(--accent);
+      }
+      .value h4 {
+        font-family: var(--font-display);
+        font-weight: 600;
+        font-size: 1.02rem;
+        margin-bottom: 6px;
+      }
+      .value p {
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+      }
+
+      /* ================================
+         Products
+      ================================ */
+      .products {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+      }
+      .product {
+        border: 1px solid var(--border-color);
+        background: var(--card-bg);
+        border-radius: 20px;
+        padding: 26px;
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease,
+          border-color 0.3s ease;
+      }
+      .product:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--card-shadow-hover);
+        border-color: color-mix(in oklab, var(--accent) 40%, var(--border-color));
+      }
+      .product-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .product-title {
+        font-family: var(--font-display);
+        font-weight: 600;
+        font-size: 1.2rem;
+        letter-spacing: -0.02em;
+      }
+      .product-tag {
+        font-family: var(--font-mono);
+        font-size: 11px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--accent);
+        padding: 4px 10px;
+        border-radius: 999px;
+        background: var(--accent-glow);
+      }
+      .product p {
+        color: var(--text-secondary);
+        font-size: 0.95rem;
+      }
+      .product-cta {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: auto;
+        font-family: var(--font-mono);
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.14em;
+        color: var(--text-primary);
+      }
+      .product-cta .arrow {
+        transition: transform 0.2s ease;
+      }
+      .product:hover .product-cta .arrow {
+        transform: translateX(4px);
+      }
+
+      /* ================================
+         Testimonials
+      ================================ */
+      .testimonials {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+      }
+      .quote {
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 20px;
+        padding: 28px;
+        position: relative;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+      .quote:hover {
+        transform: translateY(-3px);
+        box-shadow: var(--card-shadow-hover);
+      }
+      .quote .mark {
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: 3rem;
+        line-height: 1;
+        color: var(--accent);
+        margin-bottom: 8px;
+      }
+      .quote p {
+        color: var(--text-primary);
+        font-size: 1rem;
+        line-height: 1.7;
+        margin-bottom: 22px;
+      }
+      .quote .who {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .quote .avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 999px;
+        background: var(--gradient-1);
+        border: 1px solid var(--border-color);
+      }
+      .quote .who .name {
+        font-weight: 600;
+        font-size: 0.95rem;
+      }
+      .quote .who .role {
+        font-family: var(--font-mono);
+        font-size: 11px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+      }
+
+      /* ================================
+         Team
+      ================================ */
+      .team {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+      }
+      .member {
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 20px;
+        overflow: hidden;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+      .member:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--card-shadow-hover);
+      }
+      .member .photo {
+        aspect-ratio: 1 / 1;
+        background: linear-gradient(
+            135deg,
+            color-mix(in oklab, var(--accent) 20%, var(--bg-secondary)),
+            var(--bg-secondary)
+          );
+        position: relative;
+        border-bottom: 1px solid var(--border-color);
+      }
+      .member .photo::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background-image: linear-gradient(
+            var(--border-color) 1px,
+            transparent 1px
+          ),
+          linear-gradient(90deg, var(--border-color) 1px, transparent 1px);
+        background-size: 20px 20px;
+        opacity: 0.6;
+      }
+      .member .info {
+        padding: 18px 20px;
+      }
+      .member .info .name {
+        font-family: var(--font-display);
+        font-weight: 600;
+        font-size: 1.05rem;
+      }
+      .member .info .role {
+        font-family: var(--font-mono);
+        font-size: 11px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        margin-top: 4px;
+      }
+
+      /* ================================
+         CTA
+      ================================ */
+      .cta {
+        position: relative;
+        border-radius: 28px;
+        border: 1px solid var(--border-color);
+        overflow: hidden;
+        padding: 72px 48px;
+        text-align: center;
+        background: var(--card-bg);
+      }
+      .cta::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(
+            circle at 20% 20%,
+            var(--accent-glow) 0%,
+            transparent 40%
+          ),
+          radial-gradient(
+            circle at 80% 80%,
+            var(--accent2-glow) 0%,
+            transparent 40%
+          );
+        opacity: 0.6;
+      }
+      .cta > * {
+        position: relative;
+      }
+      .cta h2 {
+        font-family: var(--font-display);
+        font-weight: 700;
+        letter-spacing: -0.03em;
+        font-size: clamp(2rem, 5vw, 3.4rem);
+        line-height: 1.05;
+        margin-bottom: 16px;
+      }
+      .cta p {
+        color: var(--text-secondary);
+        max-width: 560px;
+        margin: 0 auto 28px;
+      }
+
+      /* ================================
+         Footer
+      ================================ */
+      footer {
+        border-top: 1px solid var(--border-color);
+        padding: 56px 0 32px;
+        background: var(--bg-secondary);
+      }
+      .foot-grid {
+        display: grid;
+        grid-template-columns: 1.4fr repeat(3, 1fr);
+        gap: 40px;
+        margin-bottom: 40px;
+      }
+      .foot-grid h5 {
+        font-family: var(--font-mono);
+        font-size: 11px;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        margin-bottom: 14px;
+      }
+      .foot-grid ul {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .foot-grid a {
+        color: var(--text-secondary);
+        font-size: 14px;
+      }
+      .foot-grid a:hover {
+        color: var(--text-primary);
+      }
+      .foot-bottom {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 24px;
+        border-top: 1px solid var(--border-color);
+        color: var(--text-muted);
+        font-family: var(--font-mono);
+        font-size: 12px;
+      }
+
+      /* ================================
+         Responsive
+      ================================ */
+      @media (max-width: 960px) {
+        .nav-links {
+          display: none;
+        }
+        .hero-meta {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .about {
+          grid-template-columns: 1fr;
+        }
+        .products,
+        .testimonials {
+          grid-template-columns: 1fr;
+        }
+        .team {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .bento {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .bento-card,
+        .bento-card.wide,
+        .bento-card.tall {
+          grid-column: span 2;
+          grid-row: auto;
+        }
+        .foot-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ============== NAV ============== -->
+    <header class="nav">
+      <div class="container nav-inner">
+        <a href="#" class="logo">
+          <span class="logo-mark" aria-hidden="true"></span>
+          Nebula Labs
+        </a>
+        <nav class="nav-links">
+          <a href="#products">产品</a>
+          <a href="#services">服务</a>
+          <a href="#about">关于</a>
+          <a href="#team">团队</a>
+          <a href="#contact">联系</a>
+        </nav>
+        <div class="nav-actions">
+          <button
+            class="theme-toggle"
+            id="themeToggle"
+            aria-label="切换主题"
+            title="切换主题"
+          >
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              id="themeIcon"
+            >
+              <circle cx="12" cy="12" r="4" />
+              <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
+            </svg>
+          </button>
+          <a href="#contact" class="btn btn-primary btn-sm">
+            预约演示
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <!-- ============== HERO ============== -->
+    <section class="hero">
+      <div class="hero-grid" aria-hidden="true"></div>
+      <div class="hero-glow" aria-hidden="true"></div>
+      <div class="hero-glow two" aria-hidden="true"></div>
+      <div class="container hero-inner">
+        <span class="eyebrow"><span class="dot"></span> 新一代 AI 驱动的数字体验平台</span>
+        <h1>
+          让每一次产品迭代<br />
+          都变得 <span class="grad-text">简单、优雅、可持续</span>
+        </h1>
+        <p class="hero-sub">
+          Nebula Labs 帮助全球 200+ 团队构建下一代 Web 应用与 AI 产品——
+          从设计系统、组件工程到数据洞察，一站式加速你的业务增长。
+        </p>
+        <div class="hero-cta">
+          <a href="#contact" class="btn btn-primary">
+            开启合作
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+          <a href="#products" class="btn btn-ghost">
+            查看产品
+          </a>
+        </div>
+
+        <div class="hero-meta" aria-label="核心数据">
+          <div>
+            <div class="k">200<span style="color: var(--accent)">+</span></div>
+            <div class="v">合作客户</div>
+          </div>
+          <div>
+            <div class="k">18<span style="color: var(--accent2)">M</span></div>
+            <div class="v">月活服务用户</div>
+          </div>
+          <div>
+            <div class="k">99.99<span style="color: var(--accent)">%</span></div>
+            <div class="v">SLA 可用性</div>
+          </div>
+          <div>
+            <div class="k">7<span style="color: var(--accent2)">y</span></div>
+            <div class="v">行业沉淀</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============== LOGO MARQUEE ============== -->
+    <div class="marquee" aria-label="合作客户">
+      <div class="marquee-track">
+        <span>◆ ATLAS</span><span>▲ Northwind</span><span>◇ Prism.io</span>
+        <span>★ Kaleido</span><span>◎ Vertex</span><span>▲ HELIX</span>
+        <span>◆ Lumen</span><span>◇ Orbita</span><span>★ Momentum</span>
+        <span>◎ Nova</span>
+        <span>◆ ATLAS</span><span>▲ Northwind</span><span>◇ Prism.io</span>
+        <span>★ Kaleido</span><span>◎ Vertex</span><span>▲ HELIX</span>
+        <span>◆ Lumen</span><span>◇ Orbita</span><span>★ Momentum</span>
+        <span>◎ Nova</span>
+      </div>
+    </div>
+
+    <!-- ============== SERVICES / BENTO ============== -->
+    <section id="services" class="block">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <span class="eyebrow"><span class="dot"></span> 我们提供什么</span>
+            <h2 class="section-title">
+              一体化的产品能力，<br />
+              覆盖从 <span class="grad-text">设计到部署</span> 的全链路
+            </h2>
+          </div>
+          <p class="section-desc">
+            基于 Next.js、Tailwind、Prisma 与自研 AI 编排能力，我们把复杂的工程实践收敛为一套简洁、稳定、可持续演进的方法。
+          </p>
+        </div>
+
+        <div class="bento">
+          <!-- Wide highlight -->
+          <div class="bento-card wide bento-highlight">
+            <div class="bento-figure"></div>
+            <span class="idx">01 / 平台</span>
+            <div class="bento-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 3 7l9 5 9-5-9-5Z"/><path d="m3 17 9 5 9-5"/><path d="m3 12 9 5 9-5"/></svg>
+            </div>
+            <h3>Nebula Cloud 一站式研发平台</h3>
+            <p>
+              为团队提供设计系统、组件库、CI/CD、监控与观测的一体化解决方案。开箱即用，随业务成长同步进化。
+            </p>
+          </div>
+
+          <!-- Tall -->
+          <div class="bento-card tall">
+            <span class="idx">02 / AI</span>
+            <div class="bento-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/><circle cx="12" cy="12" r="4"/></svg>
+            </div>
+            <h3>AI 产品编排</h3>
+            <p>
+              从原型到生产，帮助团队构建可靠、可观测的 AI 工作流。多模型路由、评测、缓存、灰度全部内建。
+            </p>
+          </div>
+
+          <div class="bento-card">
+            <span class="idx">03 / 工程</span>
+            <div class="bento-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+            </div>
+            <h3>Web 工程加速</h3>
+            <p>Next.js + Prisma 全栈脚手架，让新产品数天上线。</p>
+          </div>
+
+          <div class="bento-card">
+            <span class="idx">04 / 设计</span>
+            <div class="bento-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22h16"/><path d="m5 12 7-8 7 8"/><path d="M12 4v16"/></svg>
+            </div>
+            <h3>品牌与设计系统</h3>
+            <p>可扩展的 Tokens、组件与主题工作流。</p>
+          </div>
+
+          <div class="bento-card">
+            <span class="idx">05 / 数据</span>
+            <div class="bento-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m7 15 3-3 3 3 5-6"/></svg>
+            </div>
+            <h3>数据洞察</h3>
+            <p>为决策而生的可视化与分析工具集。</p>
+          </div>
+
+          <div class="bento-card">
+            <span class="idx">06 / 咨询</span>
+            <div class="bento-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </div>
+            <h3>专家咨询</h3>
+            <p>技术选型、架构评审与效能诊断。</p>
+          </div>
+
+          <div class="bento-card">
+            <span class="idx">07 / 支持</span>
+            <div class="bento-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 10 10h-10z"/><path d="M12 2a10 10 0 0 1 10 10"/></svg>
+            </div>
+            <h3>企业级支持</h3>
+            <p>7×24 响应，专属技术伙伴。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <hr class="rule" />
+
+    <!-- ============== ABOUT ============== -->
+    <section id="about" class="block" style="padding-top: 0">
+      <div class="container">
+        <div class="about">
+          <div class="about-media" aria-hidden="true">
+            <span class="badge">SINCE · 2018</span>
+            <div class="stamp">
+              <span class="grad-text">Nebula</span>
+              <small>Design · Engineering · AI</small>
+            </div>
+          </div>
+          <div>
+            <span class="eyebrow"><span class="dot"></span> 关于我们</span>
+            <h2 class="section-title">
+              用工程与美学，<br />
+              构建让人们 <span class="grad-text">真正喜爱</span> 的产品。
+            </h2>
+            <p class="section-desc">
+              我们是一支由设计师、工程师与研究员组成的团队，相信优秀的产品既需要严谨的工程，也需要克制的设计。
+              在过去的七年里，我们与从种子轮到上市公司的伙伴共同打造了数十款广受欢迎的产品。
+            </p>
+
+            <div class="values">
+              <div class="value">
+                <h4>克制的设计</h4>
+                <p>少即是多。每一像素都为用户服务。</p>
+              </div>
+              <div class="value">
+                <h4>务实的工程</h4>
+                <p>可维护 &gt; 花哨。让代码可以长期演进。</p>
+              </div>
+              <div class="value">
+                <h4>速度与质量</h4>
+                <p>用自动化让高质量交付成为默认。</p>
+              </div>
+              <div class="value">
+                <h4>真诚的合作</h4>
+                <p>把客户当作长期伙伴，而不是订单。</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============== PRODUCTS ============== -->
+    <section id="products" class="block">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <span class="eyebrow"><span class="dot"></span> 我们的产品</span>
+            <h2 class="section-title">
+              为不同场景，<br />
+              提供 <span class="grad-text">恰到好处</span> 的解决方案
+            </h2>
+          </div>
+          <a href="#" class="btn btn-ghost">
+            查看全部产品
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+
+        <div class="products">
+          <div class="product">
+            <div class="product-header">
+              <div class="product-title">Nebula Studio</div>
+              <span class="product-tag">Flagship</span>
+            </div>
+            <p>
+              可视化的产品构建工作台，把设计、代码、内容与数据聚合在一个协作空间。
+            </p>
+            <a href="#" class="product-cta">
+              了解详情 <span class="arrow">→</span>
+            </a>
+          </div>
+
+          <div class="product">
+            <div class="product-header">
+              <div class="product-title">Nebula Insight</div>
+              <span class="product-tag">Analytics</span>
+            </div>
+            <p>
+              面向业务与产品团队的数据洞察平台，无需 SQL 也能构建仪表盘。
+            </p>
+            <a href="#" class="product-cta">
+              了解详情 <span class="arrow">→</span>
+            </a>
+          </div>
+
+          <div class="product">
+            <div class="product-header">
+              <div class="product-title">Nebula Agent</div>
+              <span class="product-tag">New</span>
+            </div>
+            <p>
+              企业级 AI 智能体编排框架，安全、可观测、可回滚。
+            </p>
+            <a href="#" class="product-cta">
+              了解详情 <span class="arrow">→</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============== TESTIMONIALS ============== -->
+    <section class="block" style="padding-top: 0">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <span class="eyebrow"><span class="dot"></span> 客户之声</span>
+            <h2 class="section-title">
+              被 <span class="grad-text">全球团队</span> 信任
+            </h2>
+          </div>
+        </div>
+        <div class="testimonials">
+          <div class="quote">
+            <div class="mark">“</div>
+            <p>
+              Nebula Labs 的团队让我们的产品在一个季度内完成了原本预计一年的重构，
+              而且质量令人惊喜。他们既懂技术，也懂业务。
+            </p>
+            <div class="who">
+              <div class="avatar"></div>
+              <div>
+                <div class="name">Amelia Chen</div>
+                <div class="role">VP Engineering · Atlas</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="quote">
+            <div class="mark">“</div>
+            <p>
+              他们的设计系统让我们在 12 个产品线之间保持了惊人的一致性。这是我们合作过最靠谱的团队之一。
+            </p>
+            <div class="who">
+              <div class="avatar" style="background: var(--gradient-2)"></div>
+              <div>
+                <div class="name">Kenji Sato</div>
+                <div class="role">Head of Design · Prism</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="quote">
+            <div class="mark">“</div>
+            <p>
+              从 AI 原型到落地生产，Nebula Agent 帮助我们将实验周期缩短 70%。强烈推荐。
+            </p>
+            <div class="who">
+              <div class="avatar" style="background: linear-gradient(135deg,#00d4ff,#b066ff)"></div>
+              <div>
+                <div class="name">Priya Rao</div>
+                <div class="role">CTO · Kaleido</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============== TEAM ============== -->
+    <section id="team" class="block" style="padding-top: 0">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <span class="eyebrow"><span class="dot"></span> 团队</span>
+            <h2 class="section-title">
+              与 <span class="grad-text">最热爱产品</span> 的人共事
+            </h2>
+          </div>
+          <p class="section-desc">
+            我们的团队分布在上海、东京与柏林，热爱设计、代码与咖啡。
+          </p>
+        </div>
+        <div class="team">
+          <div class="member">
+            <div class="photo"></div>
+            <div class="info">
+              <div class="name">Lin Wei</div>
+              <div class="role">Founder · CEO</div>
+            </div>
+          </div>
+          <div class="member">
+            <div class="photo" style="background: linear-gradient(135deg,#00d4ff20,var(--bg-secondary))"></div>
+            <div class="info">
+              <div class="name">Sofia Alvarez</div>
+              <div class="role">Chief Designer</div>
+            </div>
+          </div>
+          <div class="member">
+            <div class="photo" style="background: linear-gradient(135deg,#b066ff20,var(--bg-secondary))"></div>
+            <div class="info">
+              <div class="name">Daichi Ito</div>
+              <div class="role">Head of Engineering</div>
+            </div>
+          </div>
+          <div class="member">
+            <div class="photo" style="background: linear-gradient(135deg,#39ff1420,var(--bg-secondary))"></div>
+            <div class="info">
+              <div class="name">Maya Bergström</div>
+              <div class="role">AI Research Lead</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============== CTA ============== -->
+    <section id="contact" class="block" style="padding-top: 0">
+      <div class="container">
+        <div class="cta">
+          <span class="eyebrow"><span class="dot"></span> 让我们聊聊</span>
+          <h2>
+            准备好构建下一个<br />
+            <span class="grad-text">值得被记住</span> 的产品了吗？
+          </h2>
+          <p>告诉我们你的目标与挑战，我们会在 24 小时内回复，并安排一次免费的产品咨询。</p>
+          <div class="hero-cta" style="justify-content: center">
+            <a href="mailto:hello@nebula.labs" class="btn btn-primary">
+              发送邮件
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+            <a href="#" class="btn btn-ghost">预约 30 分钟通话</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============== FOOTER ============== -->
+    <footer>
+      <div class="container">
+        <div class="foot-grid">
+          <div>
+            <a href="#" class="logo" style="margin-bottom: 16px">
+              <span class="logo-mark" aria-hidden="true"></span>
+              Nebula Labs
+            </a>
+            <p style="color: var(--text-secondary); font-size: 14px; max-width: 320px">
+              用工程与美学，构建让人们真正喜爱的产品。
+            </p>
+          </div>
+          <div>
+            <h5>产品</h5>
+            <ul>
+              <li><a href="#">Nebula Studio</a></li>
+              <li><a href="#">Nebula Insight</a></li>
+              <li><a href="#">Nebula Agent</a></li>
+              <li><a href="#">价格</a></li>
+            </ul>
+          </div>
+          <div>
+            <h5>公司</h5>
+            <ul>
+              <li><a href="#">关于我们</a></li>
+              <li><a href="#">加入我们</a></li>
+              <li><a href="#">博客</a></li>
+              <li><a href="#">新闻</a></li>
+            </ul>
+          </div>
+          <div>
+            <h5>联系</h5>
+            <ul>
+              <li><a href="mailto:hello@nebula.labs">hello@nebula.labs</a></li>
+              <li><a href="#">上海 · 东京 · 柏林</a></li>
+              <li><a href="#">Twitter</a></li>
+              <li><a href="#">LinkedIn</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="foot-bottom">
+          <span>© 2025 Nebula Labs. All rights reserved.</span>
+          <span>Made with care · v1.0</span>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      const root = document.documentElement;
+      const btn = document.getElementById('themeToggle');
+      const icon = document.getElementById('themeIcon');
+
+      const moon =
+        '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+      const sun =
+        '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>';
+
+      function apply(theme) {
+        root.classList.toggle('dark', theme === 'dark');
+        root.classList.toggle('light', theme !== 'dark');
+        icon.innerHTML = theme === 'dark' ? sun : moon;
+        try {
+          localStorage.setItem('nl-theme', theme);
+        } catch (e) {}
+      }
+
+      const saved =
+        (() => {
+          try {
+            return localStorage.getItem('nl-theme');
+          } catch (e) {
+            return null;
+          }
+        })() ||
+        (window.matchMedia('(prefers-color-scheme: dark)').matches
+          ? 'dark'
+          : 'light');
+      apply(saved);
+
+      btn.addEventListener('click', () => {
+        apply(root.classList.contains('dark') ? 'light' : 'dark');
+      });
+    </script>
+  </body>
+</html>
