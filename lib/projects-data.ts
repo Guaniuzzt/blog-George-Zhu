@@ -1,3 +1,5 @@
+import type { Locale } from '@/types'
+
 export interface ProjectModule {
   en: string
   zh: string
@@ -8,10 +10,15 @@ export interface TechStackItem {
   description: { en: string; zh: string }
 }
 
+export type ProjectThumb = 'blog' | 'shop'
+
 export interface ProjectShowcase {
   id: string
   name: { en: string; zh: string }
-  thumbnail: string
+  badge: string
+  domain: string
+  thumb: ProjectThumb
+  chips: string[]
   urls: { cn?: string; eng?: string }
   description: { en: string; zh: string }
   modules: ProjectModule[]
@@ -19,27 +26,37 @@ export interface ProjectShowcase {
   techStack: TechStackItem[]
 }
 
+export function getProjectUrl(
+  project: ProjectShowcase,
+  locale: Locale
+): string | undefined {
+  if (locale === 'zh') return project.urls.cn ?? project.urls.eng
+  return project.urls.eng ?? project.urls.cn
+}
+
 export const projects: ProjectShowcase[] = [
   {
     id: 'blog-guaniuzzt',
     name: {
-      en: 'Blog - Guaniuzzt',
+      en: 'Personal Blog',
       zh: '个人博客',
     },
-    thumbnail: '/images/projects/blog-thumbnail.png',
+    badge: 'Flagship',
+    domain: 'blog.guaniuzzt.me',
+    thumb: 'blog',
+    chips: ['Next.js 14', 'TypeScript', 'Prisma', 'Supabase', 'Framer Motion'],
     urls: {
       cn: 'https://blog.guaniuzzt.me/cn',
       eng: 'https://blog.guaniuzzt.me/eng',
     },
     description: {
-      en: 'A personal blog website built with Next.js, featuring bilingual content support, MDX-powered articles, photo gallery, project showcase, and dynamic theme switching. Designed for clean reading experience with modern aesthetics.',
-      zh: '基于 Next.js 构建的个人博客网站，支持中英文双语内容、MDX 文章渲染、照片集、项目展示和动态主题切换。以现代美学设计呈现清爽的阅读体验。',
+      en: 'A bilingual personal blog built with Next.js: MDX articles, project showcase, and light / dark themes — designed for a clean reading experience.',
+      zh: '基于 Next.js 构建的双语个人博客：MDX 文章渲染、项目展示与深色 / 浅色主题切换，以现代美学呈现清爽的阅读体验。',
     },
     modules: [
       { en: 'Home Page', zh: '首页' },
       { en: 'About Page', zh: '关于页面' },
       { en: 'Projects Showcase', zh: '项目展示' },
-      { en: 'Photo Gallery', zh: '照片集' },
       { en: 'MDX Blog', zh: 'MDX 博客' },
       { en: 'Bilingual i18n', zh: '中英双语国际化' },
       { en: 'Dark / Light Theme', zh: '深色 / 浅色主题' },
@@ -89,8 +106,8 @@ export const projects: ProjectShowcase[] = [
       {
         name: 'PostgreSQL',
         description: {
-          en: 'Robust relational database serving as the primary data store. Stores project metadata, photo references, and supports complex queries through Prisma.',
-          zh: '稳定可靠的关系型数据库，作为主数据存储。保存项目元数据、照片引用等信息，通过 Prisma 支持复杂查询。',
+          en: 'Robust relational database serving as the primary data store. Stores posts, tags, and project metadata, with complex queries through Prisma.',
+          zh: '稳定可靠的关系型数据库，作为主数据存储。保存文章、标签与项目元数据，通过 Prisma 支持复杂查询。',
         },
       },
       {
@@ -103,8 +120,8 @@ export const projects: ProjectShowcase[] = [
       {
         name: 'Framer Motion',
         description: {
-          en: 'Declarative animation library powering page transitions, modal enter/exit effects, carousel hover interactions, and neon pulse animations throughout the site.',
-          zh: '声明式动画库，驱动页面过渡、弹窗出入效果、轮播悬停交互以及全站霓虹脉冲动画等丰富的动效体验。',
+          en: 'Declarative animation library for page transitions and small interaction details without getting in the way of reading.',
+          zh: '声明式动画库，用于页面过渡和克制的交互动效，不打扰阅读。',
         },
       },
       {
@@ -122,11 +139,14 @@ export const projects: ProjectShowcase[] = [
       en: 'Next.js 15 E-Commerce',
       zh: '电商全栈平台',
     },
-    thumbnail: '/images/projects/ecommerce-thumbnail.png',
+    badge: 'Full-Stack',
+    domain: 'eshop.guaniuzzt.me',
+    thumb: 'shop',
+    chips: ['Next.js 15', 'React 19', 'Stripe', 'NextAuth', 'shadcn/ui'],
     urls: { cn: 'https://eshop.guaniuzzt.me' },
     description: {
-      en: 'A production-ready full-stack e-commerce platform built with Next.js 15 (App Router) and React 19. Features product catalog with categories & search, persistent shopping cart, Stripe-powered checkout, order management, user authentication via NextAuth, and an admin area for managing products and orders.',
-      zh: '基于 Next.js 15（App Router）与 React 19 构建的生产级全栈电商平台。包含商品目录（分类 / 搜索）、持久化购物车、Stripe 结算支付、订单管理、NextAuth 用户认证，以及用于管理商品与订单的后台管理区。',
+      en: 'A production-ready e-commerce platform on Next.js 15 and React 19: catalog, persistent cart, Stripe checkout, orders, and NextAuth — the full loop.',
+      zh: '基于 Next.js 15 与 React 19 的生产级电商平台：商品目录、持久化购物车、Stripe 结算、订单管理与 NextAuth 认证的完整闭环。',
     },
     modules: [
       { en: 'Product Catalog', zh: '商品目录' },

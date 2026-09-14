@@ -48,13 +48,20 @@ export const translations = {
 
     'section.writing': 'Writing',
     'section.featured': 'Featured',
+    'section.projects': 'Projects',
+    'section.about': 'About Me',
 
     // About page
     'about.title': 'About Me',
+    'about.role': 'Full-stack developer · Shanghai',
+    'about.sloganLine1': 'I believe good code, like good writing,',
+    'about.sloganLead': 'should be ',
+    'about.sloganAccent': 'concise, honest, and built to last',
+    'about.sloganEnd': '.',
     'about.p1':
-      "Hi, I'm George Zhu — a full-stack developer passionate about building beautiful, performant web applications.",
+      'This blog is where I write down what I actually ship: App Router rendering strategies, Prisma + Supabase in production, and TypeScript patterns that survived real code reviews. Every post comes from a bug I hit or a decision I had to defend.',
     'about.p2':
-      "With a focus on modern JavaScript ecosystems, I create end-to-end solutions from database design to pixel-perfect UI. I believe code should be both elegant and accessible, and I'm always exploring the intersection of technology and creative expression.",
+      'I work across the modern JavaScript stack — from database design to pixel-level UI. Code should be both elegant and readable, and I keep looking for where engineering meets craft.',
     'about.skills': 'Skills & Tools',
     'about.connect': "Let's Connect",
     'about.connectDesc':
@@ -77,8 +84,9 @@ export const translations = {
 
     // Projects page
     'projects.title': 'Projects',
-    'projects.desc': 'A showcase of projects I\'ve crafted with care.',
-    'projects.subdesc': 'Click on any project to explore its details.',
+    'projects.desc': 'Live products I designed, built, and still maintain.',
+    'projects.subdesc': 'Open a card to visit the live site.',
+    'projects.visit': 'Visit site',
 
     // Photos page
     'photos.title': 'Photos',
@@ -88,6 +96,11 @@ export const translations = {
     '404.title': 'Page not found',
     '404.desc': "The page you're looking for doesn't exist or has been moved.",
     '404.backHome': 'Back home',
+
+    // Error
+    'error.title': 'Something went wrong',
+    'error.desc': 'This page failed to load. You can retry, or head back home.',
+    'error.retry': 'Try again',
   },
 
   zh: {
@@ -125,11 +138,18 @@ export const translations = {
 
     'section.writing': 'Writing',
     'section.featured': '精选文章',
+    'section.projects': 'Projects',
+    'section.about': 'About Me',
 
     // About page
     'about.title': '关于我',
+    'about.role': '全栈开发者 · 上海',
+    'about.sloganLine1': '我相信好的代码和好的文字一样，',
+    'about.sloganLead': '都应该',
+    'about.sloganAccent': '简洁、诚实、经得起推敲',
+    'about.sloganEnd': '。',
     'about.p1':
-      '你好，我是 George Zhu — 一名全栈开发者，热衷于构建美观、高性能的 Web 应用。',
+      '这个博客是我记录技术实践的地方：从 Next.js App Router 的服务端渲染策略，到 Prisma + Supabase 的数据库落地，再到 TypeScript 类型系统的实战技巧。每一篇都来自真实项目里的踩坑与复盘。',
     'about.p2':
       '专注于现代 JavaScript 生态系统，我能提供从数据库设计到像素级 UI 的端到端解决方案。我相信代码应该优雅且易于理解，并始终探索技术与创意表达的交汇点。',
     'about.skills': '技能 & 工具',
@@ -152,9 +172,10 @@ export const translations = {
     'blog.viewAll': '查看全部 →',
 
     // Projects page
-    'projects.title': '项目',
-    'projects.desc': '我用心打造的精选项目展示。',
-    'projects.subdesc': '点击任意项目了解详细信息。',
+    'projects.title': '项目展示',
+    'projects.desc': '我设计、实现、并且现在还在维护的线上项目。',
+    'projects.subdesc': '打开卡片即可访问线上站点。',
+    'projects.visit': '访问站点',
 
     // Photos page
     'photos.title': '照片',
@@ -164,6 +185,11 @@ export const translations = {
     '404.title': '页面未找到',
     '404.desc': '您要查找的页面不存在或已被移动。',
     '404.backHome': '返回首页',
+
+    // Error
+    'error.title': '页面出了点问题',
+    'error.desc': '这一页没能正确加载。可以再试一次，或返回首页。',
+    'error.retry': '重试',
   },
 } as const
 

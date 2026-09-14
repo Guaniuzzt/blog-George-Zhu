@@ -1,7 +1,7 @@
-import H1 from '@/components/h1'
-import { MotionItem } from '@/components/page-transition'
+import Reveal from '@/components/reveal'
+import ProjectCard from '@/components/project-card'
 import { getTranslation, routeToLocale } from '@/lib/i18n'
-import ProjectCarousel from './components/project-carousel'
+import { projects } from '@/lib/projects-data'
 import type { Locale } from '@/types'
 import type { Metadata } from 'next'
 
@@ -17,21 +17,33 @@ export default async function ProjectsPage({ params }: { params: { lang: string 
   const t = (key: string): string => dict[key] || key
 
   return (
-    <div>
-      <H1>{t('projects.title')}</H1>
+    <Reveal>
+      <div className="flex items-end justify-between gap-6">
+        <div>
+          <div className="rv font-mono text-[12.5px] uppercase tracking-[0.18em] text-[var(--text-muted)]">
+            {t('section.projects')}
+          </div>
+          <h1 className="rv rv-d1 mt-3 font-serif text-[clamp(28px,3.6vw,42px)] font-semibold tracking-tightest">
+            {t('projects.title')}
+          </h1>
+        </div>
+      </div>
 
-      <MotionItem delay={0.1}>
-        <p className="text-lg text-[var(--text-secondary)] mb-8 leading-relaxed">
-          {t('projects.desc')}
-          <span className="block mt-1 text-sm text-[var(--text-muted)]">
-            {t('projects.subdesc')}
-          </span>
-        </p>
-      </MotionItem>
+      <p className="rv rv-d2 mt-4 max-w-[560px] text-[15.5px] leading-relaxed text-[var(--text-secondary)]">
+        {t('projects.desc')}
+      </p>
 
-      <MotionItem delay={0.2}>
-        <ProjectCarousel lang={lang} />
-      </MotionItem>
-    </div>
+      <div className="mt-10 grid gap-6 md:grid-cols-2">
+        {projects.map((project, i) => (
+          <ProjectCard
+            key={project.id}
+            project={project}
+            locale={lang}
+            visitLabel={t('projects.visit')}
+            className={i === 0 ? 'rv' : 'rv rv-d1'}
+          />
+        ))}
+      </div>
+    </Reveal>
   )
 }
