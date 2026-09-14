@@ -10,7 +10,7 @@ export interface TechStackItem {
   description: { en: string; zh: string }
 }
 
-export type ProjectThumb = 'blog' | 'shop'
+export type ProjectThumb = 'blog' | 'shop' | 'studio'
 
 export interface ProjectShowcase {
   id: string
@@ -35,6 +35,80 @@ export function getProjectUrl(
 }
 
 export const projects: ProjectShowcase[] = [
+  {
+    id: 'nova-studio',
+    name: {
+      en: 'NOVA Studio',
+      zh: 'NOVA 数字工作室',
+    },
+    badge: 'Studio',
+    domain: 'nova-website-seven-zeta.vercel.app',
+    thumb: 'studio',
+    chips: ['Next.js 16', 'React 19', 'next-intl', 'Tailwind CSS 4', 'Framer Motion'],
+    urls: {
+      cn: 'https://nova-website-seven-zeta.vercel.app',
+      eng: 'https://nova-website-seven-zeta.vercel.app/en',
+    },
+    description: {
+      en: 'A bilingual studio marketing site: brand, services, case studies, team, and contact — Next.js 16 with a dark / light design system.',
+      zh: '数字工作室品牌官网：双语首页、服务、案例、团队与联系表单，基于 Next.js 16，支持深色 / 浅色主题。',
+    },
+    modules: [
+      { en: 'Home', zh: '首页' },
+      { en: 'About', zh: '关于我们' },
+      { en: 'Services', zh: '服务' },
+      { en: 'Case Studies', zh: '案例' },
+      { en: 'Team', zh: '团队' },
+      { en: 'Contact Form', zh: '联系表单' },
+      { en: 'Bilingual i18n', zh: '中英双语' },
+      { en: 'Dark / Light Theme', zh: '深色 / 浅色主题' },
+    ],
+    screenshots: [],
+    techStack: [
+      {
+        name: 'Next.js 16',
+        description: {
+          en: 'App Router, React Server Components, and Server Actions for a marketing site that stays fast and SEO-friendly.',
+          zh: 'App Router、React Server Components 与 Server Actions，让营销站保持速度和 SEO。',
+        },
+      },
+      {
+        name: 'React 19',
+        description: {
+          en: 'Latest React with the React Compiler enabled, so UI stays responsive without hand-rolled memoization.',
+          zh: '启用 React Compiler 的最新 React，页面交互流畅，不必手写大量 memo。',
+        },
+      },
+      {
+        name: 'next-intl',
+        description: {
+          en: 'Chinese as the default locale, English under /en, with cookie persistence and typed message catalogs.',
+          zh: '默认中文、英文走 /en，语言偏好写入 cookie，文案目录有类型约束。',
+        },
+      },
+      {
+        name: 'Tailwind CSS 4',
+        description: {
+          en: 'Token-driven styling with CSS variables, so light and dark themes swap without restyling components.',
+          zh: '用 CSS 变量驱动的设计 token，明暗主题切换不用重写组件样式。',
+        },
+      },
+      {
+        name: 'Framer Motion',
+        description: {
+          en: 'Scroll reveals, hero motion, and page transitions that stay out of the way of reading.',
+          zh: '滚动入场、Hero 动效和页面过渡，不打扰阅读。',
+        },
+      },
+      {
+        name: 'Resend + Zod',
+        description: {
+          en: 'Contact form with schema validation and transactional email via Resend.',
+          zh: '联系表单用 Zod 校验，邮件通过 Resend 发出。',
+        },
+      },
+    ],
+  },
   {
     id: 'blog-guaniuzzt',
     name: {

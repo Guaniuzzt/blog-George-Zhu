@@ -54,14 +54,41 @@ function ShopThumb() {
   )
 }
 
+function StudioThumb() {
+  return (
+    <div className="flex h-full items-center justify-center">
+      <div className="w-[78%] rounded-xl bg-white/10 p-4 backdrop-blur-sm">
+        <div className="flex items-center justify-between">
+          <span className="h-2.5 w-10 rounded-full bg-white/55" />
+          <div className="flex gap-1.5">
+            <span className="h-1.5 w-6 rounded-full bg-white/35" />
+            <span className="h-1.5 w-6 rounded-full bg-white/35" />
+            <span className="h-1.5 w-6 rounded-full bg-white/35" />
+          </div>
+        </div>
+        <div className="mt-5 space-y-2">
+          <div className="h-3 w-5/6 rounded-full bg-white/70" />
+          <div className="h-3 w-3/5 rounded-full bg-white/40" />
+        </div>
+        <div className="mt-4 flex gap-2">
+          <div className="h-6 w-16 rounded-full bg-white/50" />
+          <div className="h-6 w-16 rounded-full bg-white/20" />
+        </div>
+      </div>
+    </div>
+  )
+}
+
 const thumbs: Record<ProjectThumb, () => ReactNode> = {
   blog: BlogThumb,
   shop: ShopThumb,
+  studio: StudioThumb,
 }
 
 const gradients: Record<ProjectThumb, string> = {
   blog: 'bg-gradient-to-br from-[#4F46E5] via-[#7C74F0] to-[#B7AFFF]',
   shop: 'bg-gradient-to-br from-[#0E7A5F] via-[#18A57F] to-[#8FE3C3]',
+  studio: 'bg-gradient-to-br from-[#111114] via-[#5B4B8A] to-[#E8C39E]',
 }
 
 export default function ProjectCard({
