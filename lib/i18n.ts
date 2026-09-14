@@ -35,6 +35,20 @@ export const translations = {
     'home.latestPosts': 'Latest Posts',
     'home.viewAll': 'View all posts',
 
+    'hero.eyebrow': 'Personal Blog · Full-Stack Dev',
+    'hero.line1Prefix': "Hey, I'm ",
+    'hero.line1Accent': 'George',
+    'hero.line2a': 'Building digital experiences',
+    'hero.line2b': 'at the intersection of code and creativity.',
+    'hero.startReading': 'Start reading',
+    'hero.statPosts': 'posts',
+    'hero.statLangs': 'languages',
+    'hero.statSince': 'writing since',
+    'hero.lastUpdated': 'Updated',
+
+    'section.writing': 'Writing',
+    'section.featured': 'Featured',
+
     // About page
     'about.title': 'About Me',
     'about.p1':
@@ -95,6 +109,20 @@ export const translations = {
     'home.readBlog': '阅读博客',
     'home.latestPosts': '最新文章',
     'home.viewAll': '查看全部',
+
+    'hero.eyebrow': 'Personal Blog · Full-Stack Dev',
+    'hero.line1Prefix': '你好，我是 ',
+    'hero.line1Accent': 'George',
+    'hero.line2a': '在代码与创意的交汇处，',
+    'hero.line2b': '构建数字体验。',
+    'hero.startReading': '开始阅读',
+    'hero.statPosts': '篇文章',
+    'hero.statLangs': '种语言',
+    'hero.statSince': '开始写作',
+    'hero.lastUpdated': '最近更新于',
+
+    'section.writing': 'Writing',
+    'section.featured': '精选文章',
 
     // About page
     'about.title': '关于我',

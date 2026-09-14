@@ -212,6 +212,21 @@ body {
   -webkit-mask-image: linear-gradient(to bottom, black, transparent 85%);
 }
 
+.hero-glow {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(90px);
+  pointer-events: none;
+  will-change: transform;
+}
+
+.full-bleed {
+  position: relative;
+  left: 50%;
+  width: 100vw;
+  margin-left: -50vw;
+}
+
 /* ===== POST ROWS ===== */
 .post-row {
   transition: background 0.4s var(--ease);
@@ -248,6 +263,15 @@ body {
 }
 
 /* ===== MARQUEE ===== */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
 .marquee-track {
   animation: marquee 28s linear infinite;
 }

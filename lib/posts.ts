@@ -193,6 +193,49 @@ export async function getPostForEdit(slug: string) {
   }
 }
 
+export type PostStats = {
+  total: number
+  localeCount: number
+  sinceYear: number
+  lastUpdated: string | null
+}
+
+/** 首页统计条：已发布文章总数、语言数、最早年份、最近更新 */
+export async function getPostStats(): Promise<PostStats> {
+  const fetchStats = unstable_cache(
+    async () => {
+      const [total, grouped, oldest, latest] = await Promise.all([
+        prisma.post.count({ where: { published: true } }),
+        prisma.post.groupBy({
+          by: ['locale'],
+          where: { published: true },
+        }),
+        prisma.post.findFirst({
+          where: { published: true },
+          orderBy: { date: 'asc' },
+          select: { date: true },
+        }),
+        prisma.post.findFirst({
+          where: { published: true },
+          orderBy: { updatedAt: 'desc' },
+          select: { updatedAt: true },
+        }),
+      ])
+
+      return {
+        total,
+        localeCount: grouped.length,
+        sinceYear: oldest?.date.getFullYear() ?? new Date().getFullYear(),
+        lastUpdated: latest?.updatedAt.toISOString() ?? null,
+      }
+    },
+    ['post-stats'],
+    { revalidate: 60, tags: ['posts'] }
+  )
+
+  return fetchStats()
+}
+
 /** sitemap / RSS 用：已发布文章的 slug + locale + 元信息 */
 export async function getPublishedPostMetas() {
   const records = await prisma.post.findMany({
