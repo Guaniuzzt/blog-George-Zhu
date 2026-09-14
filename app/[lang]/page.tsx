@@ -4,6 +4,7 @@ import Reveal from '@/components/reveal'
 import HomeHero from '@/components/home-hero'
 import TechMarquee from '@/components/tech-marquee'
 import PostRow from '@/components/post-row'
+import SubscribeCta from '@/components/subscribe-cta'
 import { getTranslation, routeToLocale } from '@/lib/i18n'
 
 export const dynamic = 'force-static'
@@ -55,6 +56,10 @@ export default async function Home({ params }: { params: { lang: string } }) {
           ))}
         </div>
       </section>
+
+      <div className="pt-24">
+        <SubscribeCta prefix={prefix} lang={lang} />
+      </div>
     </Reveal>
   )
 }

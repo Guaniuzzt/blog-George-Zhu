@@ -1,8 +1,7 @@
-import React, { cache } from 'react'
+import { cache } from 'react'
 import { compileMDX } from 'next-mdx-remote/rsc'
 import { prisma } from './prisma'
 import { unstable_cache } from 'next/cache'
-import H1 from '@/components/h1'
 import type { Post, PostFrontmatter, Locale } from '@/types'
 import type { Prisma } from '@/lib/generated/prisma/client'
 
@@ -162,7 +161,7 @@ export const getPostBySlug = cache(async (slug: string): Promise<Post | null> =>
   const { content } = await compileMDX({
     source: cached.rawContent,
     components: {
-      h1: (props) => React.createElement(H1, props),
+      h1: () => null,
     },
     options: { parseFrontmatter: false },
   })

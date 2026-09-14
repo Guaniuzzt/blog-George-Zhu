@@ -18,7 +18,6 @@ export default async function Image({
 }) {
   const post = await getPostMetaBySlug(params.slug)
 
-  // 草稿 / 不存在：不暴露文章信息
   const isHidden = !post || post.frontmatter.published === false
   const title = isHidden ? 'Draft' : post.frontmatter.title
   const description = isHidden ? '' : post.frontmatter.description
@@ -27,7 +26,6 @@ export default async function Image({
     description.length > 110 ? `${description.slice(0, 110)}…` : description
   const author = post?.frontmatter.author ?? SITE_AUTHOR
 
-  // Node runtime 下从文件系统读字体（Prisma 不兼容 edge runtime）
   const interSemiBold = readFile(
     join(process.cwd(), 'app/[lang]/blog/[slug]/inter.ttf')
   )
@@ -36,54 +34,95 @@ export default async function Image({
     (
       <div
         style={{
-          fontSize: 64,
-          background: 'white',
           width: '100%',
           height: '100%',
           display: 'flex',
           flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'flex-start',
-          padding: '64px 80px',
+          justifyContent: 'space-between',
+          background: '#FAFAF8',
+          padding: '64px 72px',
         }}
       >
         <div
           style={{
-            fontSize: 28,
-            color: '#888',
-            marginBottom: 24,
             display: 'flex',
             alignItems: 'center',
-            gap: 12,
+            gap: 14,
           }}
         >
-          <span
+          <div
             style={{
-              width: 12,
-              height: 12,
-              borderRadius: 9999,
-              background: '#10b981',
+              width: 40,
+              height: 40,
+              borderRadius: 10,
+              background: '#17171C',
+              color: '#FAFAF8',
+              fontSize: 16,
+              fontWeight: 600,
               display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            GZ
+          </div>
+          <div
+            style={{
+              display: 'flex',
+              fontSize: 22,
+              color: '#71717A',
+            }}
+          >
+            {author}
+          </div>
+        </div>
+
+        <div style={{ display: 'flex', flexDirection: 'column' }}>
+          <div
+            style={{
+              width: 48,
+              height: 4,
+              borderRadius: 999,
+              background: '#4F46E5',
+              marginBottom: 28,
             }}
           />
-          {author}
+          <div
+            style={{
+              display: 'flex',
+              fontSize: 56,
+              lineHeight: 1.2,
+              color: '#17171C',
+              fontWeight: 600,
+              letterSpacing: '-0.03em',
+            }}
+          >
+            {clippedTitle}
+          </div>
+          {clippedDesc ? (
+            <div
+              style={{
+                marginTop: 20,
+                fontSize: 26,
+                color: '#71717A',
+                lineHeight: 1.45,
+              }}
+            >
+              {clippedDesc}
+            </div>
+          ) : null}
         </div>
+
         <div
           style={{
             display: 'flex',
-            fontSize: 64,
-            lineHeight: 1.2,
-            color: '#111',
-            fontWeight: 600,
+            fontSize: 20,
+            color: '#A1A1AA',
+            letterSpacing: '0.04em',
           }}
         >
-          {clippedTitle}
+          blog.guaniuzzt.me
         </div>
-        {clippedDesc && (
-          <div style={{ marginTop: 28, fontSize: 30, color: '#555', lineHeight: 1.4 }}>
-            {clippedDesc}
-          </div>
-        )}
       </div>
     ),
     {
@@ -93,7 +132,7 @@ export default async function Image({
           name: 'Inter',
           data: await interSemiBold,
           style: 'normal',
-          weight: 400,
+          weight: 600,
         },
       ],
     }

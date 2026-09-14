@@ -9,6 +9,8 @@ import {
   BlogPendingProvider,
 } from '@/components/blog-pending'
 import BlogPostList from './blog-post-list'
+import SubscribeCta from '@/components/subscribe-cta'
+import Reveal from '@/components/reveal'
 import { getTranslation, routeToLocale } from '@/lib/i18n'
 import { getCurrentUser } from '@/lib/auth'
 import type { Metadata } from 'next'
@@ -94,6 +96,12 @@ export default async function BlogPostsPage({ params, searchParams }: BlogPagePr
           />
         </Suspense>
       </BlogPendingOutlet>
+
+      <div className="pt-24">
+        <Reveal>
+          <SubscribeCta prefix={prefix} lang={lang} />
+        </Reveal>
+      </div>
     </BlogPendingProvider>
   )
 }

@@ -101,6 +101,11 @@ export const translations = {
     'error.title': 'Something went wrong',
     'error.desc': 'This page failed to load. You can retry, or head back home.',
     'error.retry': 'Try again',
+
+    'cta.eyebrow': 'Stay Tuned',
+    'cta.title': 'Be first to know when a new post lands',
+    'cta.desc': 'Subscribe via RSS to get the latest notes as they go out.',
+    'cta.rss': 'RSS feed',
   },
 
   zh: {
@@ -190,6 +195,11 @@ export const translations = {
     'error.title': '页面出了点问题',
     'error.desc': '这一页没能正确加载。可以再试一次，或返回首页。',
     'error.retry': '重试',
+
+    'cta.eyebrow': 'Stay Tuned',
+    'cta.title': '新文章发布时，第一时间知道',
+    'cta.desc': '通过 RSS 订阅，获取最新的技术笔记。',
+    'cta.rss': 'RSS 订阅',
   },
 } as const
 
