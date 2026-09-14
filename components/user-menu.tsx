@@ -31,7 +31,7 @@ export default function UserMenu() {
 
   if (loading) {
     return (
-      <span className="px-4 py-1.5 rounded-xl border border-[var(--border-color)] text-sm opacity-50">
+      <span className="flex h-9 items-center rounded-full border border-[var(--border-color)] px-4 text-sm opacity-50">
         Sign In
       </span>
     )
@@ -41,7 +41,7 @@ export default function UserMenu() {
     return (
       <Link
         href={`/${routePrefix}/login`}
-        className="px-4 py-1.5 rounded-xl border border-[var(--border-color)] text-sm hover:border-[var(--accent)] hover:text-[var(--accent)] transition-all duration-300"
+        className="flex h-9 items-center rounded-full border border-[var(--border-color)] px-4 text-sm transition-all duration-300 hover:border-[var(--text-primary)] hover:text-[var(--text-primary)]"
       >
         Sign In
       </Link>
@@ -55,7 +55,7 @@ export default function UserMenu() {
       </span>
       <button
         onClick={handleSignOut}
-        className="px-3 py-1.5 rounded-xl border border-[var(--border-color)] text-sm hover:border-red-400 hover:text-red-400 transition-all duration-300"
+        className="flex h-9 items-center rounded-full border border-[var(--border-color)] px-3 text-sm transition-all duration-300 hover:border-red-400 hover:text-red-400"
       >
         Sign Out
       </button>

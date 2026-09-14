@@ -1,5 +1,7 @@
 import { type ReactNode } from 'react'
 import Header from '@/components/header'
+import Footer from '@/components/footer'
+import ScrollProgress from '@/components/scroll-progress'
 import UserMenu from '@/components/user-menu'
 import Chatbot from '@/components/chatbot'
 import { routeLocales, routeToLocale, localeToRoute } from '@/lib/i18n'
@@ -67,15 +69,15 @@ export default function LocaleLayout({
         }}
       />
 
-      <div className="fixed inset-0 grid-bg pointer-events-none opacity-[0.03] dark:opacity-[0.02]" />
+      <ScrollProgress />
+      <Header userSlot={<UserMenu />} />
 
-      <Header
-        userSlot={<UserMenu />}
-      />
-
-      <main className="max-w-4xl mx-auto px-6 pt-28 pb-24 relative z-10">
-        {children}
-      </main>
+      <div className="relative z-10 flex min-h-screen flex-col">
+        <main className="mx-auto w-full max-w-[1120px] flex-1 px-6 pt-28 pb-16">
+          {children}
+        </main>
+        <Footer routePrefix={routePrefix} />
+      </div>
 
       <Chatbot />
       <SpeedInsights />

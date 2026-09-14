@@ -19,6 +19,10 @@ export const translations = {
     'nav.projects': 'Projects',
     'nav.photos': 'Photos',
     'nav.blog': 'Blog',
+    'nav.switchLang': 'Switch language',
+    'nav.menu': 'Menu',
+    'nav.closeMenu': 'Close menu',
+    'footer.builtWith': 'Built with Next.js',
 
     // Home page
     'home.greeting': "Hey, I'm George Zhu",
@@ -77,6 +81,10 @@ export const translations = {
     'nav.projects': '项目',
     'nav.photos': '照片',
     'nav.blog': '博客',
+    'nav.switchLang': '切换语言',
+    'nav.menu': '菜单',
+    'nav.closeMenu': '关闭菜单',
+    'footer.builtWith': '用 Next.js 构建',
 
     // Home page
     'home.greeting': '你好，我是 George Zhu',

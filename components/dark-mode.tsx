@@ -1,92 +1,77 @@
 'use client'
 
-import { motion, AnimatePresence } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
 import useDarkMode from '@/hooks/use-dark-mode'
+
+function SunIcon() {
+  return (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      aria-hidden="true"
+    >
+      <circle cx="12" cy="12" r="4" />
+      <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
+    </svg>
+  )
+}
+
+function MoonIcon() {
+  return (
+    <svg
+      width="15"
+      height="15"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M21 14.5A8.5 8.5 0 1 1 9.5 3 7 7 0 0 0 21 14.5z" />
+    </svg>
+  )
+}
 
 export default function DarkMode() {
   const { theme, toggleTheme, mounted } = useDarkMode()
 
   if (!mounted) {
-    return <div className="w-14 h-7" />
+    return (
+      <div
+        className="h-9 w-9 rounded-full border border-[var(--border-color)]"
+        aria-hidden="true"
+      />
+    )
   }
 
+  const nextTheme = theme === 'dark' ? 'light' : 'dark'
+
   return (
-    <motion.button
+    <button
+      type="button"
       onClick={toggleTheme}
-      className="relative w-14 h-7 rounded-full border border-[var(--border-color)] bg-[var(--bg-tertiary)] overflow-hidden"
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.95 }}
-      aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+      aria-label={`Switch to ${nextTheme} mode`}
+      className="relative flex h-9 w-9 items-center justify-center overflow-hidden rounded-full border border-[var(--border-color)] bg-[var(--card-bg)] text-[var(--text-secondary)] transition-colors duration-300 hover:border-[var(--border-strong)] hover:text-[var(--text-primary)]"
     >
-      <motion.div
-        className="absolute inset-0 rounded-full"
-        animate={{
-          background:
-            theme === 'dark'
-              ? 'linear-gradient(135deg, #1a1a2e, #16213e)'
-              : 'linear-gradient(135deg, #ffecd2, #fcb69f)',
-        }}
-        transition={{ duration: 0.6 }}
-      />
-
-      <AnimatePresence>
-        {theme === 'dark' && (
-          <motion.div
-            className="absolute inset-0"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
-            {[...Array(4)].map((_, i) => (
-              <motion.div
-                key={i}
-                className="absolute w-0.5 h-0.5 bg-white rounded-full"
-                style={{ left: `${15 + i * 18}%`, top: `${20 + (i % 2) * 40}%` }}
-                animate={{ opacity: [0.3, 1, 0.3] }}
-                transition={{ duration: 1.5, delay: i * 0.3, repeat: Infinity }}
-              />
-            ))}
-          </motion.div>
-        )}
+      <AnimatePresence mode="wait" initial={false}>
+        <motion.span
+          key={theme}
+          className="flex items-center justify-center"
+          initial={{ opacity: 0, rotate: -30, scale: 0.8 }}
+          animate={{ opacity: 1, rotate: 0, scale: 1 }}
+          exit={{ opacity: 0, rotate: 30, scale: 0.8 }}
+          transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+        >
+          {theme === 'dark' ? <MoonIcon /> : <SunIcon />}
+        </motion.span>
       </AnimatePresence>
-
-      <motion.div
-        className="absolute top-0.5 w-6 h-6 rounded-full"
-        animate={{
-          left: theme === 'dark' ? 'calc(100% - 1.625rem)' : '0.125rem',
-          background: theme === 'dark' ? '#e8e8ed' : '#ffd700',
-          boxShadow:
-            theme === 'dark'
-              ? '0 2px 8px rgba(255, 255, 255, 0.15)'
-              : '0 2px 8px rgba(255, 140, 0, 0.3)',
-        }}
-        transition={{ type: 'spring', stiffness: 500, damping: 30 }}
-      />
-
-      <AnimatePresence>
-        {theme === 'light' && (
-          <motion.div
-            className="absolute inset-0"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
-            <motion.div
-              className="absolute left-1.5 top-1 w-5 h-5"
-              animate={{ rotate: 360 }}
-              transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
-            >
-              {[...Array(8)].map((_, i) => (
-                <div
-                  key={i}
-                  className="absolute top-1/2 left-1/2 w-0.5 h-1.5 bg-white/30 rounded-full origin-bottom"
-                  style={{ transform: `translate(-50%, -100%) rotate(${i * 45}deg)` }}
-                />
-              ))}
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </motion.button>
+    </button>
   )
 }
