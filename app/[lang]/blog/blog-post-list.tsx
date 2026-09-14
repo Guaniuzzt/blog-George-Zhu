@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { getCurrentUser } from '@/lib/auth'
 import { getPosts } from '@/lib/posts'
 import Pagination from '@/components/pagination'
 import PostRow from '@/components/post-row'
@@ -14,7 +15,6 @@ export default async function BlogPostList({
   prefix,
   lang,
   locale,
-  includeDrafts = false,
 }: {
   tags?: string[]
   page: number
@@ -23,18 +23,18 @@ export default async function BlogPostList({
   prefix: string
   lang: string
   locale: Locale
-  includeDrafts?: boolean
 }) {
   const t = (key: string): string =>
     (getTranslation(routeToLocale(lang)) as Record<string, string>)[key] || key
 
+  const user = await getCurrentUser()
   const { posts, totalPages } = await getPosts({
     tags,
     newest,
     page,
     limit,
     locale,
-    includeDrafts,
+    includeDrafts: Boolean(user),
   })
 
   if (posts.length === 0) {

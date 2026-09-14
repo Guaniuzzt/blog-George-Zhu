@@ -16,7 +16,7 @@ export function generateStaticParams() {
 }
 
 export const revalidate = 60
-export const preferredRegion = 'sin1'
+export const preferredRegion = 'bom1'
 
 export async function generateMetadata({
   params,

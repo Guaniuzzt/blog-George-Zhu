@@ -9,7 +9,6 @@ import {
 } from '@/components/blog-pending'
 import BlogPostList from './blog-post-list'
 import { getTranslation, routeToLocale } from '@/lib/i18n'
-import { getCurrentUser } from '@/lib/auth'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -34,9 +33,6 @@ export default async function BlogPostsPage({ params, searchParams }: BlogPagePr
   const order = searchParams.order ?? 'newest'
   const page = Number(searchParams.page) || 1
   const tagsKey = searchParams.tags ?? ''
-
-  // 登录后列表进入「管理视图」：额外显示当前语言的草稿
-  const user = await getCurrentUser()
 
   return (
     <BlogPendingProvider>
@@ -83,7 +79,6 @@ export default async function BlogPostsPage({ params, searchParams }: BlogPagePr
             prefix={prefix}
             lang={params.lang}
             locale={lang}
-            includeDrafts={Boolean(user)}
           />
         </Suspense>
       </BlogPendingOutlet>

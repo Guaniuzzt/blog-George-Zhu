@@ -9,6 +9,28 @@ type PostWithTags = Prisma.PostGetPayload<{
   include: { tags: { include: { tag: true } } }
 }>
 
+type PostListRecord = {
+  slug: string
+  title: string
+  description: string
+  date: Date
+  published: boolean
+  tags: { tag: { name: string } }[]
+}
+
+const postListSelect = {
+  slug: true,
+  title: true,
+  description: true,
+  date: true,
+  published: true,
+  tags: {
+    select: {
+      tag: { select: { name: true } },
+    },
+  },
+} satisfies Prisma.PostSelect
+
 function toFrontmatter(record: PostWithTags): PostFrontmatter {
   return {
     title: record.title,
@@ -18,6 +40,52 @@ function toFrontmatter(record: PostWithTags): PostFrontmatter {
     author: record.author ?? undefined,
     published: record.published,
     updatedAt: record.updatedAt.toISOString(),
+  }
+}
+
+function toListItem(record: PostListRecord): Post {
+  return {
+    slug: record.slug,
+    frontmatter: {
+      title: record.title,
+      description: record.description,
+      date: record.date.toISOString().split('T')[0],
+      tags: record.tags.map((pt) => pt.tag.name),
+      published: record.published,
+    },
+    content: null,
+  }
+}
+
+async function queryPostList({
+  where,
+  newest,
+  page,
+  limit,
+}: {
+  where: Prisma.PostWhereInput
+  newest: boolean
+  page: number
+  limit: number
+}): Promise<{ posts: Post[]; total: number; totalPages: number }> {
+  const records = await prisma.post.findMany({
+    where,
+    select: postListSelect,
+    orderBy: { date: newest ? 'desc' : 'asc' },
+    skip: (page - 1) * limit,
+    take: limit,
+  })
+
+  // 首页未填满时无需 count；跨区往返一次就够
+  const total =
+    page === 1 && records.length < limit
+      ? records.length
+      : await prisma.post.count({ where })
+
+  return {
+    posts: records.map(toListItem),
+    total,
+    totalPages: Math.ceil(total / limit),
   }
 }
 
@@ -55,26 +123,7 @@ export async function getPosts({
 
   // 管理视图：实时查库，含草稿，不缓存
   if (includeDrafts) {
-    const [records, total] = await Promise.all([
-      prisma.post.findMany({
-        where,
-        include: { tags: { include: { tag: true } } },
-        orderBy: { date: newest ? 'desc' : 'asc' },
-        skip: (page - 1) * limit,
-        take: limit,
-      }),
-      prisma.post.count({ where }),
-    ])
-
-    return {
-      posts: records.map((record) => ({
-        slug: record.slug,
-        frontmatter: toFrontmatter(record),
-        content: null,
-      })),
-      total,
-      totalPages: Math.ceil(total / limit),
-    }
+    return queryPostList({ where, newest, page, limit })
   }
 
   // 公开视图：缓存
@@ -84,28 +133,7 @@ export async function getPosts({
     .join(',')}-${locale ?? 'all'}`
 
   const fetchPosts = unstable_cache(
-    async () => {
-      const [records, total] = await Promise.all([
-        prisma.post.findMany({
-          where,
-          include: { tags: { include: { tag: true } } },
-          orderBy: { date: newest ? 'desc' : 'asc' },
-          skip: (page - 1) * limit,
-          take: limit,
-        }),
-        prisma.post.count({ where }),
-      ])
-
-      return {
-        posts: records.map((record) => ({
-          slug: record.slug,
-          frontmatter: toFrontmatter(record),
-          content: null,
-        })),
-        total,
-        totalPages: Math.ceil(total / limit),
-      }
-    },
+    () => queryPostList({ where, newest, page, limit }),
     [cacheKey],
     { revalidate: 60, tags: ['posts'] }
   )
