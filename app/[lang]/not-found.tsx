@@ -25,7 +25,7 @@ export default function NotFound() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
       >
-        <h1 className="text-8xl md:text-9xl font-display font-bold mb-4 bg-gradient-to-r from-[var(--accent)] via-[var(--accent2)] to-[var(--accent)] bg-clip-text text-transparent glitch-text">
+        <h1 className="text-8xl md:text-9xl font-display font-bold mb-4 text-[var(--text-primary)]">
           404
         </h1>
 

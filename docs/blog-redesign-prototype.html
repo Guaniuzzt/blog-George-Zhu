@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>George Zhu — 个人博客</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Serif+SC:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        ink: '#17171C',
+        mute: '#71717A',
+        faint: '#A1A1AA',
+        line: '#E9E9E6',
+        paper: '#FAFAF8',
+        card: '#FFFFFF',
+        accent: '#4F46E5',
+        accentSoft: '#EEF0FF',
+      },
+      fontFamily: {
+        sans: ['Inter', '-apple-system', 'PingFang SC', 'Microsoft YaHei', 'sans-serif'],
+        serif: ['"Noto Serif SC"', 'Songti SC', 'serif'],
+        mono: ['"JetBrains Mono"', 'SFMono-Regular', 'monospace'],
+      },
+      letterSpacing: { tightest: '-0.045em' },
+    }
+  }
+}
+</script>
+<style>
+  :root { --ease: cubic-bezier(0.22, 1, 0.36, 1); }
+  html { scroll-behavior: auto; }
+  html.lenis, html.lenis body { height: auto; }
+  .lenis.lenis-smooth { scroll-behavior: auto !important; }
+  body { background: #FAFAF8; color: #17171C; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+
+  ::selection { background: #4F46E5; color: #fff; }
+
+  /* ---------- reveal primitives ---------- */
+  .rv { opacity: 0; transform: translateY(34px); transition: opacity .9s var(--ease), transform .9s var(--ease); will-change: opacity, transform; }
+  .rv.in { opacity: 1; transform: none; }
+  .rv-d1 { transition-delay: .08s } .rv-d2 { transition-delay: .16s } .rv-d3 { transition-delay: .24s } .rv-d4 { transition-delay: .32s }
+
+  .mask-line { display: block; overflow: hidden; }
+  .mask-line > span { display: block; transform: translateY(110%); transition: transform 1s var(--ease); }
+  .mask-line.in > span { transform: none; }
+
+  /* ---------- nav ---------- */
+  #nav { transition: background .4s var(--ease), border-color .4s var(--ease), box-shadow .4s var(--ease); border-bottom: 1px solid transparent; }
+  #nav.scrolled { background: rgba(250,250,248,.78); backdrop-filter: saturate(180%) blur(14px); -webkit-backdrop-filter: saturate(180%) blur(14px); border-color: #E9E9E6; }
+  #progress { transform-origin: left; transform: scaleX(0); }
+
+  .nav-link { position: relative; }
+  .nav-link::after { content: ''; position: absolute; left: 0; bottom: -3px; width: 100%; height: 1.5px; background: #17171C; transform: scaleX(0); transform-origin: right; transition: transform .45s var(--ease); }
+  .nav-link:hover::after { transform: scaleX(1); transform-origin: left; }
+
+  /* ---------- hero deco ---------- */
+  .hero-glow { position: absolute; border-radius: 9999px; filter: blur(90px); pointer-events: none; }
+  .dot-grid { background-image: radial-gradient(#D9D9D4 1px, transparent 1px); background-size: 26px 26px; mask-image: linear-gradient(to bottom, black, transparent 85%); -webkit-mask-image: linear-gradient(to bottom, black, transparent 85%); }
+
+  /* ---------- post rows ---------- */
+  .post-row { transition: background .4s var(--ease); }
+  .post-row .post-title { transition: color .35s var(--ease), transform .45s var(--ease); }
+  .post-row .post-arrow { transition: transform .45s var(--ease), background .35s var(--ease), color .35s var(--ease), border-color .35s var(--ease); }
+  .post-row:hover { background: #fff; }
+  .post-row:hover .post-title { color: #4F46E5; transform: translateX(6px); }
+  .post-row:hover .post-arrow { transform: translate(4px,-4px) rotate(0deg); background: #4F46E5; color: #fff; border-color: #4F46E5; }
+
+  /* ---------- marquee ---------- */
+  @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  .marquee-track { animation: marquee 28s linear infinite; }
+  .marquee:hover .marquee-track { animation-play-state: paused; }
+
+  /* ---------- buttons ---------- */
+  .btn-primary { transition: transform .35s var(--ease), box-shadow .35s var(--ease), background .35s var(--ease); }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 28px -10px rgba(79,70,229,.5); }
+  .btn-ghost { transition: border-color .35s var(--ease), background .35s var(--ease), transform .35s var(--ease); }
+  .btn-ghost:hover { border-color: #17171C; transform: translateY(-2px); }
+
+  .chip { transition: background .3s var(--ease), color .3s var(--ease), border-color .3s var(--ease); }
+  .chip:hover { background: #EEF0FF; color: #4F46E5; border-color: #C7CBFF; }
+
+  /* ---------- project cards ---------- */
+  .proj-card { transition: transform .5s var(--ease), box-shadow .5s var(--ease), border-color .4s var(--ease); }
+  .proj-card:hover { transform: translateY(-6px); box-shadow: 0 24px 48px -20px rgba(23,23,28,.16); border-color: #DCDCD8; }
+  .proj-thumb { transition: transform .8s var(--ease); }
+  .proj-card:hover .proj-thumb { transform: scale(1.04); }
+  .proj-go { transition: gap .4s var(--ease), color .35s var(--ease); }
+  .proj-card:hover .proj-go { gap: 12px; color: #4F46E5; }
+
+  /* ---------- footer icons ---------- */
+  .soc { transition: transform .35s var(--ease), color .3s var(--ease), border-color .3s var(--ease); }
+  .soc:hover { transform: translateY(-3px); color: #4F46E5; border-color: #C7CBFF; }
+
+  .link-underline { background-image: linear-gradient(#4F46E5,#4F46E5); background-size: 0% 1.5px; background-repeat: no-repeat; background-position: left 96%; transition: background-size .45s var(--ease); padding-bottom: 2px; }
+  .link-underline:hover { background-size: 100% 1.5px; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .rv, .mask-line > span { opacity: 1 !important; transform: none !important; transition: none !important; }
+    .marquee-track { animation: none; }
+  }
+</style>
+</head>
+<body class="font-sans">
+
+<!-- scroll progress -->
+<div id="progress" class="fixed top-0 left-0 z-[60] h-[2px] w-full bg-accent"></div>
+
+<!-- ============ NAV ============ -->
+<header id="nav" class="fixed top-0 left-0 z-50 w-full">
+  <div class="mx-auto flex h-[68px] max-w-[1120px] items-center justify-between px-6">
+    <a href="#" class="group flex items-center gap-2.5">
+      <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-ink font-mono text-[13px] font-semibold text-white transition-transform duration-500 group-hover:rotate-[-8deg]">GZ</span>
+      <span class="text-[15px] font-semibold tracking-tight">George Zhu</span>
+    </a>
+    <nav class="hidden items-center gap-8 text-[14px] font-medium text-mute md:flex">
+      <a href="#posts" class="nav-link hover:text-ink">文章</a>
+      <a href="#projects" class="nav-link hover:text-ink">项目</a>
+      <a href="#about" class="nav-link hover:text-ink">关于</a>
+      <a href="#footer" class="nav-link hover:text-ink">联系</a>
+    </nav>
+    <div class="flex items-center gap-3">
+      <button aria-label="搜索" class="flex h-9 w-9 items-center justify-center rounded-full border border-line bg-white text-mute transition hover:border-ink hover:text-ink">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+      </button>
+      <a href="#posts" class="btn-primary hidden rounded-full bg-ink px-5 py-2 text-[13.5px] font-medium text-white sm:block">开始阅读</a>
+    </div>
+  </div>
+</header>
+
+<!-- ============ HERO ============ -->
+<section class="relative overflow-hidden pt-[168px] pb-24">
+  <div class="dot-grid absolute inset-0"></div>
+  <div class="hero-glow left-[-120px] top-[-60px] h-[380px] w-[380px] bg-[#C7CBFF] opacity-50"></div>
+  <div class="hero-glow right-[-100px] top-[120px] h-[320px] w-[320px] bg-[#FFE3D3] opacity-60"></div>
+
+  <div class="relative mx-auto max-w-[1120px] px-6">
+    <div class="rv flex items-center gap-3 font-mono text-[12.5px] uppercase tracking-[0.18em] text-faint">
+      <span class="h-1.5 w-1.5 rounded-full bg-accent"></span>
+      Personal Blog · Full-Stack Dev
+    </div>
+
+    <h1 class="mt-7 font-serif text-[clamp(40px,6.2vw,74px)] font-semibold leading-[1.12] tracking-tightest">
+      <span class="mask-line"><span>你好，我是 <em class="not-italic text-accent">George</em></span></span>
+      <span class="mask-line" style="transition-delay:.1s"><span>在代码与创意的交汇处，<br class="hidden sm:block" />构建数字体验。</span></span>
+    </h1>
+
+    <p class="rv rv-d2 mt-7 max-w-[560px] text-[16.5px] leading-[1.85] text-mute">
+      一名全栈开发者，使用现代技术构建高性能 Web 应用。
+      不写代码时，我喜欢探索新工具、写技术文章、用镜头记录瞬间。
+    </p>
+
+    <div class="rv rv-d3 mt-10 flex flex-wrap items-center gap-4">
+      <a href="#posts" class="btn-primary group inline-flex items-center gap-2 rounded-full bg-accent px-7 py-3.5 text-[14.5px] font-medium text-white">
+        阅读文章
+        <svg class="transition-transform duration-500 group-hover:translate-x-1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+      </a>
+      <a href="#about" class="btn-ghost inline-flex items-center gap-2 rounded-full border border-line bg-white px-7 py-3.5 text-[14.5px] font-medium text-ink">关于我</a>
+    </div>
+
+    <div class="rv rv-d4 mt-16 flex flex-wrap items-center gap-x-10 gap-y-4 border-t border-line pt-7 text-[13px] text-faint">
+      <div><span class="font-mono text-[20px] font-semibold text-ink">10</span><span class="ml-2">篇文章</span></div>
+      <div><span class="font-mono text-[20px] font-semibold text-ink">2</span><span class="ml-2">种语言</span></div>
+      <div><span class="font-mono text-[20px] font-semibold text-ink">2024</span><span class="ml-2">开始写作</span></div>
+      <div class="ml-auto hidden items-center gap-2 md:flex">
+        <span class="relative flex h-2 w-2"><span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-60"></span><span class="relative inline-flex h-2 w-2 rounded-full bg-emerald-500"></span></span>
+        最近更新于 2026.06
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TECH MARQUEE ============ -->
+<section class="marquee overflow-hidden border-y border-line bg-white py-5">
+  <div class="marquee-track flex w-max items-center gap-12 font-mono text-[13px] uppercase tracking-[0.16em] text-faint">
+    <span>Next.js 14</span><span class="text-line">✦</span><span>TypeScript</span><span class="text-line">✦</span><span>React Server Components</span><span class="text-line">✦</span><span>Tailwind CSS</span><span class="text-line">✦</span><span>Prisma</span><span class="text-line">✦</span><span>Supabase</span><span class="text-line">✦</span><span>MDX</span><span class="text-line">✦</span><span>Framer Motion</span><span class="text-line">✦</span><span>Vercel</span><span class="text-line">✦</span>
+    <span>Next.js 14</span><span class="text-line">✦</span><span>TypeScript</span><span class="text-line">✦</span><span>React Server Components</span><span class="text-line">✦</span><span>Tailwind CSS</span><span class="text-line">✦</span><span>Prisma</span><span class="text-line">✦</span><span>Supabase</span><span class="text-line">✦</span><span>MDX</span><span class="text-line">✦</span><span>Framer Motion</span><span class="text-line">✦</span><span>Vercel</span><span class="text-line">✦</span>
+  </div>
+</section>
+
+<!-- ============ POSTS ============ -->
+<section id="posts" class="mx-auto max-w-[1120px] px-6 py-24">
+  <div class="rv flex items-end justify-between">
+    <div>
+      <div class="font-mono text-[12.5px] uppercase tracking-[0.18em] text-faint">Writing</div>
+      <h2 class="mt-3 font-serif text-[clamp(28px,3.6vw,42px)] font-semibold tracking-tightest">精选文章</h2>
+    </div>
+    <a href="#" class="link-underline hidden text-[14px] font-medium text-ink sm:block">查看全部 →</a>
+  </div>
+
+  <div class="mt-10">
+    <!-- row -->
+    <a href="#" class="post-row rv group grid grid-cols-[44px_1fr_auto] items-center gap-5 rounded-2xl border-b border-line px-4 py-7 md:grid-cols-[64px_1fr_220px_auto] md:px-6">
+      <span class="font-mono text-[13px] text-faint">01</span>
+      <span>
+        <span class="post-title block font-serif text-[19px] font-semibold leading-snug md:text-[21px]">用 Prisma + Supabase 给博客搭后端：从 schema 到线上数据库</span>
+        <span class="mt-2 block text-[14px] leading-relaxed text-mute md:max-w-[520px]">Postgres 托管在 Supabase、ORM 用 Prisma、部署在 Vercel——这套组合的完整落地记录。</span>
+      </span>
+      <span class="hidden text-right md:block">
+        <span class="block font-mono text-[12.5px] text-faint">2026.06.25</span>
+        <span class="mt-2 inline-flex gap-1.5">
+          <span class="chip rounded-full border border-line px-2.5 py-0.5 text-[11.5px] text-mute">prisma</span>
+          <span class="chip rounded-full border border-line px-2.5 py-0.5 text-[11.5px] text-mute">supabase</span>
+        </span>
+      </span>
+      <span class="post-arrow flex h-10 w-10 items-center justify-center rounded-full border border-line text-ink">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg>
+      </span>
+    </a>
+
+    <a href="#" class="post-row rv rv-d1 group grid grid-cols-[44px_1fr_auto] items-center gap-5 rounded-2xl border-b border-line px-4 py-7 md:grid-cols-[64px_1fr_220px_auto] md:px-6">
+      <span class="font-mono text-[13px] text-faint">02</span>
+      <span>
+        <span class="post-title block font-serif text-[19px] font-semibold leading-snug md:text-[21px]">Next.js Server Components 实战笔记：哪些代码该留在服务端</span>
+        <span class="mt-2 block text-[14px] leading-relaxed text-mute md:max-w-[520px]">从实际项目里总结的 Server Components 使用心法与判断流程。</span>
+      </span>
+      <span class="hidden text-right md:block">
+        <span class="block font-mono text-[12.5px] text-faint">2026.06.20</span>
+        <span class="mt-2 inline-flex gap-1.5">
+          <span class="chip rounded-full border border-line px-2.5 py-0.5 text-[11.5px] text-mute">nextjs</span>
+          <span class="chip rounded-full border border-line px-2.5 py-0.5 text-[11.5px] text-mute">react</span>
+        </span>
+      </span>
+      <span class="post-arrow flex h-10 w-10 items-center justify-center rounded-full border border-line text-ink">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg>
+      </span>
+    </a>
+
+    <a href="#" class="post-row rv rv-d2 group grid grid-cols-[44px_1fr_auto] items-center gap-5 rounded-2xl border-b border-line px-4 py-7 md:grid-cols-[64px_1fr_220px_auto] md:px-6">
+      <span class="font-mono text-[13px] text-faint">03</span>
+      <span>
+        <span class="post-title block font-serif text-[19px] font-semibold leading-snug md:text-[21px]">Building a Full-Stack Personal Blog: Architecture &amp; Performance</span>
+        <span class="mt-2 block text-[14px] leading-relaxed text-mute md:max-w-[520px]">Deep dive into a production-ready blog built with Next.js 14 App Router.</span>
+      </span>
+      <span class="hidden text-right md:block">
+        <span class="block font-mono text-[12.5px] text-faint">2026.06.14</span>
+        <span class="mt-2 inline-flex gap-1.5">
+          <span class="chip rounded-full border border-line px-2.5 py-0.5 text-[11.5px] text-mute">project</span>
+          <span class="chip rounded-full border border-line px-2.5 py-0.5 text-[11.5px] text-mute">typescript</span>
+        </span>
+      </span>
+      <span class="post-arrow flex h-10 w-10 items-center justify-center rounded-full border border-line text-ink">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg>
+      </span>
+    </a>
+
+    <a href="#" class="post-row rv rv-d3 group grid grid-cols-[44px_1fr_auto] items-center gap-5 rounded-2xl border-b border-line px-4 py-7 md:grid-cols-[64px_1fr_220px_auto] md:px-6">
+      <span class="font-mono text-[13px] text-faint">04</span>
+      <span>
+        <span class="post-title block font-serif text-[19px] font-semibold leading-snug md:text-[21px]">Complete Tech Stack Breakdown</span>
+        <span class="mt-2 block text-[14px] leading-relaxed text-mute md:max-w-[520px]">A deep dive into the core technologies powering this blog.</span>
+      </span>
+      <span class="hidden text-right md:block">
+        <span class="block font-mono text-[12.5px] text-faint">2026.06.06</span>
+        <span class="mt-2 inline-flex gap-1.5">
+          <span class="chip rounded-full border border-line px-2.5 py-0.5 text-[11.5px] text-mute">nextjs</span>
+          <span class="chip rounded-full border border-line px-2.5 py-0.5 text-[11.5px] text-mute">mdx</span>
+        </span>
+      </span>
+      <span class="post-arrow flex h-10 w-10 items-center justify-center rounded-full border border-line text-ink">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg>
+      </span>
+    </a>
+
+    <a href="#" class="post-row rv rv-d4 group grid grid-cols-[44px_1fr_auto] items-center gap-5 rounded-2xl border-b border-line px-4 py-7 md:grid-cols-[64px_1fr_220px_auto] md:px-6">
+      <span class="font-mono text-[13px] text-faint">05</span>
+      <span>
+        <span class="post-title block font-serif text-[19px] font-semibold leading-snug md:text-[21px]">TypeScript Generics in Practice: From Wrapper Types to API Responses</span>
+        <span class="mt-2 block text-[14px] leading-relaxed text-mute md:max-w-[520px]">How generics actually get used in production code — patterns worth stealing.</span>
+      </span>
+      <span class="hidden text-right md:block">
+        <span class="block font-mono text-[12.5px] text-faint">2026.05.31</span>
+        <span class="mt-2 inline-flex gap-1.5">
+          <span class="chip rounded-full border border-line px-2.5 py-0.5 text-[11.5px] text-mute">typescript</span>
+          <span class="chip rounded-full border border-line px-2.5 py-0.5 text-[11.5px] text-mute">generics</span>
+        </span>
+      </span>
+      <span class="post-arrow flex h-10 w-10 items-center justify-center rounded-full border border-line text-ink">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg>
+      </span>
+    </a>
+  </div>
+</section>
+
+<!-- ============ PROJECTS ============ -->
+<section id="projects" class="mx-auto max-w-[1120px] px-6 pb-24">
+  <div class="rv flex items-end justify-between">
+    <div>
+      <div class="font-mono text-[12.5px] uppercase tracking-[0.18em] text-faint">Projects</div>
+      <h2 class="mt-3 font-serif text-[clamp(28px,3.6vw,42px)] font-semibold tracking-tightest">项目展示</h2>
+    </div>
+    <a href="#" class="link-underline hidden text-[14px] font-medium text-ink sm:block">GitHub 主页 →</a>
+  </div>
+
+  <div class="mt-10 grid gap-6 md:grid-cols-2">
+    <!-- project 1 -->
+    <a href="https://blog.guaniuzzt.me/cn" target="_blank" rel="noopener" class="proj-card rv group flex flex-col overflow-hidden rounded-3xl border border-line bg-white">
+      <div class="relative h-[220px] overflow-hidden bg-gradient-to-br from-[#4F46E5] via-[#7C74F0] to-[#B7AFFF]">
+        <div class="proj-thumb absolute inset-0 flex items-center justify-center">
+          <div class="w-[72%] rounded-xl bg-white/12 p-4 backdrop-blur-sm" style="background:rgba(255,255,255,.12)">
+            <div class="flex gap-1.5"><span class="h-2 w-2 rounded-full bg-white/40"></span><span class="h-2 w-2 rounded-full bg-white/40"></span><span class="h-2 w-2 rounded-full bg-white/40"></span></div>
+            <div class="mt-3 space-y-2">
+              <div class="h-2.5 w-3/4 rounded-full bg-white/50"></div>
+              <div class="h-2.5 w-1/2 rounded-full bg-white/30"></div>
+              <div class="mt-3 grid grid-cols-3 gap-2">
+                <div class="h-9 rounded-md bg-white/25"></div><div class="h-9 rounded-md bg-white/15"></div><div class="h-9 rounded-md bg-white/25"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <span class="absolute left-5 top-5 rounded-full bg-white/90 px-3 py-1 font-mono text-[11px] font-medium uppercase tracking-wider text-ink">Flagship</span>
+      </div>
+      <div class="flex flex-1 flex-col p-7">
+        <div class="flex items-center justify-between">
+          <h3 class="font-serif text-[21px] font-semibold tracking-tight">个人博客</h3>
+          <span class="font-mono text-[12px] text-faint">blog.guaniuzzt.me</span>
+        </div>
+        <p class="mt-3 text-[14px] leading-[1.8] text-mute">基于 Next.js 构建的双语个人博客：MDX 文章渲染、照片集、项目展示与深色 / 浅色主题切换，以现代美学呈现清爽的阅读体验。</p>
+        <div class="mt-5 flex flex-wrap gap-2">
+          <span class="chip rounded-full border border-line px-3 py-1 text-[12px] text-mute">Next.js 14</span>
+          <span class="chip rounded-full border border-line px-3 py-1 text-[12px] text-mute">TypeScript</span>
+          <span class="chip rounded-full border border-line px-3 py-1 text-[12px] text-mute">Prisma</span>
+          <span class="chip rounded-full border border-line px-3 py-1 text-[12px] text-mute">Supabase</span>
+          <span class="chip rounded-full border border-line px-3 py-1 text-[12px] text-mute">Framer Motion</span>
+        </div>
+        <div class="proj-go mt-auto flex items-center gap-2 pt-6 text-[13.5px] font-medium text-ink">
+          访问站点
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg>
+        </div>
+      </div>
+    </a>
+
+    <!-- project 2 -->
+    <a href="https://eshop.guaniuzzt.me" target="_blank" rel="noopener" class="proj-card rv rv-d1 group flex flex-col overflow-hidden rounded-3xl border border-line bg-white">
+      <div class="relative h-[220px] overflow-hidden bg-gradient-to-br from-[#0E7A5F] via-[#18A57F] to-[#8FE3C3]">
+        <div class="proj-thumb absolute inset-0 flex items-center justify-center">
+          <div class="w-[72%] rounded-xl p-4 backdrop-blur-sm" style="background:rgba(255,255,255,.14)">
+            <div class="flex gap-1.5"><span class="h-2 w-2 rounded-full bg-white/40"></span><span class="h-2 w-2 rounded-full bg-white/40"></span><span class="h-2 w-2 rounded-full bg-white/40"></span></div>
+            <div class="mt-3 grid grid-cols-3 gap-2">
+              <div class="rounded-md bg-white/25 p-2"><div class="h-6 rounded bg-white/35"></div><div class="mt-1.5 h-1.5 w-2/3 rounded-full bg-white/50"></div></div>
+              <div class="rounded-md bg-white/15 p-2"><div class="h-6 rounded bg-white/30"></div><div class="mt-1.5 h-1.5 w-2/3 rounded-full bg-white/40"></div></div>
+              <div class="rounded-md bg-white/25 p-2"><div class="h-6 rounded bg-white/35"></div><div class="mt-1.5 h-1.5 w-2/3 rounded-full bg-white/50"></div></div>
+            </div>
+            <div class="mt-3 h-2.5 w-1/2 rounded-full bg-white/30"></div>
+          </div>
+        </div>
+        <span class="absolute left-5 top-5 rounded-full bg-white/90 px-3 py-1 font-mono text-[11px] font-medium uppercase tracking-wider text-ink">Full-Stack</span>
+      </div>
+      <div class="flex flex-1 flex-col p-7">
+        <div class="flex items-center justify-between">
+          <h3 class="font-serif text-[21px] font-semibold tracking-tight">电商全栈平台</h3>
+          <span class="font-mono text-[12px] text-faint">eshop.guaniuzzt.me</span>
+        </div>
+        <p class="mt-3 text-[14px] leading-[1.8] text-mute">基于 Next.js 15 与 React 19 的生产级电商平台：商品目录、持久化购物车、Stripe 结算、订单管理与 NextAuth 认证的完整闭环。</p>
+        <div class="mt-5 flex flex-wrap gap-2">
+          <span class="chip rounded-full border border-line px-3 py-1 text-[12px] text-mute">Next.js 15</span>
+          <span class="chip rounded-full border border-line px-3 py-1 text-[12px] text-mute">React 19</span>
+          <span class="chip rounded-full border border-line px-3 py-1 text-[12px] text-mute">Stripe</span>
+          <span class="chip rounded-full border border-line px-3 py-1 text-[12px] text-mute">NextAuth</span>
+          <span class="chip rounded-full border border-line px-3 py-1 text-[12px] text-mute">shadcn/ui</span>
+        </div>
+        <div class="proj-go mt-auto flex items-center gap-2 pt-6 text-[13.5px] font-medium text-ink">
+          访问站点
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg>
+        </div>
+      </div>
+    </a>
+  </div>
+</section>
+
+<!-- ============ ABOUT ============ -->
+<section id="about" class="border-y border-line bg-white">
+  <div class="mx-auto grid max-w-[1120px] gap-14 px-6 py-24 md:grid-cols-[320px_1fr] md:gap-20">
+    <div class="rv">
+      <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#4F46E5] via-[#7C74F0] to-[#FFB59A] p-[1px]">
+        <div class="flex aspect-[4/5] flex-col justify-between rounded-[23px] bg-ink p-7 text-white">
+          <span class="font-mono text-[12px] uppercase tracking-[0.2em] text-white/50">About Me</span>
+          <div>
+            <div class="flex h-16 w-16 items-center justify-center rounded-2xl bg-white/10 font-mono text-[22px] font-semibold backdrop-blur">GZ</div>
+            <div class="mt-5 font-serif text-[26px] font-semibold">George Zhu</div>
+            <div class="mt-1 text-[13.5px] text-white/60">全栈开发者 · 上海</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="flex flex-col justify-center">
+      <h2 class="rv font-serif text-[clamp(26px,3.2vw,38px)] font-semibold leading-[1.3] tracking-tightest">
+        我相信好的代码和好的文字一样，<br />都应该<span class="text-accent">简洁、诚实、经得起推敲</span>。
+      </h2>
+      <p class="rv rv-d1 mt-6 max-w-[560px] text-[15.5px] leading-[1.9] text-mute">
+        这个博客是我记录技术实践的地方：从 Next.js App Router 的服务端渲染策略，
+        到 Prisma + Supabase 的数据库落地，再到 TypeScript 类型系统的实战技巧。
+        每一篇都来自真实项目里的踩坑与复盘。
+      </p>
+      <div class="rv rv-d2 mt-9 flex flex-wrap gap-2.5">
+        <span class="chip rounded-full border border-line bg-paper px-4 py-1.5 text-[13px] font-medium text-ink">Next.js</span>
+        <span class="chip rounded-full border border-line bg-paper px-4 py-1.5 text-[13px] font-medium text-ink">TypeScript</span>
+        <span class="chip rounded-full border border-line bg-paper px-4 py-1.5 text-[13px] font-medium text-ink">React</span>
+        <span class="chip rounded-full border border-line bg-paper px-4 py-1.5 text-[13px] font-medium text-ink">Node.js</span>
+        <span class="chip rounded-full border border-line bg-paper px-4 py-1.5 text-[13px] font-medium text-ink">Prisma</span>
+        <span class="chip rounded-full border border-line bg-paper px-4 py-1.5 text-[13px] font-medium text-ink">Supabase</span>
+        <span class="chip rounded-full border border-line bg-paper px-4 py-1.5 text-[13px] font-medium text-ink">摄影</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CTA / NEWSLETTER ============ -->
+<section class="mx-auto max-w-[1120px] px-6 py-24">
+  <div class="rv relative overflow-hidden rounded-[28px] bg-ink px-8 py-16 text-center text-white md:px-16">
+    <div class="hero-glow left-[10%] top-[-80px] h-[240px] w-[240px] bg-[#4F46E5] opacity-40"></div>
+    <div class="hero-glow right-[8%] bottom-[-100px] h-[220px] w-[220px] bg-[#FF8E63] opacity-25"></div>
+    <div class="relative">
+      <div class="font-mono text-[12.5px] uppercase tracking-[0.2em] text-white/50">Stay Tuned</div>
+      <h2 class="mt-4 font-serif text-[clamp(26px,3.4vw,40px)] font-semibold tracking-tightest">新文章发布时，第一时间知道</h2>
+      <p class="mx-auto mt-4 max-w-[440px] text-[14.5px] leading-relaxed text-white/60">通过 RSS 订阅，或关注我的社交账号，获取最新的技术笔记。</p>
+      <div class="mt-9 flex flex-wrap items-center justify-center gap-3.5">
+        <a href="#" class="btn-primary inline-flex items-center gap-2 rounded-full bg-white px-7 py-3.5 text-[14px] font-medium text-ink">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1.5" fill="currentColor" stroke="none"/></svg>
+          RSS 订阅
+        </a>
+        <a href="#" class="btn-ghost inline-flex items-center gap-2 rounded-full border border-white/25 px-7 py-3.5 text-[14px] font-medium text-white hover:border-white">GitHub →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer id="footer" class="border-t border-line">
+  <div class="mx-auto flex max-w-[1120px] flex-col items-center justify-between gap-6 px-6 py-10 md:flex-row">
+    <div class="flex items-center gap-2.5">
+      <span class="flex h-7 w-7 items-center justify-center rounded-md bg-ink font-mono text-[11px] font-semibold text-white">GZ</span>
+      <span class="text-[13.5px] text-mute">© 2026 George Zhu · 用 Next.js 构建</span>
+    </div>
+    <div class="flex items-center gap-2.5">
+      <a href="#" aria-label="GitHub" class="soc flex h-9 w-9 items-center justify-center rounded-full border border-line text-mute"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5A11.5 11.5 0 0 0 .5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56v-2c-3.2.7-3.87-1.54-3.87-1.54-.53-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.73-1.54-2.55-.29-5.23-1.28-5.23-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.78 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.41-2.69 5.38-5.25 5.67.41.36.78 1.06.78 2.14v3.17c0 .31.21.68.8.56A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5Z"/></svg></a>
+      <a href="#" aria-label="X" class="soc flex h-9 w-9 items-center justify-center rounded-full border border-line text-mute"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.9 2H22l-6.9 7.9L23.3 22h-6.4l-5-6.6L6.1 22H3l7.4-8.4L1 2h6.6l4.5 6L18.9 2Zm-1.1 18h1.7L7.4 3.9H5.6L17.8 20Z"/></svg></a>
+      <a href="#" aria-label="RSS" class="soc flex h-9 w-9 items-center justify-center rounded-full border border-line text-mute"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1.5" fill="currentColor" stroke="none"/></svg></a>
+      <a href="#" aria-label="Email" class="soc flex h-9 w-9 items-center justify-center rounded-full border border-line text-mute"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></a>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
+<script>
+  // ---- smooth scroll (Lenis + GSAP ticker) ----
+  let lenis = null;
+  try {
+    lenis = new Lenis({ duration: 1.15, easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)), smoothWheel: true });
+    function raf(t) { lenis.raf(t); requestAnimationFrame(raf); }
+    requestAnimationFrame(raf);
+  } catch (e) { /* graceful degradation */ }
+
+  // ---- nav scrolled state + progress ----
+  const nav = document.getElementById('nav');
+  const progress = document.getElementById('progress');
+  function onScroll() {
+    const y = window.scrollY || document.documentElement.scrollTop;
+    nav.classList.toggle('scrolled', y > 24);
+    const h = document.documentElement.scrollHeight - window.innerHeight;
+    progress.style.transform = 'scaleX(' + (h > 0 ? y / h : 0) + ')';
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  // ---- anchor links via lenis ----
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', ev => {
+      const id = a.getAttribute('href');
+      if (id.length > 1) {
+        const el = document.querySelector(id);
+        if (el) { ev.preventDefault(); lenis ? lenis.scrollTo(el, { offset: -80 }) : el.scrollIntoView({ behavior: 'smooth' }); }
+      }
+    });
+  });
+
+  // ---- reveal on scroll ----
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(en => { if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); } });
+  }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+  document.querySelectorAll('.rv, .mask-line').forEach(el => io.observe(el));
+
+  // ---- hero entrance ----
+  if (window.gsap) {
+    gsap.registerPlugin(ScrollTrigger);
+    gsap.fromTo('.hero-glow', { scale: .8, opacity: 0 }, { scale: 1, opacity: 1, duration: 1.6, ease: 'power3.out', stagger: .15, clearProps: 'opacity' });
+    gsap.to('.hero-glow', { y: -30, duration: 6, ease: 'sine.inOut', yoyo: true, repeat: -1, stagger: 2 });
+  }
+
+  // ---- safety: reveal everything after 6s no matter what ----
+  setTimeout(() => document.querySelectorAll('.rv, .mask-line').forEach(el => el.classList.add('in')), 6000);
+</script>
+</body>
+</html>

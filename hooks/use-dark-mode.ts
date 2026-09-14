@@ -1,21 +1,31 @@
 import { useState, useEffect } from 'react'
-import { useCookies } from 'react-cookie'
 import type { Theme } from '@/types'
 
-const useDarkMode = (defaultTheme: Theme = 'dark') => {
+function readThemeFromDom(fallback: Theme): Theme {
+  if (typeof document === 'undefined') return fallback
+  if (document.documentElement.classList.contains('dark')) return 'dark'
+  if (document.documentElement.classList.contains('light')) return 'light'
+  return fallback
+}
+
+function persistTheme(theme: Theme) {
+  document.documentElement.classList.remove('light', 'dark')
+  document.documentElement.classList.add(theme)
+  document.cookie = `theme=${theme}; path=/; max-age=31536000; SameSite=Lax`
+}
+
+const useDarkMode = (defaultTheme: Theme = 'light') => {
   const [theme, setTheme] = useState<Theme>(defaultTheme)
-  const [, setCookie] = useCookies(['theme'])
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
+    setTheme(readThemeFromDom(defaultTheme))
     setMounted(true)
-  }, [])
+  }, [defaultTheme])
 
   const setAndSaveTheme = (newTheme: Theme) => {
     setTheme(newTheme)
-    document.documentElement.classList.remove('light', 'dark')
-    document.documentElement.classList.add(newTheme)
-    setCookie('theme', newTheme, { path: '/' })
+    persistTheme(newTheme)
   }
 
   const toggleTheme = () => {

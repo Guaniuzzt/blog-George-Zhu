@@ -35,9 +35,7 @@ export default function Header({ userSlot }: { userSlot: ReactNode }) {
               whileHover={{ scale: 1.02 }}
               transition={{ type: 'spring', stiffness: 400, damping: 10 }}
             >
-              <span className="bg-gradient-to-r from-[var(--accent)] to-[var(--accent2)] bg-clip-text text-transparent">
-                GZ
-              </span>
+              <span className="text-[var(--text-primary)]">GZ</span>
               <span className="text-[var(--text-primary)] hidden sm:inline">.dev</span>
             </motion.span>
           </Link>

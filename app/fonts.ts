@@ -1,20 +1,18 @@
-import { JetBrains_Mono, Plus_Jakarta_Sans, Syne } from 'next/font/google'
+import { Inter, JetBrains_Mono, Noto_Serif_SC } from 'next/font/google'
 
-// Self-hosted at build time via next/font — no Fontshare/Google request in the browser.
-// Plus Jakarta Sans stands in for Satoshi; Syne for Clash Display.
-
-export const satoshi = Plus_Jakarta_Sans({
+export const sans = Inter({
   subsets: ['latin'],
-  weight: ['400', '500', '700'],
-  variable: '--font-satoshi',
+  variable: '--font-sans',
   display: 'swap',
 })
 
-export const clashDisplay = Syne({
+// Latin subset only — CJK titles fall back to Songti SC / STSong to keep LCP small.
+export const serif = Noto_Serif_SC({
   subsets: ['latin'],
   weight: ['500', '600', '700'],
-  variable: '--font-clash',
+  variable: '--font-serif',
   display: 'swap',
+  adjustFontFallback: false,
 })
 
 export const jetbrainsMono = JetBrains_Mono({
